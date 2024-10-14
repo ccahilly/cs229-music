@@ -70,8 +70,8 @@ def main():
 
     # Loop through the first 10 rows in the CSV and process each one
     for index, row in data.iterrows():
-        if index >= 11:  # Break after processing 10 examples
-            break
+        # if index >= 11:  # Break after processing 10 examples
+        #     break
 
         ytid = row['ytid']
         start_s = row['start_s']
