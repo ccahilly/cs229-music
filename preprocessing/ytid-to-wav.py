@@ -4,6 +4,7 @@ from pydub import AudioSegment
 import os
 
 # Run from preprocessing folder
+# Note the resampling to 16 khz
 
 def download_youtube_audio(ytid):
     try:
@@ -16,6 +17,7 @@ def download_youtube_audio(ytid):
                 'preferredcodec': 'wav',
                 'preferredquality': '192',
             }],
+            'noplaylist': True,  # Don't download playlists
         }
         with YoutubeDL(ydl_opts) as ydl:
             ydl.download([f'https://www.youtube.com/watch?v={ytid}'])
@@ -24,10 +26,11 @@ def download_youtube_audio(ytid):
         print(f"Error downloading audio for {ytid}: {e}")
         return None
 
-def extract_audio_segment(input_file, start_s, end_s):
+def extract_audio_segment(input_file, start_s, end_s, target_sample_rate=16000):
     try:
         # Load the webm file and extract the segment
         audio = AudioSegment.from_file(input_file, format="webm")  # Specify format as webm
+        audio = audio.set_frame_rate(target_sample_rate)  # Resample to 16 kHz
         segment = audio[start_s * 1000:end_s * 1000]  # Convert seconds to milliseconds
         return segment
     except Exception as e:
@@ -67,8 +70,8 @@ def main():
 
     # Loop through the first 10 rows in the CSV and process each one
     for index, row in data.iterrows():
-        # if index >= 11:  # Break after processing 10 examples
-        #     break
+        if index >= 11:  # Break after processing 10 examples
+            break
 
         ytid = row['ytid']
         start_s = row['start_s']
