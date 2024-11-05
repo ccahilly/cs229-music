@@ -17,8 +17,8 @@ labels_df = pd.read_csv('../data/musiccaps/musiccaps-train-data.csv')
 labels_dict = pd.Series(labels_df.caption.values, index=labels_df.ytid).to_dict()
 
 # Directory containing the .wav files
-# wav_dir = "../data/musiccaps/wav"
-wav_dir = "../data/musiccaps/wav-small"
+wav_dir = "../data/musiccaps/wav"
+# wav_dir = "../data/musiccaps/wav-small"
 
 audio_samples = []
 audio_filenames = [] 
