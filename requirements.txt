@@ -1,0 +1,7 @@
+torch
+torchvision
+torchaudio
+transformers
+librosa
+numpy
+transformers
