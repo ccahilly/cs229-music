@@ -16,8 +16,8 @@ model = AutoModel.from_pretrained("laion/larger_clap_music").to(device)  # Send 
 labels_df = pd.read_csv('../data/musiccaps/musiccaps-train-data.csv')
 labels_dict = pd.Series(labels_df.caption.values, index=labels_df.ytid).to_dict()
 
-# Directory containing the .wav files
-wav_dir = "../data/musiccaps/wav"
+# Directory containing the 49 khz .wav files
+wav_dir = "../data/musiccaps/wav-48"
 # wav_dir = "../data/musiccaps/wav-small"
 
 audio_samples = []
