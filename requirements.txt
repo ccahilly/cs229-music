@@ -5,4 +5,5 @@ transformers
 librosa
 numpy
 transformers
-sklearn
+scikit-learn
+sentencepiece
