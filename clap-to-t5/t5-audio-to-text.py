@@ -4,7 +4,8 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
-import matplotlib.pyplot as plt  # Import matplotlib
+import matplotlib.pyplot as plt
+from google.cloud import storage
 
 # Check if GPU is available, otherwise use CPU
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -56,7 +57,7 @@ model.train()  # Set the model to training mode
 # Set the optimizer
 optimizer = optim.AdamW(model.parameters(), lr=1e-5)  # You can adjust the learning rate
 
-num_epochs = 5  # You can adjust this depending on your dataset and model size
+num_epochs = 10  # You can adjust this depending on your dataset and model size
 
 # List to store the loss for each epoch
 epoch_losses = []
@@ -87,7 +88,7 @@ for epoch in range(num_epochs):
         # Update model parameters
         optimizer.step()
 
-        if i % 12 == 0:
+        if i % 62 == 0:
             print(f"Done with first {8 * i} examples")
 
     # Calculate and print the loss for this epoch
@@ -105,10 +106,20 @@ plt.grid(True)
 plt.legend()
 
 # Save the plot as a .jpg file
-plt.savefig('../data/audio_to_text_training_loss.jpg', format='jpg')
+plt.savefig('audio_to_text_training_loss.jpg', format='jpg')
 
 # Optionally show the plot
 plt.show()
 
 # Save the trained model
 torch.save(model.state_dict(), '../models/trained_audio_to_text_model.pth')
+
+# save to google cloud
+bucket_name = "musiccaps-wav-16khz"
+storage_client = storage.Client()
+bucket = storage_client.bucket(bucket_name)
+blob = bucket.blob("trained_audio_to_text_model.pth")
+
+# # Upload the temporary file to GCS
+# blob.upload_from_filename('../models/trained_audio_to_text_model.pth')
+# print(f"Embedding dictionary saved to GCS")
