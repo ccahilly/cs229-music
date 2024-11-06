@@ -1,16 +1,9 @@
-# General Approach
-# Create a projection layer to transform the (512,) embeddings to the T5 input dimension
-# and then set up a model architecture that feeds these transformed embeddings into T5. 
-
-# Starting with T5-small for prototyping
-# Num params small / base / large / 3B / 11B: 60M / 220M / 770M / 3B / 11B
-
 import torch
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
-import torch.nn.functional as F
+import numpy as np
 
 class AudioToTextModel(nn.Module):
     def __init__(self, projection_dim=768):
@@ -28,7 +21,10 @@ class AudioToTextModel(nn.Module):
     def forward(self, audio_embeddings, labels=None):
         # Pass through the projection layer
         projected_embeddings = self.projection(audio_embeddings)
-        
+    
+        # Ensure correct shape for inputs_embeds: (batch_size, seq_length, embedding_dim)
+        projected_embeddings = projected_embeddings.unsqueeze(1)  # Add a dimension for sequence length (e.g., 1)
+
         # Generate outputs with T5
         outputs = self.t5(
             inputs_embeds=projected_embeddings,
@@ -36,23 +32,33 @@ class AudioToTextModel(nn.Module):
         )
         return outputs
 
+
 # Load the training data
 train_data = torch.load('../data/train_data.pt')
 
-# Extract the embeddings and labels from the loaded data
-train_embeddings = torch.tensor(train_data["embeddings"])
-train_labels = train_data["labels"]
+train_embeddings = torch.tensor(np.array(train_data["embeddings"]))
+train_labels = [str(label) for label in train_data["labels"]]
 
-# Prepare DataLoader with your train, validation splits
-train_dataset = TensorDataset(torch.tensor(train_embeddings), torch.tensor(train_labels))  # Adapt to your data structure
+# print(f"Type of train labels: {type(train_labels)}")
+# print(f"Type of first element of train labels: {type(train_labels[0])}")
+
+# Ensure all labels are strings
+for label in train_labels:
+    if label is None or not isinstance(label, str):
+        print("Label has an error or is not a string")
+
+tokenizer = T5Tokenizer.from_pretrained("t5-small")
+
+# Tokenize the labels (convert them into token IDs) just once
+tokenized_labels = tokenizer(train_labels, padding=True, truncation=True, return_tensors="pt").input_ids
+
+# Create a DataLoader for your train data
+train_dataset = TensorDataset(train_embeddings, tokenized_labels)
 train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
 
 # Initialize the model and tokenizer
-model = AudioToTextModel(projection_dim=768)  # or use a larger dimension for more complexity
-tokenizer = T5Tokenizer.from_pretrained("t5-small")  # Or another T5 model depending on your choice
-
-# Set the model to training mode
-model.train()
+model = AudioToTextModel(projection_dim=768)  # Or use a larger dimension for more complexity
+model.train()  # Set the model to training mode
 
 # Set the optimizer
 optimizer = optim.AdamW(model.parameters(), lr=1e-5)  # You can adjust the learning rate
@@ -65,14 +71,12 @@ for epoch in range(num_epochs):
     for batch in train_loader:
         audio_embeddings, labels = batch
         
-        # Tokenize the labels for T5
-        tokenized_labels = tokenizer(labels, padding=True, return_tensors="pt").input_ids
-        
+        # No need to re-tokenize the labels here, just use the already tokenized labels
         # Zero the gradients
         optimizer.zero_grad()
         
         # Forward pass
-        outputs = model(audio_embeddings, labels=tokenized_labels)
+        outputs = model(audio_embeddings, labels=labels)
         
         # Calculate loss
         loss = outputs.loss
