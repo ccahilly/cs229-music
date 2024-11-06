@@ -5,3 +5,4 @@ transformers
 librosa
 numpy
 transformers
+sklearn
