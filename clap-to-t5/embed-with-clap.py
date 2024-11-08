@@ -41,6 +41,10 @@ else:
 labels_df = pd.read_csv(temp_csv_file)
 labels_dict = pd.Series(labels_df.caption.values, index=labels_df.ytid).to_dict()
 
+labels_df.head()
+
+labels_dict
+
 # Remove the temporary CSV file
 if CLOUD_DATA:
     os.remove(temp_csv_file)
@@ -48,7 +52,8 @@ if CLOUD_DATA:
 audio_samples = []
 audio_filenames = [] 
 
-for ytid in labels_df['ytid']:  # Loop through ytid to ensure we process all files in the CSV
+from tqdm import tqdm
+for ytid in tqdm(labels_df['ytid']):  # Loop through ytid to ensure we process all files in the CSV
     file_name = f"{ytid}.wav"
 
     if CLOUD_DATA:
@@ -159,3 +164,5 @@ for i in range(min(5, len(embedding_dict['embeddings']))):
     print(f"Label: {embedding_dict['labels'][i]}")
     print(f"Embedding shape: {embedding_dict['embeddings'][i].shape}")  # Shape of the embedding
     print("-" * 40)  # Separator for clarity
+
+
