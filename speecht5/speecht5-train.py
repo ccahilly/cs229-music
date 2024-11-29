@@ -8,6 +8,9 @@ import torch
 import matplotlib.pyplot as plt
 from scipy.io import wavfile
 
+SAMPLE_RATE = 16000
+BATCH_SIZE = 8
+
 # Paths
 split_save_path = "../data/splits"
 
@@ -40,10 +43,14 @@ class SpeechDataset(Dataset):
         audio_path = self.data.iloc[idx]["file_path"]
         
         # Load the audio file using scipy (or librosa if you prefer)
-        sample_rate, audio = wavfile.read(audio_path)
+        _, audio = wavfile.read(audio_path)
         
+        # Check if the audio is stereo (2 channels) and convert it to mono if necessary
+        if audio.ndim == 2:  # Stereo audio (2 channels)
+            audio = audio.mean(axis=1)  # Convert stereo to mono by averaging the channels
+            
         # Use the processor to convert audio into input values (with proper sample rate)
-        audio_input = self.processor(audio=audio, sampling_rate=sample_rate, return_tensors="pt")
+        audio_input = self.processor(audio=audio, sampling_rate=SAMPLE_RATE, return_tensors="pt")
 
         # Get the text caption (this is used as the target label for the model)
         caption = self.data.iloc[idx]["caption"]
@@ -56,9 +63,9 @@ train_dataset = SpeechDataset(train_data, processor)
 val_dataset = SpeechDataset(val_data, processor)
 test_dataset = SpeechDataset(test_data, processor)
 
-train_dataloader = DataLoader(train_dataset, batch_size=4, shuffle=True)
-val_dataloader = DataLoader(val_dataset, batch_size=4, shuffle=False)
-test_dataloader = DataLoader(test_dataset, batch_size=4, shuffle=False)
+train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+val_dataloader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False)
+test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
 # 6. Training loop
 optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
