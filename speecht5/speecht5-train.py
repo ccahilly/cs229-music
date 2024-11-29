@@ -43,7 +43,7 @@ class SpeechDataset(Dataset):
         sample_rate, audio = wavfile.read(audio_path)
         
         # Use the processor to convert audio into input values (with proper sample rate)
-        audio_input = self.processor(audio, sampling_rate=sample_rate, return_tensors="pt")
+        audio_input = self.processor(audio=audio, sampling_rate=sample_rate, return_tensors="pt")
 
         # Get the text caption (this is used as the target label for the model)
         caption = self.data.iloc[idx]["caption"]
@@ -79,7 +79,7 @@ for epoch in range(num_epochs):
         labels = batch["labels"]
 
         # Tokenize the labels (captions) into IDs
-        labels = processor(labels, padding=True, truncation=True, return_tensors="pt").input_ids.to(device)
+        labels = processor(text_target=labels, padding=True, truncation=True, return_tensors="pt").input_ids.to(device)
 
         # Forward pass
         outputs = model(input_values, labels=labels)
@@ -103,7 +103,7 @@ for epoch in range(num_epochs):
         labels = batch["labels"]
         
         # Tokenize the labels (captions) for validation
-        labels = processor(labels, padding=True, truncation=True, return_tensors="pt").input_ids.to(device)
+        labels = processor(text_target=labels, padding=True, truncation=True, return_tensors="pt").input_ids.to(device)
         
         with torch.no_grad():
             outputs = model(input_values, labels=labels)
