@@ -118,7 +118,12 @@ for epoch in range(num_epochs):
         # Calculate WER
         predictions = outputs.logits.argmax(dim=-1)
         predicted_texts = processor.batch_decode(predictions, skip_special_tokens=True)
-        total_wer += wer.compute(predictions=predicted_texts, references=labels)
+        
+        # Decode references to text
+        decoded_references = processor.batch_decode(labels, skip_special_tokens=True)
+        
+        # Compute WER
+        total_wer += wer.compute(predictions=predicted_texts, references=decoded_references)
 
     print(f"Validation WER: {total_wer / len(val_dataloader)}")
 

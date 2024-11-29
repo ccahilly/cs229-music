@@ -18,7 +18,14 @@ assert "ytid" in metadata.columns and "caption" in metadata.columns, "Missing re
 metadata["file_path"] = metadata["ytid"].apply(lambda x: os.path.join(audio_dir, f"{x}.wav"))
 
 # List of ytids to ignore
-ytids_to_ignore = ['W58kioYp1Ms', 'lwdDm3UO5WM', 'sETUDPPoDuo']
+ytids_to_ignore = [
+    'W58kioYp1Ms', 'lwdDm3UO5WM', 'sETUDPPoDuo', 
+    'KDzy3ZL626U', 'HflVPAOVL7U', '05JAmKFVy44', 
+    'K_ZuxYxxT60', '0soVCtJgDTk', 'zrb76mJOZQQ', 
+    '2xtOqrNKH5s', 'lTOzGIOIfq0', 'dTsOP7Nfnpg',
+    'pYXx0xXZiXk', 'OjvWDzPGeic', 'zw5dkiklbhE',
+    'PRzBkZSSyY0', '-SWaCArvQug'
+]
 
 # Function to get the sample rate of an audio file
 def get_sample_rate(file_path):
@@ -43,5 +50,10 @@ os.makedirs(split_save_path, exist_ok=True)
 train_data.to_csv(os.path.join(split_save_path, "train.csv"), index=False)
 val_data.to_csv(os.path.join(split_save_path, "val.csv"), index=False)
 test_data.to_csv(os.path.join(split_save_path, "test.csv"), index=False)
+
+# Print the number of items in each split
+print(f"Number of items in train split: {len(train_data)}")
+print(f"Number of items in validation split: {len(val_data)}")
+print(f"Number of items in test split: {len(test_data)}")
 
 print("Data splits saved!")

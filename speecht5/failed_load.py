@@ -6,13 +6,15 @@ from scipy.io import wavfile
 split_dir = "../data/splits"  # directory containing train.csv, val.csv, test.csv
 audio_dir = "../data/wav"     # directory containing the audio files
 
-# Function to load audio and check for errors
+# Function to load audio and check for errors (including length check)
 def check_audio_file(file_path):
     try:
         # Try loading the audio file
         sample_rate, audio_data = wavfile.read(file_path)
-        # If file is empty, return False
-        if len(audio_data) == 0:
+        
+        # Check if file is empty or has a length < 160000 samples
+        if len(audio_data) == 0 or len(audio_data) < 160000:
+            print(len(audio_data))
             return False
         return True
     except Exception as e:
