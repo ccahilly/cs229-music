@@ -10,6 +10,7 @@ from scipy.io import wavfile
 
 SAMPLE_RATE = 16000
 BATCH_SIZE = 8
+num_epochs = 15
 
 # Paths
 split_save_path = "../data/splits"
@@ -72,8 +73,6 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
 
 # Use WER (Word Error Rate) metric
 wer = evaluate.load("wer")
-
-num_epochs = 3
 
 # Store loss values for plotting
 epoch_losses = []
