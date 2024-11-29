@@ -7,3 +7,4 @@ numpy
 transformers
 scikit-learn
 sentencepiece
+jiwer
