@@ -137,5 +137,5 @@ plt.legend()
 plt.savefig("training_loss_graph.png")
 
 # 8. Save the model and processor
-model.save_pretrained("./speecht5-model")
-processor.save_pretrained("./speecht5-model")
+model.save_pretrained("../models/speecht5-model-e" + str(num_epochs))
+processor.save_pretrained("../models/speecht5-model-e" + str(num_epochs))
