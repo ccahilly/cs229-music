@@ -4,11 +4,14 @@ from torch.utils.data import Dataset, DataLoader
 from transformers import SpeechT5Processor, SpeechT5ForConditionalGeneration
 from datasets import load_metric
 import librosa
+import matplotlib.pyplot as plt
+import pandas as pd
 
 # Paths
 train_split = "../data/splits/train.csv"
 val_split = "../data/splits/val.csv"
 output_dir = "../model_weights"
+loss_plot_path = "../model_weights/loss_plot.jpg"
 
 # Load splits
 train_data = pd.read_csv(train_split)
@@ -57,11 +60,15 @@ model.to(device)
 # Define optimizer and loss
 optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
 
+# Lists to store losses for plotting
+train_losses = []
+val_losses = []
+
 # Training loop
 num_epochs = 5
 for epoch in range(num_epochs):
     model.train()
-    total_loss = 0
+    total_train_loss = 0
 
     for batch in train_loader:
         # Move data to GPU if available
@@ -77,28 +84,42 @@ for epoch in range(num_epochs):
         loss.backward()
         optimizer.step()
 
-        total_loss += loss.item()
+        total_train_loss += loss.item()
 
-    avg_loss = total_loss / len(train_loader)
-    print(f"Epoch {epoch + 1}/{num_epochs} - Training Loss: {avg_loss:.4f}")
+    avg_train_loss = total_train_loss / len(train_loader)
+    train_losses.append(avg_train_loss)
+    print(f"Epoch {epoch + 1}/{num_epochs} - Training Loss: {avg_train_loss:.4f}")
 
-    # Validation step (optional)
+    # Validation step
     model.eval()
-    val_loss = 0
+    total_val_loss = 0
     with torch.no_grad():
         for batch in val_loader:
             input_features = batch["input_features"].to(device)
             labels = batch["labels"].to(device)
 
             outputs = model(input_features=input_features, labels=labels)
-            val_loss += outputs.loss.item()
+            total_val_loss += outputs.loss.item()
 
-    avg_val_loss = val_loss / len(val_loader)
+    avg_val_loss = total_val_loss / len(val_loader)
+    val_losses.append(avg_val_loss)
     print(f"Epoch {epoch + 1}/{num_epochs} - Validation Loss: {avg_val_loss:.4f}")
 
 # Save Model
 os.makedirs(output_dir, exist_ok=True)
 model.save_pretrained(output_dir)
 processor.save_pretrained(output_dir)
-
 print("Model and processor saved!")
+
+# Plot Loss
+plt.figure(figsize=(8, 6))
+plt.plot(range(1, num_epochs + 1), train_losses, label="Training Loss", marker='o')
+plt.plot(range(1, num_epochs + 1), val_losses, label="Validation Loss", marker='o')
+plt.title("Training and Validation Loss")
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+plt.legend()
+plt.grid()
+plt.savefig(loss_plot_path)
+print(f"Loss plot saved at {loss_plot_path}")
+plt.show()
