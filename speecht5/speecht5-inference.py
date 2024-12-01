@@ -11,7 +11,7 @@ wer = evaluate.load("wer")
 
 # Paths
 split_save_path = "../data/splits"
-model_path = "../models/speecht5-model-e3"  # Path to the saved model
+model_path = "../models/speecht5-model-e15"  # Path to the saved model
 
 # Load the preprocessed data splits
 train_data = pd.read_csv(os.path.join(split_save_path, "train.csv"))
