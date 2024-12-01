@@ -10,7 +10,7 @@ from scipy.io import wavfile
 
 SAMPLE_RATE = 16000
 BATCH_SIZE = 8
-num_epochs = 15
+num_epochs = 20
 
 # Paths
 split_save_path = "../data/splits"
@@ -62,11 +62,9 @@ class SpeechDataset(Dataset):
 # 5. Prepare DataLoader
 train_dataset = SpeechDataset(train_data, processor)
 val_dataset = SpeechDataset(val_data, processor)
-test_dataset = SpeechDataset(test_data, processor)
 
 train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 val_dataloader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False)
-test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
 # 6. Training loop
 optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
@@ -75,11 +73,14 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
 wer = evaluate.load("wer")
 
 # Store loss values for plotting
-epoch_losses = []
+# Store metrics for plotting
+train_losses, val_losses = [], []
+train_wer_scores, val_wer_scores = [], []
 
 for epoch in range(num_epochs):
     model.train()
-    total_loss = 0
+    total_train_loss = 0
+    total_train_wer = 0
     for batch in tqdm(train_dataloader, desc=f"Epoch {epoch + 1}/{num_epochs}"):
         input_values = batch["input_values"].to(device)  # Move input values to GPU
         labels = batch["labels"]
@@ -90,50 +91,76 @@ for epoch in range(num_epochs):
         # Forward pass
         outputs = model(input_values, labels=labels)
         loss = outputs.loss
-        total_loss += loss.item()
+        total_train_loss += loss.item()
 
         # Backward pass
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
-    avg_loss = total_loss / len(train_dataloader)
-    epoch_losses.append(avg_loss)
-    print(f"Epoch {epoch + 1} - Loss: {avg_loss}")
+        # Calculate train WER
+        with torch.no_grad():
+            predictions = outputs.logits.argmax(dim=-1)
+            predicted_texts = processor.batch_decode(predictions, skip_special_tokens=True)
+            decoded_references = processor.batch_decode(labels, skip_special_tokens=True)
+            total_train_wer += wer.compute(predictions=predicted_texts, references=decoded_references)
+
+    avg_train_loss = total_train_loss / len(train_dataloader)
+    avg_train_wer = total_train_wer / len(train_dataloader)
+    train_losses.append(avg_train_loss)
+    train_wer_scores.append(avg_train_wer)
+    print(f"Epoch {epoch + 1} - Train Loss: {avg_train_loss}, Train WER: {avg_train_wer}")
 
     # Validation
     model.eval()
-    total_wer = 0
+    total_val_loss = 0
+    total_val_wer = 0
     for batch in tqdm(val_dataloader, desc="Validation"):
-        input_values = batch["input_values"].to(device)  # Move input values to GPU
+        input_values = batch["input_values"].to(device)
         labels = batch["labels"]
-        
+
         # Tokenize the labels (captions) for validation
         labels = processor(text_target=labels, padding=True, truncation=True, return_tensors="pt").input_ids.to(device)
-        
+
         with torch.no_grad():
             outputs = model(input_values, labels=labels)
-        
-        # Calculate WER
-        predictions = outputs.logits.argmax(dim=-1)
-        predicted_texts = processor.batch_decode(predictions, skip_special_tokens=True)
-        
-        # Decode references to text
-        decoded_references = processor.batch_decode(labels, skip_special_tokens=True)
-        
-        # Compute WER
-        total_wer += wer.compute(predictions=predicted_texts, references=decoded_references)
+            total_val_loss += outputs.loss.item()
 
-    print(f"Validation WER: {total_wer / len(val_dataloader)}")
+            # Calculate WER
+            predictions = outputs.logits.argmax(dim=-1)
+            predicted_texts = processor.batch_decode(predictions, skip_special_tokens=True)
+            decoded_references = processor.batch_decode(labels, skip_special_tokens=True)
+            total_val_wer += wer.compute(predictions=predicted_texts, references=decoded_references)
 
-# 7. Plot the loss graph
-plt.plot(range(1, num_epochs + 1), epoch_losses, marker='o', color='b', label="Training Loss")
-plt.title("Training Loss Across Epochs")
-plt.xlabel("Epoch")
-plt.ylabel("Loss")
-plt.grid(True)
-plt.legend()
-plt.savefig("training_loss_graph.png")
+    avg_val_loss = total_val_loss / len(val_dataloader)
+    avg_val_wer = total_val_wer / len(val_dataloader)
+    val_losses.append(avg_val_loss)
+    val_wer_scores.append(avg_val_wer)
+    print(f"Epoch {epoch + 1} - Validation Loss: {avg_val_loss}, Validation WER: {avg_val_wer}")
+
+    # Plot Train vs Validation Loss
+    plt.figure(figsize=(10, 6))
+    plt.plot(range(1, epoch + 2), train_losses, marker='o', label="Train Loss")
+    plt.plot(range(1, epoch + 2), val_losses, marker='o', label="Validation Loss")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.title("Train and Validation Loss Over Epochs")
+    plt.legend()
+    plt.grid(True)
+    plt.savefig("loss_plot_e" + str(num_epochs) + ".jpg")
+    plt.close()
+
+    # Plot Train vs Validation WER
+    plt.figure(figsize=(10, 6))
+    plt.plot(range(1, epoch + 2), train_wer_scores, marker='o', label="Train WER")
+    plt.plot(range(1, epoch + 2), val_wer_scores, marker='o', label="Validation WER")
+    plt.xlabel("Epoch")
+    plt.ylabel("WER")
+    plt.title("Train and Validation WER Over Epochs")
+    plt.legend()
+    plt.grid(True)
+    plt.savefig("wer_plot_e" + str(num_epochs) +".jpg")
+    plt.close()
 
 # 8. Save the model and processor
 model.save_pretrained("../models/speecht5-model-e" + str(num_epochs))
