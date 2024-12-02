@@ -11,7 +11,7 @@ import numpy as np
 
 SAMPLE_RATE = 16000
 BATCH_SIZE = 8
-NUM_EPOCHS = 20
+NUM_EPOCHS = 5
 NORMALIZING_INPUT = True
 
 class SpeechDataset(Dataset):
@@ -50,7 +50,7 @@ class SpeechDataset(Dataset):
 def train():
     # Paths
     split_save_path = "../data/splits"
-    checkpoint_dir = "../models/checkpoints_e" + str(NUM_EPOCHS)  # Directory to save checkpoints
+    checkpoint_dir = "../models/checkpoints"  # Directory to save checkpoints
     if NORMALIZING_INPUT:
         checkpoint_dir += "_norm"
     os.makedirs(checkpoint_dir, exist_ok=True)
@@ -157,7 +157,7 @@ def train():
         plt.legend()
         plt.grid(True)
         if NORMALIZING_INPUT:
-            plt.savefig("loss_plot_e" + str(NUM_EPOCHS) + "_norm.jpg")
+            plt.savefig("loss_plot" + str(NUM_EPOCHS) + "_norm.jpg")
         else:
             plt.savefig("loss_plot_e" + str(NUM_EPOCHS) + ".jpg")
         plt.close()
