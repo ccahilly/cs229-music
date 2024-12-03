@@ -8,3 +8,4 @@ transformers
 scikit-learn
 sentencepiece
 jiwer
+simpleaudio
