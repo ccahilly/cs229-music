@@ -39,6 +39,7 @@ def main():
     model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # Check if GPU is available
     model.to(device)
+    print(f"Device: {device}")
 
     # Function to generate 10 second audio for a caption
     def generate_audio_for_caption(caption, ytid, num_pairs=NUM_PAIRS_PER_CAPTION_PER_TEMP, temps=TEMPS):
@@ -46,7 +47,7 @@ def main():
         inputs = processor(text=caption, return_tensors="pt", truncation=True, padding=True).to(device)
 
         # Generate the required number of pairs
-        print(f"Generating audio for caption: {caption}\n")
+        print(f"\nGenerating audio for caption: {caption}\n")
         for i in range(num_pairs):
             for temp in temps:
                 for j in range(2):
