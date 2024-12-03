@@ -29,7 +29,7 @@ def play_audio(file_path):
 stop_early = False
 for f in os.listdir(converted_audio_dir):
     if stop_early:
-        continue
+        break
 
     # Extract ytid and check if it's valid
     if not f.endswith(".wav"):
