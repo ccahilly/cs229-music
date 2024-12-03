@@ -52,8 +52,8 @@ for f in os.listdir(converted_audio_dir):
         print(f"{ytid}")
     continue
 
-    for pair_idx in range(NUM_PAIRS_PER_CAPTION_PER_TEMP):  # Define NUM_PAIRS_PER_CAPTION
-        for temp in TEMPS:
+    for temp in TEMPS:
+        for pair_idx in range(NUM_PAIRS_PER_CAPTION_PER_TEMP):
             # Skip if label already exists and preference is set
             existing_label_idx = find_label_index(ytid, pair_idx, temp)
             if existing_label_idx != -1 and labels[existing_label_idx]["preference"] != -1:
