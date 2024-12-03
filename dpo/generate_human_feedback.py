@@ -10,7 +10,7 @@ caption_file = "../data/musiccaps-train-data.csv"
 output_file = "../data/dpo-gen-output/human_labels.json"
 
 print("Note that this must be run locally for the sound to work.")
-print("You can click 'c' while a song is playing to stop it.")
+# print("You can click 'c' while a song is playing to stop it.")
 
 # Load captions
 captions_df = pd.read_csv(caption_file)
@@ -61,15 +61,15 @@ for f in os.listdir(converted_audio_dir):
 
         # Display caption
         caption = captions_df[captions_df["ytid"] == ytid]["caption"].values[0]
-        print(f"\nCaption: {caption}")
+        print(f"\nCaption: {caption}\n")
         # print(f"Pair {pair_idx}:")
-        print(f"1. {file_0}")
-        print(f"2. {file_1}")
+        # print(f"1. {file_0}")
+        # print(f"2. {file_1}")
 
         # Playback loop
         while True:
-            print("Type '1' to play first audio, '2' to play second audio, or 'n' to move to rating.")
-            choice = input("Play option (1/2/n): ").strip()
+            print("Type '1' to play first audio, '2' to play second audio, or 'n' to move to rating.\n")
+            choice = input("Play option (1/2/n): \n").strip()
             if choice == "1":
                 play_audio(file_0)
             elif choice == "2":
