@@ -8,12 +8,12 @@ import numpy as np
 # Constants
 iteration_number = 0
 
-NUM_CAPTIONS = 5  # Set the number of captions to select
+NUM_CAPTIONS = 1  # Set the number of captions to select
 NUM_PAIRS_PER_CAPTION_PER_TEMP = 1  # Set the number of pairs per caption
 TEMPS = [0.7, 1.0]
 
 audio_dir = f"../data/dpo-gen-{iteration_number}/wavs"
-logits_dir = f"../data/dpo-gen-{iteration_number}/logits"
+logprobs_dir = f"../data/dpo-gen-{iteration_number}/logprobs"
 caption_file = "../data/musiccaps-train-data.csv"  # Path to the captions CSV
 
 FAILED_YTID_PATH = "../data/failed_ytids.txt"  # Path to failed ytids
@@ -28,6 +28,12 @@ policy_model_name = "facebook/musicgen-small"
 
 REF_IDX = 0
 POL_IDX = 1
+
+def logits_to_logprobs(logits):
+    # Assuming logits are of shape (batch_size = 1, num_classes)
+    probs = torch.softmax(logits, dim=-1)  # Convert logits to probabilities
+    logprobs = torch.log(probs)  # Take log of the probabilities
+    return logprobs
 
 # Function to generate 10 second audio for a caption
 def generate_audio_for_caption(caption, ytid, processor_name, model, device, num_pairs=NUM_PAIRS_PER_CAPTION_PER_TEMP, temps=TEMPS):
@@ -53,19 +59,23 @@ def generate_audio_for_caption(caption, ytid, processor_name, model, device, num
 
             # Extract logits (model output before softmax)
             logits = generated_audio.logits
+            print(f"Logits shape: {logits.shape}")
 
             # Convert output tokens back to audio
             audio_array = generated_audio.cpu().numpy()
-
-            print(audio_array.shape)
 
             # Save the audio as a WAV file
             output_path = os.path.join(audio_dir, f"{ytid}-temp{temp}-pair{i}-{idx}.wav")
             write(output_path, SAMPLE_RATE, audio_array)
 
+            probs = torch.softmax(logits, dim=-1)
+            logprobs = torch.log(probs)
+            print(f"Logprobs: {logprobs}")
+            print(f"Logprobs: {logprobs.shape}")
+
             # Save logits as a numpy array
-            logits_path = os.path.join(logits_dir, f"{ytid}-temp{temp}-pair{i}-{idx}.npy")
-            np.save(logits_path, logits.cpu().numpy())
+            logprobs_path = os.path.join(logprobs_dir, f"{ytid}-temp{temp}-pair{i}-{idx}.npy")
+            np.save(logprobs_path, logprobs.cpu().numpy())
 
             print(f"Saved as {output_path}")
 
@@ -85,7 +95,7 @@ def gen(model, processor_name, sampled_data):
 
 def main():
     os.makedirs(audio_dir, exist_ok=True)
-    os.makedirs(logits_dir, exist_ok=True)
+    os.makedirs(logprobs_dir, exist_ok=True)
 
     # Load the failed ytids
     with open(FAILED_YTID_PATH, "r") as f:
