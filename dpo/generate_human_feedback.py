@@ -29,7 +29,7 @@ def play_audio(file_path):
 stop_early = False
 for f in os.listdir(converted_audio_dir):
     if stop_early:
-        break
+        continue
 
     # Extract ytid and check if it's valid
     if not f.endswith(".wav"):
@@ -67,9 +67,9 @@ for f in os.listdir(converted_audio_dir):
 
         # Collect human preference
         while True:
-            preference = input("Enter your preference (0 for first, 1 for second, -1 for no preference, or q to quit): ").strip()
-            if preference in {"0", "1", "-1"}:
-                labels.append({"ytid": ytid, "pair_idx": pair_idx, "preference": int(preference)})
+            preference = input("Enter your preference (1 for first, 2 for second, 0 for no preference, or q to quit): ").strip()
+            if preference in {"1", "2", "0"}:
+                labels.append({"ytid": ytid, "pair_idx": pair_idx, "preference": int(preference) - 1})
                 break
             elif preference == "q":
                 stop_early = True
