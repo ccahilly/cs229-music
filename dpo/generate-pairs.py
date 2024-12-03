@@ -43,7 +43,7 @@ def generate_audio_for_caption(caption, ytid, num_pairs=NUM_PAIRS_PER_CAPTION):
     inputs = processor(text=caption, return_tensors="pt", truncation=True, padding=True).to(device)
 
     # Generate the required number of pairs
-    print(f"Generating audio for caption: {caption}")
+    print(f"Generating audio for caption: {caption}\n")
     for i in range(num_pairs):
         for j in range(2):
             # Generate music using MusicGen
