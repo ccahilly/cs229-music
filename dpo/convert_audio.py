@@ -1,5 +1,9 @@
 import os
 import subprocess
+from generate_pairs import audio_dir
+
+# Define the directories
+converted_audio_dir = audio_dir + "-converted"
 
 def convert_audio_files(audio_dir, converted_audio_dir, target_sample_rate=44100, target_channels=2):
     """
@@ -35,9 +39,5 @@ def convert_audio_files(audio_dir, converted_audio_dir, target_sample_rate=44100
                 print(f"Error converting {file_name}: {e}")
     print("Audio conversion completed.")
 
-# Define the directories
-audio_dir = "../data/dpo-gen-output/"
-converted_audio_dir = "../data/dpo-gen-output-converted/"
-
-# Run the conversion
-convert_audio_files(audio_dir, converted_audio_dir)
+if __name__ == "__main__":
+    convert_audio_files(audio_dir, converted_audio_dir)
