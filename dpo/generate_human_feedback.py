@@ -41,11 +41,9 @@ def play_audio(file_path):
 stop_early = False
 for f in os.listdir(converted_audio_dir):
     # Extract ytid and check if it's valid
-    if not f.endswith(".wav"):
+    if (not f.endswith(".wav")) or (not "temp" not in f):
         continue
     ytid = "-".join(f.split("-")[:-3])
-    print(ytid)
-    continue
 
     for pair_idx in range(NUM_PAIRS_PER_CAPTION_PER_TEMP):  # Define NUM_PAIRS_PER_CAPTION
         for temp in TEMPS:
