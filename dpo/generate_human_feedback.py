@@ -28,9 +28,6 @@ def play_audio(file_path):
 
 stop_early = False
 for f in os.listdir(converted_audio_dir):
-    if stop_early:
-        break
-
     # Extract ytid and check if it's valid
     if not f.endswith(".wav"):
         continue
@@ -54,13 +51,13 @@ for f in os.listdir(converted_audio_dir):
 
         # Playback loop
         while True:
-            print("Type '1' to play first audio, '2' to play second audio, or 'q' to move to rating.")
-            choice = input("Play option (1/2/q): ").strip()
+            print("Type '1' to play first audio, '2' to play second audio, or 'n' to move to rating.")
+            choice = input("Play option (1/2/n): ").strip()
             if choice == "1":
                 play_audio(file_0)
             elif choice == "2":
                 play_audio(file_1)
-            elif choice == "q":
+            elif choice == "n":
                 break
             else:
                 print("Invalid input. Please try again.")
@@ -76,6 +73,12 @@ for f in os.listdir(converted_audio_dir):
                 break
             else:
                 print("Invalid input. Please enter 0, 1, or -1.")
+        
+        if stop_early:
+            break
+    
+    if stop_early:
+        break
 
 # Save labeled data
 with open(output_file, "w") as f:
