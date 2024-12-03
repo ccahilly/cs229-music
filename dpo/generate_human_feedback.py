@@ -7,7 +7,7 @@ from generate_pairs import NUM_PAIRS_PER_CAPTION
 # Configurations
 converted_audio_dir = "../data/dpo-gen-output-converted/"
 caption_file = "../data/musiccaps-train-data.csv"
-output_file = "./data/dpo-gen-output/human_labels.json"
+output_file = "../data/dpo-gen-output/human_labels.json"
 
 print("Note that this must be run locally for the sound to work.")
 
@@ -28,7 +28,7 @@ def play_audio(file_path):
 
 stop_early = False
 for f in os.listdir(converted_audio_dir):
-    if not stop_early:
+    if stop_early:
         break
 
     # Extract ytid and check if it's valid
