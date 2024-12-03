@@ -31,7 +31,7 @@ for f in os.listdir(audio_dir):
     ytid = "-".join(f.split("-")[:-2])
 
     for pair_idx in range(NUM_PAIRS_PER_CAPTION):  # Define NUM_PAIRS_PER_CAPTION
-        file_0 = os.path.join(audio_dir, f"{ytid}-pair{pair_idx}-0.wav")
+        file_0 = os.path.join(audio_dir, f"{ytid}-pair{pair_idx}-0-converted.wav")
         file_1 = os.path.join(audio_dir, f"{ytid}-pair{pair_idx}-1.wav")
         
         # Skip if files are missing
