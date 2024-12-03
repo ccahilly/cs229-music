@@ -7,14 +7,16 @@ import numpy as np
 
 # Constants
 NUM_CAPTIONS = 5  # Set the number of captions to select
-NUM_PAIRS_PER_CAPTION = 2  # Set the number of pairs per caption
+NUM_PAIRS_PER_CAPTION_PER_TEMP = 2  # Set the number of pairs per caption
+TEMPS = [0.5, 0.7, 1.0]
+
 OUTPUT_DIR = "../data/dpo-gen-output"  # Directory to save generated audio clips
 FAILED_YTID_PATH = "../data/failed_ytids.txt"  # Path to failed ytids
 CAPTIONS_CSV_PATH = "../data/musiccaps-train-data.csv"  # Path to the captions CSV
+
 SAMPLE_RATE = 32000  # Sample rate for the audio clips
 COMPRESSION_RATIO = 50
 SECONDS = 10
-TEMP = 1.0
 
 def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -39,34 +41,28 @@ def main():
     model.to(device)
 
     # Function to generate 10 second audio for a caption
-    def generate_audio_for_caption(caption, ytid, num_pairs=NUM_PAIRS_PER_CAPTION):
+    def generate_audio_for_caption(caption, ytid, num_pairs=NUM_PAIRS_PER_CAPTION_PER_TEMP, temps=TEMPS):
         # Prepare the prompt for MusicGen
         inputs = processor(text=caption, return_tensors="pt", truncation=True, padding=True).to(device)
 
         # Generate the required number of pairs
         print(f"Generating audio for caption: {caption}\n")
         for i in range(num_pairs):
-            for j in range(2):
-                # Generate music using MusicGen
-                generated_audio = model.generate(**inputs, max_new_tokens=COMPRESSION_RATIO * SECONDS, temperature=TEMP)
+            for temp in temps:
+                for j in range(2):
+                    # Generate music using MusicGen
+                    generated_audio = model.generate(**inputs, max_new_tokens=COMPRESSION_RATIO * SECONDS, temperature=temp)
 
-                # Convert output tokens back to audio
-                audio_array = generated_audio.cpu().numpy()
+                    # Convert output tokens back to audio
+                    audio_array = generated_audio.cpu().numpy()
 
-                print(audio_array.shape)
-                # Ensure 10-second duration
-                # if len(audio_array) > SECONDS * SAMPLE_RATE:
-                #     audio_array = audio_array[:SECONDS * SAMPLE_RATE]
-                #     print(f"Truncated output for ytid {ytid}")
-                # else:
-                #     audio_array = np.pad(audio_array, (0, SECONDS * SAMPLE_RATE - len(audio_array)), 'constant')
-                #     print(f"Padded output for ytid {ytid}")
+                    print(audio_array.shape)
 
-                # Save the audio as a WAV file
-                output_path = os.path.join(OUTPUT_DIR, f"{ytid}-pair{i}-{j}.wav")
-                write(output_path, SAMPLE_RATE, audio_array)
+                    # Save the audio as a WAV file
+                    output_path = os.path.join(OUTPUT_DIR, f"{ytid}-temp{temp}-pair{i}-{j}.wav")
+                    write(output_path, SAMPLE_RATE, audio_array)
 
-                print(f"Saved as {output_path}")
+                    print(f"Saved as {output_path}")
 
     # Generate audio for each sampled caption
     for _, row in sampled_data.iterrows():
@@ -74,7 +70,7 @@ def main():
         ytid = row['ytid']
         
         # Generate pairs of audio for the caption
-        generate_audio_for_caption(caption, ytid, NUM_PAIRS_PER_CAPTION)
+        generate_audio_for_caption(caption, ytid)
 
 if __name__ == "__main__":
     main()
