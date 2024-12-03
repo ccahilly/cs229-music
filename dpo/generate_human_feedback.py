@@ -4,6 +4,7 @@ import simpleaudio as sa
 import json
 from generate_pairs import NUM_PAIRS_PER_CAPTION
 import keyboard
+import threading
 
 # Configurations
 converted_audio_dir = "../data/dpo-gen-output-converted/"
@@ -28,18 +29,44 @@ labels = []
 #     except Exception as e:
 #         print(f"Error playing audio: {e}")
 
-# Helper function to play an audio file
+# # Helper function to play an audio file
+# def play_audio(file_path):
+#     try:
+#         wave_obj = sa.WaveObject.from_wave_file(file_path)
+#         play_obj = wave_obj.play()
+        
+#         # Monitor keyboard press while the audio is playing
+#         while play_obj.is_playing():
+#             if keyboard.is_pressed('c'):  # If 'c' is pressed, stop the audio
+#                 play_obj.stop()
+#                 return True  # Stop playing and return to the prompt
+#         play_obj.wait_done()
+#         return True  # Audio finished playing normally
+#     except Exception as e:
+#         print(f"Error playing audio: {e}")
+#         return False
+
+import threading
+
 def play_audio(file_path):
     try:
         wave_obj = sa.WaveObject.from_wave_file(file_path)
         play_obj = wave_obj.play()
+
+        def listen_for_keypress():
+            while play_obj.is_playing():
+                if keyboard.is_pressed('c'):  # If 'c' is pressed, stop the audio
+                    play_obj.stop()
+                    print("\nAudio stopped. Returning to prompt.")
+                    return
+
+        # Start a separate thread to listen for 'c' key press
+        key_thread = threading.Thread(target=listen_for_keypress)
+        key_thread.start()
         
-        # Monitor keyboard press while the audio is playing
-        while play_obj.is_playing():
-            if keyboard.is_pressed('c'):  # If 'c' is pressed, stop the audio
-                play_obj.stop()
-                return True  # Stop playing and return to the prompt
         play_obj.wait_done()
+        key_thread.join()  # Ensure the keypress thread finishes before continuing
+
         return True  # Audio finished playing normally
     except Exception as e:
         print(f"Error playing audio: {e}")
