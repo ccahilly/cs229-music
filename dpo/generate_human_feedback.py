@@ -7,7 +7,7 @@ from generate_pairs import NUM_PAIRS_PER_CAPTION_PER_TEMP, TEMPS
 # Configurations
 converted_audio_dir = "../data/dpo-gen-output-converted/"
 caption_file = "../data/musiccaps-train-data.csv"
-output_file = "../data/dpo-gen-output/human_labels.json"
+output_file = "../data/dpo-gen-output/human_labels_temp.json"
 
 print("Note that this must be run locally for the sound to work.")
 # print("You can click 'c' while a song is playing to stop it.")
@@ -41,9 +41,16 @@ def play_audio(file_path):
 stop_early = False
 for f in os.listdir(converted_audio_dir):
     # Extract ytid and check if it's valid
+    print(f)
     if (not f.endswith(".wav")) or (not "temp" not in f):
         continue
     ytid = "-".join(f.split("-")[:-3])
+    if ytid == "":
+        # print(f"Invalid file name: {f}")
+        continue
+    else:
+        print(f"{ytid}")
+    continue
 
     for pair_idx in range(NUM_PAIRS_PER_CAPTION_PER_TEMP):  # Define NUM_PAIRS_PER_CAPTION
         for temp in TEMPS:
@@ -69,8 +76,8 @@ for f in os.listdir(converted_audio_dir):
 
             # Playback loop
             while True:
-                print("Type '1' to play first audio, '2' to play second audio, or 'n' to move to rating.\n")
-                choice = input("Play option (1/2/n): \n").strip()
+                print("Type '1' to play first audio, '2' to play second audio, or 'n' to move to rating.")
+                choice = input("Play option (1/2/n): ").strip()
                 if choice == "1":
                     play_audio(file_0)
                 elif choice == "2":

@@ -8,7 +8,7 @@ import numpy as np
 # Constants
 NUM_CAPTIONS = 5  # Set the number of captions to select
 NUM_PAIRS_PER_CAPTION_PER_TEMP = 2  # Set the number of pairs per caption
-TEMPS = [0.5, 0.7, 1.0]
+TEMPS = [0.7, 1.0]
 
 OUTPUT_DIR = "../data/dpo-gen-output"  # Directory to save generated audio clips
 FAILED_YTID_PATH = "../data/failed_ytids.txt"  # Path to failed ytids
