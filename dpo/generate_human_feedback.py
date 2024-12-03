@@ -3,6 +3,7 @@ import pandas as pd
 import simpleaudio as sa
 import json
 from generate_pairs import NUM_PAIRS_PER_CAPTION
+import keyboard
 
 # Configurations
 converted_audio_dir = "../data/dpo-gen-output-converted/"
@@ -10,6 +11,7 @@ caption_file = "../data/musiccaps-train-data.csv"
 output_file = "../data/dpo-gen-output/human_labels.json"
 
 print("Note that this must be run locally for the sound to work.")
+print("You can click 'c' while a song is playing to stop it.")
 
 # Load captions
 captions_df = pd.read_csv(caption_file)
@@ -17,20 +19,34 @@ captions_df = pd.read_csv(caption_file)
 # Initialize labels
 labels = []
 
+# # Helper function to play an audio file
+# def play_audio(file_path):
+#     try:
+#         wave_obj = sa.WaveObject.from_wave_file(file_path)
+#         play_obj = wave_obj.play()
+#         play_obj.wait_done()
+#     except Exception as e:
+#         print(f"Error playing audio: {e}")
+
 # Helper function to play an audio file
 def play_audio(file_path):
     try:
         wave_obj = sa.WaveObject.from_wave_file(file_path)
         play_obj = wave_obj.play()
+        
+        # Monitor keyboard press while the audio is playing
+        while play_obj.is_playing():
+            if keyboard.is_pressed('c'):  # If 'c' is pressed, stop the audio
+                play_obj.stop()
+                return True  # Stop playing and return to the prompt
         play_obj.wait_done()
+        return True  # Audio finished playing normally
     except Exception as e:
         print(f"Error playing audio: {e}")
+        return False
 
 stop_early = False
 for f in os.listdir(converted_audio_dir):
-    if stop_early:
-        break
-
     # Extract ytid and check if it's valid
     if not f.endswith(".wav"):
         continue
@@ -54,13 +70,13 @@ for f in os.listdir(converted_audio_dir):
 
         # Playback loop
         while True:
-            print("Type '1' to play first audio, '2' to play second audio, or 'q' to move to rating.")
-            choice = input("Play option (1/2/q): ").strip()
+            print("Type '1' to play first audio, '2' to play second audio, or 'n' to move to rating.")
+            choice = input("Play option (1/2/n): ").strip()
             if choice == "1":
                 play_audio(file_0)
             elif choice == "2":
                 play_audio(file_1)
-            elif choice == "q":
+            elif choice == "n":
                 break
             else:
                 print("Invalid input. Please try again.")
@@ -76,6 +92,12 @@ for f in os.listdir(converted_audio_dir):
                 break
             else:
                 print("Invalid input. Please enter 0, 1, or -1.")
+        
+        if stop_early:
+            break
+    
+    if stop_early:
+        break
 
 # Save labeled data
 with open(output_file, "w") as f:
