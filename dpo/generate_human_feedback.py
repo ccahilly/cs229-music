@@ -11,6 +11,7 @@ caption_file = "../data/musiccaps-train-data.csv"
 output_file = "../data/dpo-gen-output/human_labels.json"
 
 print("Note that this must be run locally for the sound to work.")
+print("You can click 'c' while a song is playing to stop it.")
 
 # Load captions
 captions_df = pd.read_csv(caption_file)
