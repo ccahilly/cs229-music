@@ -6,17 +6,20 @@ from dpo.generate_pairs import SAMPLE_RATE
 from scipy.io.wavfile import read
 import numpy as np
 from generate_human_feedback import feedback_file
-from generate_pairs import reference_model_name, policy_model_name, logits_dir, REF_IDX, POL_IDX
+from generate_pairs import reference_model_name, policy_model_name, logprobs_dir, REF_IDX, POL_IDX, iteration_number
+
+output_dir = f"../models/musicgen-{iteration_number + 1}"
 
 batch_size = 16
 learning_rate = 5e-5
 num_epochs = 3
+BETA = 0.1
 
 # Prepare Dataset
 class HumanFeedbackDataset(Dataset):
     def __init__(self, feedback_data):
         self.data = feedback_data
-        self.logits_dir = logits_dir
+        self.logprobs_dir = logprobs_dir
 
     def __len__(self):
         return len(self.data)
@@ -24,42 +27,41 @@ class HumanFeedbackDataset(Dataset):
     def __getitem__(self, idx):
         item = self.data[idx]
         
-        # Load the logits for the ref and pol models
-        ref_logits_path = f"{self.logits_dir}/{item['ytid']}-temp{item['temp']}-pair{item['pair_idx']}-{REF_IDX}.npy"
-        pol_logits_path = f"{self.logits_dir}/{item['ytid']}-temp{item['temp']}-pair{item['pair_idx']}-{POL_IDX}.npy"
-        
-        ref_logits = np.load(ref_logits_path)
-        pol_logits = np.load(pol_logits_path)
+        # Load the logprobs for the ref and pol models
+        ref_logprob = np.load(f"{self.logprobs_dir}/{item['ytid']}-temp{item['temp']}-pair{item['pair_idx']}-{REF_IDX}.npy")
+        pol_logprob = np.load(f"{self.logprobs_dir}/{item['ytid']}-temp{item['temp']}-pair{item['pair_idx']}-{POL_IDX}.npy")
         
         return {
-            "ytid": item["ytid"],
-            "temp": item["temp"],
+            # "ytid": item["ytid"],
+            # "temp": item["temp"],
             "preference": item["preference"],
-            "ref_logits": torch.tensor(ref_logits, dtype=torch.float32),
-            "pol_logits": torch.tensor(pol_logits, dtype=torch.float32),
+            "ref_logprob": torch.tensor(ref_logprob, dtype=torch.float32),
+            "pol_logprob": torch.tensor(pol_logprob, dtype=torch.float32),
         }
 
-def get_audio_array(audio_path):
-    _, data = read(audio_path)
-
-    # Normalize using the data type's range
-    if np.issubdtype(data.dtype, np.integer):  # Check if data type is integer
-        max_val = np.iinfo(data.dtype).max  # Max value for int type (e.g., 32767 for int16)
-        min_val = np.iinfo(data.dtype).min  # Min value for int type (e.g., -32768 for int16)
-        audio_array = data.astype("float32") / max(abs(max_val), abs(min_val))  # Normalize to [-1, 1]
-    else:
-        # If already float, assume it's normalized
-        audio_array = data.astype("float32")
-
-    return audio_array
-
 # Define DPO Loss
-def dpo_loss(preferred_logits, less_preferred_logits, beta=0.1):
-    """Calculates the DPO loss."""
-    difference = (preferred_logits - less_preferred_logits) / beta
-    return -torch.log(torch.sigmoid(difference)).mean()
+import torch.nn.functional as F
 
-def train():
+def dpo_loss(pol_logps, ref_logps, prefs, beta=BETA):
+    """
+    pol_logps: policy logprobs, shape (B,)
+    ref_logps: reference model logprobs, shape (B,)
+    prefs: human preferences, either POL_IDX or REF_IDX, shape (B,)
+    beta: temperature controlling strength of KL penalty
+    """
+    # Compute the log ratio between policy and reference model logprobs directly
+    pol_logratios = pol_logps[prefs == POL_IDX] - pol_logps[prefs != POL_IDX]
+    ref_logratios = ref_logps[prefs == REF_IDX] - ref_logps[prefs != REF_IDX]
+    
+    # Compute the DPO loss as a sigmoid cross-entropy of the logratios, scaled by beta
+    losses = -F.logsigmoid(beta * (pol_logratios - ref_logratios))
+    
+    # Calculate the reward term, which is the log difference between policy and reference model logprobs
+    rewards = beta * (pol_logps - ref_logps).detach()
+    
+    return losses, rewards
+
+def finetune():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Device: {device}")
 
@@ -71,41 +73,19 @@ def train():
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
     # Load MusicGen Model and Tokenizer
-    model = MusicgenForConditionalGeneration.from_pretrained(model_path).to(device)
-    processor = AutoProcessor.from_pretrained(model_path)
+    policy_model = MusicgenForConditionalGeneration.from_pretrained(policy_model_name).to(device)
+    policy_processor = AutoProcessor.from_pretrained(policy_model_name)
 
     # Training Loop
-    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
+    optimizer = torch.optim.AdamW(policy_model.parameters(), lr=learning_rate)
 
-    model.train()
+    policy_model.train()
     for epoch in range(num_epochs):
         for batch in dataloader:
             optimizer.zero_grad()
 
-            # Tokenize and encode inputs
-            ytids = batch["ytid"]
-            preferences = batch["preference"]
-
-            # Generate audio embeddings for preferred and less-preferred pairs
-            preferred_audio, less_preferred_audio = [], []
-            for idx, pref in enumerate(preferences):
-                audio_0_path = f"../data/audio/{ytids[idx]}-temp{batch['temp'][idx]}-pair{batch['pair_idx'][idx]}-0.wav"
-                audio_1_path = f"../data/audio/{ytids[idx]}-temp{batch['temp'][idx]}-pair{batch['pair_idx'][idx]}-1.wav"
-
-                # Ignore if pref == -1 (no preference)
-                if pref == 0:
-                    preferred_audio.append(get_audio_array(audio_0_path))
-                    less_preferred_audio.append(get_audio_array(audio_1_path))
-                elif pref == 1:
-                    preferred_audio.append(get_audio_array(audio_1_path))
-                    less_preferred_audio.append(get_audio_array(audio_0_path))
-
-            # Convert audio to embeddings using MusicGen
-            preferred_inputs = processor(raw_audio=preferred_audio, return_tensors="pt").to(device)
-            less_preferred_inputs = processor(raw_audio=less_preferred_audio, return_tensors="pt").to(device)
-
             # Compute DPO Loss
-            loss = dpo_loss(preferred_inputs, less_preferred_inputs)
+            loss = dpo_loss(batch["pol_logprob"], batch["ref_logprob"], batch["preference"])
 
             # Backpropagation
             loss.backward()
@@ -114,10 +94,10 @@ def train():
         print(f"Epoch {epoch + 1}/{num_epochs} completed. Loss: {loss.item()}")
 
     # Save Fine-Tuned Model
-    model.save_pretrained(output_dir)
-    processor.save_pretrained(output_dir)
+    policy_model.save_pretrained(output_dir)
+    policy_processor.save_pretrained(output_dir)
 
     print(f"Model fine-tuned and saved to {output_dir}")
 
 if __name__ == "__main__":
-    train()
+    finetune()

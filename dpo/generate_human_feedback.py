@@ -42,7 +42,7 @@ def collect_input_for_pair(ytid, pair_idx, temp, labels, captions_df, stop_early
     caption = captions_df[captions_df["ytid"] == ytid]["caption"].values[0]
     print(f"\nCaption: {caption}\n")
     print(f"1. {ref_file}")
-    print(f"2. {pol_file}}\n")
+    print(f"2. {pol_file}\n")
 
     # Playback loop
     while True:
