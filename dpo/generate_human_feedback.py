@@ -16,7 +16,18 @@ print("You can click 'c' while a song is playing to stop it.")
 captions_df = pd.read_csv(caption_file)
 
 # Initialize labels
-labels = []
+if os.path.exists(output_file):
+    with open(output_file, "r") as f:
+        labels = json.load(f)
+else:
+    labels = []
+
+# Helper function to find the label index for a given ytid and pair_idx
+def find_label_index(ytid, pair_idx):
+    for i, label in enumerate(labels):
+        if label["ytid"] == ytid and label["pair_idx"] == pair_idx:
+            return i
+    return -1
 
 # Helper function to play an audio file
 def play_audio(file_path):
@@ -35,6 +46,11 @@ for f in os.listdir(converted_audio_dir):
     ytid = "-".join(f.split("-")[:-2])
 
     for pair_idx in range(NUM_PAIRS_PER_CAPTION):  # Define NUM_PAIRS_PER_CAPTION
+        # Skip if label already exists and preference is set
+        existing_label_idx = find_label_index(ytid, pair_idx)
+        if existing_label_idx != -1 and labels[existing_label_idx]["preference"] != -1:
+            continue
+        
         file_0 = os.path.join(converted_audio_dir, f"{ytid}-pair{pair_idx}-0.wav")
         file_1 = os.path.join(converted_audio_dir, f"{ytid}-pair{pair_idx}-1.wav")
         
@@ -65,9 +81,12 @@ for f in os.listdir(converted_audio_dir):
 
         # Collect human preference
         while True:
-            preference = input("Enter your preference (1 for first, 2 for second, 0 for no preference, or q to quit): ").strip()
+            preference = input("Enter your preference (1 for first, 2 for second, 0 to skip, or q to quit): ").strip()
             if preference in {"1", "2", "0"}:
-                labels.append({"ytid": ytid, "pair_idx": pair_idx, "preference": int(preference) - 1})
+                if existing_label_idx != -1:
+                    labels[existing_label_idx]["preference"] = int(preference) - 1
+                else:
+                    labels.append({"ytid": ytid, "pair_idx": pair_idx, "preference": int(preference) - 1})
                 break
             elif preference == "q":
                 stop_early = True
