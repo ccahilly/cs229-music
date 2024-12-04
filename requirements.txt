@@ -10,3 +10,14 @@ sentencepiece
 jiwer
 simpleaudio
 keyboard
+deepspeed
+hjson
+msgpack
+ninja
+nvidia-ml-py
+packaging
+psutil
+py-cpuinfo
+pydantic
+tqdm
+nnAudio
