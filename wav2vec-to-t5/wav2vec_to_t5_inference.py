@@ -4,14 +4,13 @@ import numpy as np
 from scipy.io import wavfile
 import torch.nn as nn
 import os
-from wav2vec_to_t5_train import AudioCaptionDataset, preprocess_audio
+from wav2vec_to_t5_train import AudioCaptionDataset, preprocess_audio, model_save_path
 import pandas as pd
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print("Device:", DEVICE)
 
 # Load the fine-tuned model, Wav2Vec2 model, linear layer, and processor
-model_save_path = "../models/fine_tuned_wav2vec_t5"
 test_data_path = "../data/splits/test.csv"
 
 t5_model = T5ForConditionalGeneration.from_pretrained(model_save_path + "/t5").to(DEVICE)
