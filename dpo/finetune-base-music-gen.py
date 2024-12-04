@@ -54,7 +54,7 @@ def dpo_loss(pol_logps, ref_logps, prefs, beta=BETA):
     ref_logratios = ref_logps[prefs == REF_IDX] - ref_logps[prefs != REF_IDX]
     
     # Compute the DPO loss as a sigmoid cross-entropy of the logratios, scaled by beta
-    losses = -F.logsigmoid(beta * (pol_logratios - ref_logratios))
+    losses = -F.logsigmoid(beta * (pol_logratios - ref_logratios)).mean()
     
     # Calculate the reward term, which is the log difference between policy and reference model logprobs
     rewards = beta * (pol_logps - ref_logps).detach()
