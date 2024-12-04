@@ -14,7 +14,7 @@ train_data_path = "../data/splits/train.csv"
 val_data_path = "../data/splits/val.csv"
 
 # Hyperparameters
-BATCH_SIZE = 8
+BATCH_SIZE = 16
 EPOCHS = 10
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
