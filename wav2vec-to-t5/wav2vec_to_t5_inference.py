@@ -63,21 +63,12 @@ def infer(audio_paths):
         with torch.no_grad():
             wav2vec_outputs = wav2vec_model(**inputs)
             audio_embeddings = wav2vec_outputs.last_hidden_state
-            print(audio_embeddings.shape)
 
             # Reduce the dimension to match T5 input size
             reduced_embeddings = reduce_layer(audio_embeddings)
-            print(reduced_embeddings.shape)
-
-            print("Expected T5 embedding size:", t5_model.config.d_model)
-            print("Reduced embedding size:", reduced_embeddings.size(-1))
-            print("Linear layer output shape:", reduced_embeddings.shape)
-            print("Expected reduced dim:", t5_model.config.d_model) 
 
             # Generate caption using T5
-            # attention_mask = torch.ones(reduced_embeddings.shape[:2], dtype=torch.long).to(DEVICE)
-            # generated_ids = t5_model.generate(inputs_embeds=reduced_embeddings)
-            generated_ids = t5_model.generate(inputs_embeds=audio_embeddings)
+            generated_ids = t5_model.generate(inputs_embeds=reduced_embeddings)
             generated_caption = t5_tokenizer.decode(generated_ids[0], skip_special_tokens=True)
             
             captions.append((audio_path, generated_caption))
