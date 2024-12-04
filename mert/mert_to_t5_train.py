@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from transformers import Wav2Vec2FeatureExtractor, T5Tokenizer, T5ForConditionalGeneration
+from transformers import Wav2Vec2FeatureExtractor, T5Tokenizer, T5ForConditionalGeneration, AutoModel
 from torch.utils.data import Dataset, DataLoader
 import torch
 import torchaudio
@@ -8,10 +8,7 @@ from tqdm import tqdm
 import numpy as np
 from scipy.io import wavfile
 import torch.nn as nn
-
-# Paths
-train_data_path = "../data/splits/train.csv"
-val_data_path = "../data/splits/val.csv"
+from prep_all_data import data_dir
 
 # Hyperparameters
 BATCH_SIZE = 16
@@ -24,26 +21,29 @@ MAX_TOKENS = 64
 
 print("Device:", DEVICE)
 
-# model_name = "facebook/wav2vec2-large-960h"
-# model_name = "facebook/wav2vec2-base-960h"
-model_name = "../models/fine_tuned_wav2vec_t5_e2"
+mert_model_name = "m-a-p/MERT-v1-95M"
+t5_model_name = "t5-small"
 
 # Save the fine-tuned model
-model_save_path = f"../models/fine_tuned_wav2vec_t5_e10"
+model_save_path = f"../models/fine_tuned_mert_t5_e10"
 os.makedirs(model_save_path, exist_ok=True)
+os.makedirs(model_save_path + "/mert", exist_ok=True)
+os.makedirs(model_save_path + "/conv1d", exist_ok=True)
 os.makedirs(model_save_path + "/linear", exist_ok=True)
-os.makedirs(model_save_path + "/wav2vec", exist_ok=True)
 os.makedirs(model_save_path + "/t5", exist_ok=True)
 
-if model_name in ["facebook/wav2vec2-base-960h", "facebook/wav2vec2-large-960h"]:
+if mert_model_name in ["m-a-p/MERT-v1-95M"]:
     # Load pretrained models
-    processor = Wav2Vec2Processor.from_pretrained(model_name)
-    wav2vec_model = Wav2Vec2Model.from_pretrained(model_name).to(DEVICE)
+    mert_processor = Wav2Vec2FeatureExtractor.from_pretrained("m-a-p/MERT-v1-95M",trust_remote_code=True)
+    mert_model = AutoModel.from_pretrained("m-a-p/MERT-v1-95M", trust_remote_code=True).to(DEVICE)
+    
     t5_tokenizer = T5Tokenizer.from_pretrained("t5-small")
     t5_model = T5ForConditionalGeneration.from_pretrained("t5-small").to(DEVICE)
 
+    aggregator = nn.Conv1d(in_channels=13, out_channels=1, kernel_size=1)
+
     # Define the linear layer outside the loop to reduce Wav2Vec2 embeddings to T5's input size
-    reduce_layer = nn.Linear(wav2vec_model.config.hidden_size, t5_model.config.d_model).to(DEVICE)
+    reduce_layer = nn.Linear(aggregator.config.hidden_size, t5_model.config.d_model).to(DEVICE)
 else: # Using previously fine tuned
     t5_model = T5ForConditionalGeneration.from_pretrained(model_name + "/t5").to(DEVICE)
     t5_tokenizer = T5Tokenizer.from_pretrained(model_name + "/t5")
