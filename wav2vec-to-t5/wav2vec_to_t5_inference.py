@@ -4,8 +4,10 @@ import numpy as np
 from scipy.io import wavfile
 import torch.nn as nn
 import os
-from wav2vec_to_t5_train import AudioCaptionDataset, preprocess_audio, model_save_path
+from wav2vec_to_t5_train import AudioCaptionDataset, preprocess_audio
 import pandas as pd
+
+model_save_path = "../models/fine_tuned_wav2vec_t5_e1"
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print("Device:", DEVICE)
