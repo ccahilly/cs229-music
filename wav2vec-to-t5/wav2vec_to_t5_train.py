@@ -15,7 +15,7 @@ val_data_path = "../data/splits/val.csv"
 
 # Hyperparameters
 BATCH_SIZE = 16
-EPOCHS = 1
+EPOCHS = 8
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 NORMALIZING_INPUT = True  # Flag for normalization
@@ -26,10 +26,10 @@ print("Device:", DEVICE)
 
 # model_name = "facebook/wav2vec2-large-960h"
 # model_name = "facebook/wav2vec2-base-960h"
-model_name = "../models/fine_tuned_wav2vec_t5_e1"
+model_name = "../models/fine_tuned_wav2vec_t5_e2"
 
 # Save the fine-tuned model
-model_save_path = f"../models/fine_tuned_wav2vec_t5_e2"
+model_save_path = f"../models/fine_tuned_wav2vec_t5_e10"
 os.makedirs(model_save_path, exist_ok=True)
 os.makedirs(model_save_path + "/linear", exist_ok=True)
 os.makedirs(model_save_path + "/wav2vec", exist_ok=True)
