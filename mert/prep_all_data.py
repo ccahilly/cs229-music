@@ -12,10 +12,10 @@ import pandas as pd
 
 data_dir = "../data/mert"
 
-# wav_dir = "../data/wav-48"
-# original_sampling_rate = 48000
-wav_dir = "../data/wav"
-original_sampling_rate = 16000
+wav_dir = "../data/wav-48"
+original_sampling_rate = 48000
+# wav_dir = "../data/wav"
+# original_sampling_rate = 16000
 
 train_metadata_path = "../data/splits/train.csv"
 test_metadata_path = "../data/splits/val.csv"
@@ -35,14 +35,21 @@ def main():
     desired_sampling_rate = processor.sampling_rate
 
     for metadata_path in [train_metadata_path, test_metadata_path, val_metadata_path]:
+        if metadata_path == train_metadata_path:
+            print("Train")
+        elif metadata_path == test_metadata_path:
+            print("Test")
+        else:
+            print("Val")
+        
         # List all .wav files in the directory
         wav_files = get_list_of_filepaths(metadata_path)
 
         # Initialize resampler and processor
         resampler = T.Resample(orig_freq=original_sampling_rate, new_freq=desired_sampling_rate)
 
-        # Prepare dataset
-        data = []
+        # # Prepare dataset
+        # data = []
 
         # Process each audio file
         for file in wav_files:
@@ -62,27 +69,38 @@ def main():
             
             # Normalize the waveform to match input expected by the model
             audio_array = waveform.squeeze().numpy()
+            save_dir = data_dir
+            if metadata_path == train_metadata_path:
+                save_dir = os.path.join(save_dir, "train")
+            elif metadata_path == test_metadata_path:
+                save_dir = os.path.join(save_dir, "test")
+            else:
+                save_dir = os.path.join(save_dir, "val")
+            npy_path = file.replace(".wav", ".npy")
+            save_path = os.path.join(save_dir, npy_path.split("/")[-1])
+            np.save(save_path, audio_array)
+            # print(f"Saved: {save_path}")
             
-            # Add to the dataset list
-            data.append({
-                "audio_array": audio_array,
-                "audio_path": file,
-                "sampling_rate": desired_sampling_rate
-            })
+        #     # Add to the dataset list
+        #     data.append({
+        #         "audio_array": audio_array,
+        #         "audio_path": file,
+        #         "sampling_rate": desired_sampling_rate
+        #     })
 
-        # Create a Hugging Face dataset
-        dataset = Dataset.from_dict({"audio": data})
+        # # Create a Hugging Face dataset
+        # dataset = Dataset.from_dict({"audio": data})
 
-        if metadata_path == train_metadata_path:
-            # Save the dataset to disk in the expected format
-            dataset.save_to_disk("../data/mert/train")
-            print("Saved to ../data/mert/train")
-        elif metadata_path == test_metadata_path:
-            dataset.save_to_disk("../data/mert/test")
-            print("Saved to ../data/mert/test")
-        else:
-            dataset.save_to_disk("../data/mert/val")
-            print("Saved to ../data/mert/val")
+        # if metadata_path == train_metadata_path:
+        #     # Save the dataset to disk in the expected format
+        #     dataset.save_to_disk("../data/mert/train")
+        #     print("Saved to ../data/mert/train")
+        # elif metadata_path == test_metadata_path:
+        #     dataset.save_to_disk("../data/mert/test")
+        #     print("Saved to ../data/mert/test")
+        # else:
+        #     dataset.save_to_disk("../data/mert/val")
+        #     print("Saved to ../data/mert/val")
 
 if __name__ == "__main__":
     main()
