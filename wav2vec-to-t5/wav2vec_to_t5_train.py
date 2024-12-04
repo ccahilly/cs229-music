@@ -24,11 +24,11 @@ DEBUG = False
 print("Device:", DEVICE)
 
 # model_name = "facebook/wav2vec2-large-960h"
-model_name = "facebook/wav2vec2-base-960h"
-# model_name = "../models/fine_tuned_wav2vec_t5_e1"
+# model_name = "facebook/wav2vec2-base-960h"
+model_name = "../models/fine_tuned_wav2vec_t5_e1"
 
 # Save the fine-tuned model
-model_save_path = f"../models/fine_tuned_wav2vec_t5_e{EPOCHS}"
+model_save_path = f"../models/fine_tuned_wav2vec_t5_e2"
 os.makedirs(model_save_path, exist_ok=True)
 os.makedirs(model_save_path + "/linear", exist_ok=True)
 os.makedirs(model_save_path + "/wav2vec", exist_ok=True)
