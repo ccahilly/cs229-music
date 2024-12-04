@@ -15,10 +15,11 @@ val_data_path = "../data/splits/val.csv"
 
 # Hyperparameters
 BATCH_SIZE = 16
-EPOCHS = 5
+EPOCHS = 1
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 NORMALIZING_INPUT = True  # Flag for normalization
+DEBUG = False
 
 print("Device:", DEVICE)
 
@@ -113,13 +114,27 @@ def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
             labels = batch["labels"].to(DEVICE)
             decoder_attention_mask = batch["decoder_attention_mask"].to(DEVICE)
 
+            if DEBUG:
+                print("Input values shape:", input_values.shape)
+                print("Attention mask shape:", attention_mask.shape)
+                print("Labels shape:", labels.shape)
+                print("Decoder attention mask shape:", decoder_attention_mask.shape)
+
+
             # Extract embeddings
             with torch.no_grad():
                 wav2vec_outputs = wav2vec_model(input_values, attention_mask=attention_mask)
                 audio_embeddings = wav2vec_outputs.last_hidden_state
 
+                if DEBUG:
+                    print("Wav2Vec2 last hidden state shape:", audio_embeddings.shape)
+
                 # Reduce Wav2Vec2 embeddings
                 reduced_embeddings = reduce_layer(audio_embeddings)
+
+                if DEBUG:
+                    print("Reduced embeddings shape:", reduced_embeddings.shape)
+                    print("Expected T5 embedding size:", t5_model.config.d_model)
 
             # Feed embeddings to T5
             outputs = model(
@@ -127,6 +142,10 @@ def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
                 labels=labels,
                 decoder_attention_mask=decoder_attention_mask,
             )
+
+            if DEBUG:
+                print("T5 output logits shape (if available):", outputs.logits.shape if hasattr(outputs, 'logits') else "Not available")
+                print("T5 loss:", outputs.loss.item())
 
             loss = outputs.loss
             train_loss += loss.item()
@@ -146,17 +165,17 @@ def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
     os.makedirs(model_save_path, exist_ok=True)
 
     # Save the T5 model
-    t5_model.save_pretrained(model_save_path)
+    t5_model.save_pretrained(model_save_path + "/t5")
 
     # Save the Wav2Vec2 model
-    wav2vec_model.save_pretrained(model_save_path)
+    wav2vec_model.save_pretrained(model_save_path + "/wav2vec")
 
     # Save the linear layer used for dimension reduction
-    torch.save(reduce_layer.state_dict(), os.path.join(model_save_path, "reduce_layer.pth"))
+    torch.save(reduce_layer.state_dict(), os.path.join(model_save_path + "/linear", "reduce_layer.pth"))
 
     # Save the processor and tokenizer
-    processor.save_pretrained(model_save_path)
-    t5_tokenizer.save_pretrained(model_save_path)
+    processor.save_pretrained(model_save_path + "/wav2vec")
+    t5_tokenizer.save_pretrained(model_save_path + "/t5")
 
 # Evaluation function
 def evaluate(model, wav2vec_model, val_loader):
