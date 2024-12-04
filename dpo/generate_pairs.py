@@ -58,8 +58,8 @@ def generate_audio_for_caption(caption, ytid, processor_name, model, device, num
             generated_audio = model.generate(**inputs, max_new_tokens=COMPRESSION_RATIO * SECONDS, temperature=temp)
 
             # Extract logits (model output before softmax)
-            logits = generated_audio.logits
-            print(f"Logits shape: {logits.shape}")
+            logit = generated_audio.logit()
+            print(f"Logit: {logit}")
 
             # Convert output tokens back to audio
             audio_array = generated_audio.cpu().numpy()
@@ -68,14 +68,14 @@ def generate_audio_for_caption(caption, ytid, processor_name, model, device, num
             output_path = os.path.join(audio_dir, f"{ytid}-temp{temp}-pair{i}-{idx}.wav")
             write(output_path, SAMPLE_RATE, audio_array)
 
-            probs = torch.softmax(logits, dim=-1)
-            logprobs = torch.log(probs)
-            print(f"Logprobs: {logprobs}")
-            print(f"Logprobs: {logprobs.shape}")
+            prob = torch.softmax(logit, dim=-1)
+            logprob = torch.log(prob)
+            print(f"Logprobs: {logprob}")
+            print(f"Logprobs: {logprob.shape}")
 
             # Save logits as a numpy array
             logprobs_path = os.path.join(logprobs_dir, f"{ytid}-temp{temp}-pair{i}-{idx}.npy")
-            np.save(logprobs_path, logprobs.cpu().numpy())
+            np.save(logprobs_path, logprob.cpu().numpy())
 
             print(f"Saved as {output_path}")
 
