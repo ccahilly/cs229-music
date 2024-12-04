@@ -25,12 +25,33 @@ print("Device:", DEVICE)
 
 # model_name = "facebook/wav2vec2-large-960h"
 model_name = "facebook/wav2vec2-base-960h"
+# model_name = "../models/fine_tuned_wav2vec_t5_e1"
 
-# Load pretrained models
-processor = Wav2Vec2Processor.from_pretrained(model_name)
-wav2vec_model = Wav2Vec2Model.from_pretrained(model_name).to(DEVICE)
-t5_tokenizer = T5Tokenizer.from_pretrained("t5-small")
-t5_model = T5ForConditionalGeneration.from_pretrained("t5-small").to(DEVICE)
+# Save the fine-tuned model
+model_save_path = f"../models/fine_tuned_wav2vec_t5_e{EPOCHS}"
+os.makedirs(model_save_path, exist_ok=True)
+os.makedirs(model_save_path + "/linear", exist_ok=True)
+os.makedirs(model_save_path + "/wav2vec", exist_ok=True)
+os.makedirs(model_save_path + "/t5", exist_ok=True)
+
+if model_name in ["facebook/wav2vec2-base-960h", "facebook/wav2vec2-large-960h"]:
+    # Load pretrained models
+    processor = Wav2Vec2Processor.from_pretrained(model_name)
+    wav2vec_model = Wav2Vec2Model.from_pretrained(model_name).to(DEVICE)
+    t5_tokenizer = T5Tokenizer.from_pretrained("t5-small")
+    t5_model = T5ForConditionalGeneration.from_pretrained("t5-small").to(DEVICE)
+
+    # Define the linear layer outside the loop to reduce Wav2Vec2 embeddings to T5's input size
+    reduce_layer = nn.Linear(wav2vec_model.config.hidden_size, t5_model.config.d_model).to(DEVICE)
+else: # Using previously fine tuned
+    t5_model = T5ForConditionalGeneration.from_pretrained(model_name + "/t5").to(DEVICE)
+    t5_tokenizer = T5Tokenizer.from_pretrained(model_name + "/t5")
+
+    wav2vec_model = Wav2Vec2Model.from_pretrained(model_name + "/wav2vec").to(DEVICE)
+    processor = Wav2Vec2Processor.from_pretrained(model_name + "/wav2vec")
+
+    reduce_layer = nn.Linear(wav2vec_model.config.hidden_size, t5_model.config.d_model).to(DEVICE)
+    reduce_layer.load_state_dict(torch.load(os.path.join(model_name + "/linear", "reduce_layer.pth")))
 
 def preprocess_audio(audio_path):
     """
@@ -96,11 +117,6 @@ val_dataset = AudioCaptionDataset(val_data_path, processor, t5_tokenizer)
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
 val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, drop_last=True)
 
-# Define the linear layer outside the loop to reduce Wav2Vec2 embeddings to T5's input size
-embedding_dim = wav2vec_model.config.hidden_size  # Wav2Vec2 embedding size (768)
-reduced_dim = 512  # T5 input size (512)
-reduce_layer = nn.Linear(embedding_dim, reduced_dim).to(DEVICE)
-
 # Training function
 def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
     model.train()
@@ -159,10 +175,6 @@ def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
 
         # Evaluate
         evaluate(model, wav2vec_model, val_loader)
-
-    # Save the fine-tuned model
-    model_save_path = "../models/fine_tuned_wav2vec_t5"
-    os.makedirs(model_save_path, exist_ok=True)
 
     # Save the T5 model
     t5_model.save_pretrained(model_save_path + "/t5")
