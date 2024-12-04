@@ -1,0 +1,8 @@
+datasource:
+  max_channels: 2
+  max_sample_rate: 44100
+
+  evaluate: egs/eval
+  generate: egs/train
+  train: egs/train
+  valid: egs/eval
