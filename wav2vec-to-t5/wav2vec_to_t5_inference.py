@@ -14,14 +14,14 @@ print("Device:", DEVICE)
 model_save_path = "../models/fine_tuned_wav2vec_t5"
 test_data_path = "../data/splits/test.csv"
 
-processor = Wav2Vec2Processor.from_pretrained(model_save_path)
-t5_model = T5ForConditionalGeneration.from_pretrained(model_save_path).to(DEVICE)
-t5_tokenizer = T5Tokenizer.from_pretrained(model_save_path)
+t5_model = T5ForConditionalGeneration.from_pretrained(model_save_path + "/t5").to(DEVICE)
+t5_tokenizer = T5Tokenizer.from_pretrained(model_save_path + "/t5")
 
-# Load Wav2Vec2 model and linear layer
-wav2vec_model = Wav2Vec2Model.from_pretrained(model_save_path).to(DEVICE)
-reduce_layer = nn.Linear(wav2vec_model.config.hidden_size, 512).to(DEVICE)
-reduce_layer.load_state_dict(torch.load(os.path.join(model_save_path, "reduce_layer.pth")))
+wav2vec_model = Wav2Vec2Model.from_pretrained(model_save_path + "/wav2vec").to(DEVICE)
+processor = Wav2Vec2Processor.from_pretrained(model_save_path + "/wav2vec")
+
+reduce_layer = nn.Linear(wav2vec_model.config.hidden_size, t5_model.config.d_model).to(DEVICE)
+reduce_layer.load_state_dict(torch.load(os.path.join(model_save_path + "/linear", "reduce_layer.pth")))
 
 test_dataset = AudioCaptionDataset(test_data_path, processor, t5_tokenizer)
 
@@ -68,8 +68,15 @@ def infer(audio_paths):
             reduced_embeddings = reduce_layer(audio_embeddings)
             print(reduced_embeddings.shape)
 
+            print("Expected T5 embedding size:", t5_model.config.d_model)
+            print("Reduced embedding size:", reduced_embeddings.size(-1))
+            print("Linear layer output shape:", reduced_embeddings.shape)
+            print("Expected reduced dim:", t5_model.config.d_model) 
+
             # Generate caption using T5
-            generated_ids = t5_model.generate(inputs_embeds=reduced_embeddings)
+            # attention_mask = torch.ones(reduced_embeddings.shape[:2], dtype=torch.long).to(DEVICE)
+            # generated_ids = t5_model.generate(inputs_embeds=reduced_embeddings)
+            generated_ids = t5_model.generate(inputs_embeds=audio_embeddings)
             generated_caption = t5_tokenizer.decode(generated_ids[0], skip_special_tokens=True)
             
             captions.append((audio_path, generated_caption))
@@ -86,6 +93,8 @@ if __name__ == "__main__":
     # Infer captions for 5 samples
     sample_audio_paths = test_metadata["file_path"].iloc[:5].tolist()
     results = infer(sample_audio_paths)
+
+    print(results)
 
     for audio_path, caption in results:
         print(f"Caption for {os.path.basename(audio_path)}: {caption}")
