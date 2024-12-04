@@ -4,7 +4,7 @@ import numpy as np
 from scipy.io import wavfile
 import torch.nn as nn
 import os
-from wav2vec_to_t5_train import AudioCaptionDataset, preprocess_audio
+from wav2vec_to_t5_train import AudioCaptionDataset, preprocess_audio, MAX_TOKENS
 import pandas as pd
 
 model_save_path = "../models/fine_tuned_wav2vec_t5_e1"
@@ -68,7 +68,7 @@ def infer(audio_paths):
             reduced_embeddings = reduce_layer(audio_embeddings)
 
             # Generate caption using T5
-            generated_ids = t5_model.generate(inputs_embeds=reduced_embeddings)
+            generated_ids = t5_model.generate(inputs_embeds=reduced_embeddings, max_new_tokens=MAX_TOKENS)
             generated_caption = t5_tokenizer.decode(generated_ids[0], skip_special_tokens=True)
             
             captions.append((audio_path, generated_caption))
