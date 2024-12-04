@@ -89,4 +89,7 @@ if __name__ == "__main__":
     print(results)
 
     for audio_path, caption in results:
-        print(f"Caption for {os.path.basename(audio_path)}: {caption}")
+        ytid = os.path.basename(audio_path).split(".")[0]
+        print(f"\nCaption for {ytid}: {caption}")
+        real_caption = test_metadata[test_metadata["ytid"] == ytid]["caption"].values[0]
+        print(f"\nReal caption for {ytid}: {real_caption}")
