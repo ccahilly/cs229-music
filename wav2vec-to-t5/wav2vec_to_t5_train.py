@@ -20,6 +20,7 @@ LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 NORMALIZING_INPUT = True  # Flag for normalization
 DEBUG = False
+MAX_TOKENS = 64
 
 print("Device:", DEVICE)
 
@@ -97,7 +98,7 @@ class AudioCaptionDataset(Dataset):
         inputs = processor(processed_audio, sampling_rate=sample_rate, return_tensors="pt")
 
         # Tokenize caption
-        labels = self.tokenizer(caption, return_tensors="pt", padding="max_length", truncation=True, max_length=64)
+        labels = self.tokenizer(caption, return_tensors="pt", padding="max_length", truncation=True, max_length=MAX_TOKENS)
 
         # Check if attention_mask is present
         input_values = inputs["input_values"].squeeze(0)
