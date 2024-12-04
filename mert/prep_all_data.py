@@ -12,8 +12,10 @@ import pandas as pd
 
 data_dir = "../data/mert"
 
-wav_dir = "../data/wav-48"
-original_sampling_rate = 48000
+# wav_dir = "../data/wav-48"
+# original_sampling_rate = 48000
+wav_dir = "../data/wav"
+original_sampling_rate = 16000
 
 train_metadata_path = "../data/splits/train.csv"
 test_metadata_path = "../data/splits/val.csv"
@@ -26,7 +28,7 @@ os.makedirs(data_dir + "/val", exist_ok=True)
 
 def get_list_of_filepaths(metadata_path):
      df = pd.read_csv(metadata_path)
-     return [os.path.join(wav_dir, f) for f in df["file_path"]]
+     return [os.path.join(wav_dir, f.split("/")[-1]) for f in df["file_path"]]
      
 def main():
     processor = Wav2Vec2FeatureExtractor.from_pretrained("m-a-p/MERT-v1-95M", trust_remote_code=True)
@@ -44,6 +46,9 @@ def main():
 
         # Process each audio file
         for file in wav_files:
+            if not os.path.exists(file):
+                print(f"File not found: {file}")
+                continue
             # Load the audio file
             waveform, sample_rate = torchaudio.load(file)
 
@@ -68,11 +73,16 @@ def main():
         # Create a Hugging Face dataset
         dataset = Dataset.from_dict({"audio": data})
 
-        # Save the dataset to disk in the expected format
-        dataset.save_to_disk("../data/mert")
-
-        # Print the dataset to verify
-        print(dataset)
+        if metadata_path == train_metadata_path:
+            # Save the dataset to disk in the expected format
+            dataset.save_to_disk("../data/mert/train")
+            print("Saved to ../data/mert/train")
+        elif metadata_path == test_metadata_path:
+            dataset.save_to_disk("../data/mert/test")
+            print("Saved to ../data/mert/test")
+        else:
+            dataset.save_to_disk("../data/mert/val")
+            print("Saved to ../data/mert/val")
 
 if __name__ == "__main__":
     main()
