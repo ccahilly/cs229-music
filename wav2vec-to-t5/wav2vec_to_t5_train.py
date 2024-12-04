@@ -22,9 +22,12 @@ NORMALIZING_INPUT = True  # Flag for normalization
 
 print("Device:", DEVICE)
 
+# model_name = "facebook/wav2vec2-large-960h"
+model_name = "facebook/wav2vec2-base-960h"
+
 # Load pretrained models
-processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-large-960h")
-wav2vec_model = Wav2Vec2Model.from_pretrained("facebook/wav2vec2-large-960h").to(DEVICE)
+processor = Wav2Vec2Processor.from_pretrained(model_name)
+wav2vec_model = Wav2Vec2Model.from_pretrained(model_name).to(DEVICE)
 t5_tokenizer = T5Tokenizer.from_pretrained("t5-small")
 t5_model = T5ForConditionalGeneration.from_pretrained("t5-small").to(DEVICE)
 
