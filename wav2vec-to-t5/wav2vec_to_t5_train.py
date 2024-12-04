@@ -193,5 +193,5 @@ def evaluate(model, wav2vec_model, val_loader):
 # Initialize optimizer
 optimizer = torch.optim.AdamW(t5_model.parameters(), lr=LEARNING_RATE)
 
-# Train the model
-train(t5_model, wav2vec_model, train_loader, val_loader, optimizer, EPOCHS)
+if __name__ == "__main__":
+    train(t5_model, wav2vec_model, train_loader, val_loader, optimizer, EPOCHS)
