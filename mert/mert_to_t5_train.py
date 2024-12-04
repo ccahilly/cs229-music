@@ -1,7 +1,8 @@
 import os
 import pandas as pd
 from transformers import Wav2Vec2FeatureExtractor, T5Tokenizer, T5ForConditionalGeneration, AutoModel
-from torch.utils.data import Dataset, DataLoader
+from datasets import Dataset
+from torch.utils.data import DataLoader
 import torch
 import torchaudio
 from tqdm import tqdm
@@ -12,7 +13,7 @@ from prep_all_data import data_dir
 
 # Hyperparameters
 BATCH_SIZE = 16
-EPOCHS = 8
+EPOCHS = 1
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 NORMALIZING_INPUT = True  # Flag for normalization
@@ -24,15 +25,18 @@ print("Device:", DEVICE)
 mert_model_name = "m-a-p/MERT-v1-95M"
 t5_model_name = "t5-small"
 
+# old_model_save_path = "../models/fine_tuned_mert_t5_e1"
+old_model_save_path = None
+
 # Save the fine-tuned model
-model_save_path = f"../models/fine_tuned_mert_t5_e10"
+model_save_path = "../models/fine_tuned_mert_t5_e1"
 os.makedirs(model_save_path, exist_ok=True)
 os.makedirs(model_save_path + "/mert", exist_ok=True)
 os.makedirs(model_save_path + "/conv1d", exist_ok=True)
 os.makedirs(model_save_path + "/linear", exist_ok=True)
 os.makedirs(model_save_path + "/t5", exist_ok=True)
 
-if mert_model_name in ["m-a-p/MERT-v1-95M"]:
+if old_model_save_path is None:
     # Load pretrained models
     mert_processor = Wav2Vec2FeatureExtractor.from_pretrained("m-a-p/MERT-v1-95M",trust_remote_code=True)
     mert_model = AutoModel.from_pretrained("m-a-p/MERT-v1-95M", trust_remote_code=True).to(DEVICE)
@@ -40,129 +44,80 @@ if mert_model_name in ["m-a-p/MERT-v1-95M"]:
     t5_tokenizer = T5Tokenizer.from_pretrained("t5-small")
     t5_model = T5ForConditionalGeneration.from_pretrained("t5-small").to(DEVICE)
 
+    # Define the linear and aggregator layers
     aggregator = nn.Conv1d(in_channels=13, out_channels=1, kernel_size=1)
-
-    # Define the linear layer outside the loop to reduce Wav2Vec2 embeddings to T5's input size
-    reduce_layer = nn.Linear(aggregator.config.hidden_size, t5_model.config.d_model).to(DEVICE)
+    reduce_layer = nn.Linear(768, t5_model.config.d_model).to(DEVICE)
 else: # Using previously fine tuned
-    t5_model = T5ForConditionalGeneration.from_pretrained(model_name + "/t5").to(DEVICE)
-    t5_tokenizer = T5Tokenizer.from_pretrained(model_name + "/t5")
+    mert_processor = Wav2Vec2FeatureExtractor.from_pretrained(old_model_save_path + "/mert")
+    mert_model = AutoModel.from_pretrained(old_model_save_path + "/mert").to(DEVICE)
+    
+    t5_tokenizer = T5Tokenizer.from_pretrained(old_model_save_path + "/t5")
+    t5_model = T5ForConditionalGeneration.from_pretrained(old_model_save_path + "/t5").to(DEVICE)
 
-    wav2vec_model = Wav2Vec2Model.from_pretrained(model_name + "/wav2vec").to(DEVICE)
-    processor = Wav2Vec2Processor.from_pretrained(model_name + "/wav2vec")
+    aggregator = nn.Conv1d(in_channels=13, out_channels=1, kernel_size=1)
+    aggregator.load_state_dict(torch.load(os.path.join(old_model_save_path + "/aggregator", "aggregator.pth")))
 
-    reduce_layer = nn.Linear(wav2vec_model.config.hidden_size, t5_model.config.d_model).to(DEVICE)
-    reduce_layer.load_state_dict(torch.load(os.path.join(model_name + "/linear", "reduce_layer.pth")))
+    reduce_layer = nn.Linear(768, t5_model.config.d_model).to(DEVICE)
+    reduce_layer.load_state_dict(torch.load(os.path.join(old_model_save_path + "/linear", "reduce_layer.pth")))
 
-def preprocess_audio(audio_path):
-    """
-    Preprocess audio file to ensure it is mono and normalized.
-    Args:
-        audio_path (str): Path to the audio file.
-    Returns:
-        np.ndarray: Preprocessed audio data.
-    """
-    # Load the audio file
-    sample_rate, audio = wavfile.read(audio_path)
-
-    # Convert stereo to mono if necessary
-    if audio.ndim == 2:  # Stereo audio
-        audio = audio.mean(axis=1)  # Average the two channels
-
-    # Normalize audio to the range [-1, 1] if required
-    if NORMALIZING_INPUT:
-        audio = audio.astype(np.float32) / np.iinfo(np.int16).max
-
-    return audio, sample_rate
-
-# Dataset class
-class AudioCaptionDataset(Dataset):
-    def __init__(self, data_path, processor, tokenizer):
-        self.data = pd.read_csv(data_path)
-        self.processor = processor
-        self.tokenizer = tokenizer
-
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, idx):
-        row = self.data.iloc[idx]
-        audio_path = row["file_path"]
-        caption = row["caption"]
-
-        # Load and preprocess audio
-        processed_audio, sample_rate = preprocess_audio(audio_path)
-        if sample_rate != 16000:
-            raise ValueError(f"Invalid sample rate: {sample_rate}. Expected 16000 Hz.")
-        
-        inputs = processor(processed_audio, sampling_rate=sample_rate, return_tensors="pt")
-
-        # Tokenize caption
-        labels = self.tokenizer(caption, return_tensors="pt", padding="max_length", truncation=True, max_length=MAX_TOKENS)
-
-        # Check if attention_mask is present
-        input_values = inputs["input_values"].squeeze(0)
-        attention_mask = inputs.get("attention_mask", torch.ones_like(input_values))  # Default to ones if missing
-
-        return {
-            "input_values": input_values,
-            "attention_mask": attention_mask,
-            "labels": labels["input_ids"].squeeze(0),
-            "decoder_attention_mask": labels["attention_mask"].squeeze(0)
-        }
+def load_dataset(data_folder):
+    data = []
+    captions = []
+    metadata = pd.read_csv("../data/musiccaps-train-data.csv")
+    npy_files = [os.path.join(data_folder, f) for f in os.listdir(data_folder) if f.endswith('.npy')]
+    for f in npy_files:
+        base_path = f.split("/")[-1]
+        ytid = base_path[:-4]
+        # print(ytid)
+        data.append({
+            "audio_array": np.load(f),
+            "ytid": ytid,
+            # "sampling_rate": mert_processor.desired_sampling_rate
+        })
+        captions.append(metadata[metadata["ytid"] == ytid]["caption"].values[0])
+    print(f"Example caption: {captions[0]}")
+    return Dataset.from_dict({"audio": data, "labels": captions})
 
 # Load data
-train_dataset = AudioCaptionDataset(train_data_path, processor, t5_tokenizer)
-val_dataset = AudioCaptionDataset(val_data_path, processor, t5_tokenizer)
+train_dataset = load_dataset(data_dir + "/train")
+val_dataset = load_dataset(data_dir + "/val")
 
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
 val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, drop_last=True)
 
 # Training function
-def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
+def train(model, train_loader, val_loader, optimizer, epochs):
     model.train()
     optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE)
 
     for epoch in range(epochs):
         train_loss = 0
         for batch in tqdm(train_loader, desc=f"Epoch {epoch + 1}/{epochs}"):
-            input_values = batch["input_values"].to(DEVICE)
-            attention_mask = batch["attention_mask"].to(DEVICE)
-            labels = batch["labels"].to(DEVICE)
-            decoder_attention_mask = batch["decoder_attention_mask"].to(DEVICE)
+            input_audios = batch["audio"]["audio_array"].to(DEVICE)
 
-            if DEBUG:
-                print("Input values shape:", input_values.shape)
-                print("Attention mask shape:", attention_mask.shape)
-                print("Labels shape:", labels.shape)
-                print("Decoder attention mask shape:", decoder_attention_mask.shape)
-
+            inputs = mert_processor(input_audios, sampling_rate = mert_processor.sampling_rate, return_tensors="pt")
 
             # Extract embeddings
             with torch.no_grad():
-                wav2vec_outputs = wav2vec_model(input_values, attention_mask=attention_mask)
-                audio_embeddings = wav2vec_outputs.last_hidden_state
+                mert_outputs = mert_model(inputs, output_hidden_states=True)
+                all_layer_hidden_states = torch.stack(mert_outputs.hidden_states).squeeze()
+                
+            combined_dim = all_layer_hidden_states.view(10, 13, -1)  # [batch_size, layers, time_steps * features]
 
-                if DEBUG:
-                    print("Wav2Vec2 last hidden state shape:", audio_embeddings.shape)
+            # Apply Conv1d for learnable aggregation
+            aggregated_embedding = aggregator(combined_dim)  # [batch_size, 1, time_steps * features]
 
-                # Reduce Wav2Vec2 embeddings
-                reduced_embeddings = reduce_layer(audio_embeddings)
+            # Uncombine the last dimension back into time_steps and features
+            aggregated_embedding = aggregated_embedding.view(10, 749, 768)  # [batch_size, time_steps, features]
 
-                if DEBUG:
-                    print("Reduced embeddings shape:", reduced_embeddings.shape)
-                    print("Expected T5 embedding size:", t5_model.config.d_model)
+            # Reduce Wav2Vec2 embeddings
+            reduced_embeddings = reduce_layer(aggregated_embedding)
 
             # Feed embeddings to T5
             outputs = model(
                 inputs_embeds=reduced_embeddings,
-                labels=labels,
-                decoder_attention_mask=decoder_attention_mask,
+                labels=batch["labels"].to(DEVICE)
             )
-
-            if DEBUG:
-                print("T5 output logits shape (if available):", outputs.logits.shape if hasattr(outputs, 'logits') else "Not available")
-                print("T5 loss:", outputs.loss.item())
 
             loss = outputs.loss
             train_loss += loss.item()
@@ -175,45 +130,42 @@ def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
         print(f"Epoch {epoch + 1}: Train Loss = {avg_train_loss}")
 
         # Evaluate
-        evaluate(model, wav2vec_model, val_loader)
+        evaluate(model, val_loader)
 
     # Save the T5 model
     t5_model.save_pretrained(model_save_path + "/t5")
 
     # Save the Wav2Vec2 model
-    wav2vec_model.save_pretrained(model_save_path + "/wav2vec")
+    mert_model.save_pretrained(model_save_path + "/mert")
 
     # Save the linear layer used for dimension reduction
     torch.save(reduce_layer.state_dict(), os.path.join(model_save_path + "/linear", "reduce_layer.pth"))
+    torch.save(aggregator.state_dict(), os.path.join(model_save_path + "/aggregator", "aggregator.pth"))
 
     # Save the processor and tokenizer
-    processor.save_pretrained(model_save_path + "/wav2vec")
+    mert_processor.save_pretrained(model_save_path + "/mert")
     t5_tokenizer.save_pretrained(model_save_path + "/t5")
 
 # Evaluation function
-def evaluate(model, wav2vec_model, val_loader):
+def evaluate(model, val_loader):
     model.eval()
     val_loss = 0
 
     with torch.no_grad():
         for batch in tqdm(val_loader, desc="Evaluating"):
-            input_values = batch["input_values"].to(DEVICE)
-            attention_mask = batch["attention_mask"].to(DEVICE)
+            input_values = batch["audio_array"].to(DEVICE)
             labels = batch["labels"].to(DEVICE)
-            decoder_attention_mask = batch["decoder_attention_mask"].to(DEVICE)
 
             # Extract embeddings
-            wav2vec_outputs = wav2vec_model(input_values, attention_mask=attention_mask)
-            audio_embeddings = wav2vec_outputs.last_hidden_state
-
-            # Reduce Wav2Vec2 embeddings
-            reduced_embeddings = reduce_layer(audio_embeddings)
+            outputs = mert_model(input_values, output_hidden_states=True)
+            combined_dim = outputs.view(10, 13, -1)
+            aggregated_embedding = aggregator(combined_dim)  # [batch_size, 1, time_steps * features]
+            reduced_embeddings = reduce_layer(aggregated_embedding)
 
             # Feed embeddings to T5
             outputs = model(
                 inputs_embeds=reduced_embeddings,
                 labels=labels,
-                decoder_attention_mask=decoder_attention_mask,
             )
 
             val_loss += outputs.loss.item()
@@ -226,4 +178,4 @@ def evaluate(model, wav2vec_model, val_loader):
 optimizer = torch.optim.AdamW(t5_model.parameters(), lr=LEARNING_RATE)
 
 if __name__ == "__main__":
-    train(t5_model, wav2vec_model, train_loader, val_loader, optimizer, EPOCHS)
+    train(t5_model, mert_model, train_loader, val_loader, optimizer, EPOCHS)
