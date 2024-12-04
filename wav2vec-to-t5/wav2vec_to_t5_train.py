@@ -95,6 +95,11 @@ val_dataset = AudioCaptionDataset(val_data_path, processor, t5_tokenizer)
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
 val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, drop_last=True)
 
+# Define the linear layer outside the loop to reduce Wav2Vec2 embeddings to T5's input size
+embedding_dim = wav2vec_model.config.hidden_size  # Wav2Vec2 embedding size (768)
+reduced_dim = 512  # T5 input size (512)
+reduce_layer = nn.Linear(embedding_dim, reduced_dim).to(DEVICE)
+
 # Training function
 def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
     model.train()
@@ -112,12 +117,6 @@ def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
             with torch.no_grad():
                 wav2vec_outputs = wav2vec_model(input_values, attention_mask=attention_mask)
                 audio_embeddings = wav2vec_outputs.last_hidden_state
-
-                # Add a linear layer to match dimensions
-                embedding_dim = wav2vec_model.config.hidden_size  # Wav2Vec2 embedding size
-                reduced_dim = 512  # T5 input size
-
-                reduce_layer = nn.Linear(embedding_dim, reduced_dim).to(DEVICE)
 
                 # Reduce Wav2Vec2 embeddings
                 reduced_embeddings = reduce_layer(audio_embeddings)
@@ -142,6 +141,23 @@ def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
         # Evaluate
         evaluate(model, wav2vec_model, val_loader)
 
+    # Save the fine-tuned model
+    model_save_path = "../models/fine_tuned_wav2vec_t5"
+    os.makedirs(model_save_path, exist_ok=True)
+
+    # Save the T5 model
+    t5_model.save_pretrained(model_save_path)
+
+    # Save the Wav2Vec2 model
+    wav2vec_model.save_pretrained(model_save_path)
+
+    # Save the linear layer used for dimension reduction
+    torch.save(reduce_layer.state_dict(), os.path.join(model_save_path, "reduce_layer.pth"))
+
+    # Save the processor and tokenizer
+    processor.save_pretrained(model_save_path)
+    t5_tokenizer.save_pretrained(model_save_path)
+
 # Evaluation function
 def evaluate(model, wav2vec_model, val_loader):
     model.eval()
@@ -158,9 +174,12 @@ def evaluate(model, wav2vec_model, val_loader):
             wav2vec_outputs = wav2vec_model(input_values, attention_mask=attention_mask)
             audio_embeddings = wav2vec_outputs.last_hidden_state
 
+            # Reduce Wav2Vec2 embeddings
+            reduced_embeddings = reduce_layer(audio_embeddings)
+
             # Feed embeddings to T5
             outputs = model(
-                inputs_embeds=audio_embeddings,
+                inputs_embeds=reduced_embeddings,
                 labels=labels,
                 decoder_attention_mask=decoder_attention_mask,
             )
