@@ -85,7 +85,7 @@ def finetune():
             optimizer.zero_grad()
 
             # Compute DPO Loss
-            loss = dpo_loss(batch["pol_logprob"], batch["ref_logprob"], batch["preference"])
+            loss, _ = dpo_loss(batch["pol_logprob"], batch["ref_logprob"], batch["preference"])
 
             # Backpropagation
             loss.backward()

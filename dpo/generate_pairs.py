@@ -29,11 +29,11 @@ policy_model_name = "facebook/musicgen-small"
 REF_IDX = 0
 POL_IDX = 1
 
-def logits_to_logprobs(logits):
-    # Assuming logits are of shape (batch_size = 1, num_classes)
-    probs = torch.softmax(logits, dim=-1)  # Convert logits to probabilities
-    logprobs = torch.log(probs)  # Take log of the probabilities
-    return logprobs
+# def logits_to_logprobs(logits):
+#     # Assuming logits are of shape (batch_size = 1, num_classes)
+#     probs = torch.softmax(logits, dim=-1)  # Convert logits to probabilities
+#     logprobs = torch.log(probs)  # Take log of the probabilities
+#     return logprobs
 
 # Function to generate 10 second audio for a caption
 def generate_audio_for_caption(caption, ytid, processor_name, model, device, num_pairs=NUM_PAIRS_PER_CAPTION_PER_TEMP, temps=TEMPS):
@@ -58,8 +58,9 @@ def generate_audio_for_caption(caption, ytid, processor_name, model, device, num
             generated_audio = model.generate(**inputs, max_new_tokens=COMPRESSION_RATIO * SECONDS, temperature=temp)
 
             # Extract logits (model output before softmax)
-            logit = generated_audio.logit()
-            print(f"Logit: {logit}")
+            # logit = generated_audio.logit()
+            # print(f"Logit: {logit}")
+            logprob = model(**inputs, generated_audio=generated_audio, return_dict=True).logprobs
 
             # Convert output tokens back to audio
             audio_array = generated_audio.cpu().numpy()
@@ -68,8 +69,8 @@ def generate_audio_for_caption(caption, ytid, processor_name, model, device, num
             output_path = os.path.join(audio_dir, f"{ytid}-temp{temp}-pair{i}-{idx}.wav")
             write(output_path, SAMPLE_RATE, audio_array)
 
-            prob = torch.softmax(logit, dim=-1)
-            logprob = torch.log(prob)
+            # prob = torch.softmax(logit, dim=-1)
+            # logprob = torch.log(prob)
             print(f"Logprobs: {logprob}")
             print(f"Logprobs: {logprob.shape}")
 
