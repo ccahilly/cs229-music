@@ -8,7 +8,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print("Device:", DEVICE)
 
 # Load the fine-tuned model, Wav2Vec2 model, linear layer, and processor
-model_save_path = "../models/fine_tuned_t5_wav2vec"
+model_save_path = "../models/fine_tuned_wav2vec_t5"
 processor = Wav2Vec2Processor.from_pretrained(model_save_path)
 t5_model = T5ForConditionalGeneration.from_pretrained(model_save_path).to(DEVICE)
 t5_tokenizer = T5Tokenizer.from_pretrained(model_save_path)
