@@ -7,12 +7,14 @@ import os
 from wav2vec_to_t5_train import AudioCaptionDataset, preprocess_audio, MAX_TOKENS
 import pandas as pd
 
-model_save_path = "../models/fine_tuned_wav2vec_t5_e1"
+model_save_path = "../models/fine_tuned_wav2vec_t5_e2"
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print("Device:", DEVICE)
 
 # Load the fine-tuned model, Wav2Vec2 model, linear layer, and processor
+train_data_path = "../data/splits/train.csv"
+val_data_path = "../data/splits/val.csv"
 test_data_path = "../data/splits/test.csv"
 
 t5_model = T5ForConditionalGeneration.from_pretrained(model_save_path + "/t5").to(DEVICE)
@@ -75,21 +77,31 @@ def infer(audio_paths):
     
     return captions
 
-if __name__ == "__main__":
-    # Load test data
-    test_metadata = pd.read_csv(test_data_path)
-
+def gen_n_samples(metadata, n):
     # Verify file paths
-    test_metadata = test_metadata[test_metadata["file_path"].apply(os.path.exists)]
+    metadata = metadata[metadata["file_path"].apply(os.path.exists)]
 
     # Infer captions for 5 samples
-    sample_audio_paths = test_metadata["file_path"].iloc[:5].tolist()
+    sample_audio_paths = metadata["file_path"].iloc[:n].tolist()
     results = infer(sample_audio_paths)
-
-    print(results)
 
     for audio_path, caption in results:
         ytid = os.path.basename(audio_path).split(".")[0]
         print(f"\nCaption for {ytid}: {caption}")
-        real_caption = test_metadata[test_metadata["ytid"] == ytid]["caption"].values[0]
+        real_caption = metadata[metadata["ytid"] == ytid]["caption"].values[0]
         print(f"\nReal caption for {ytid}: {real_caption}")
+
+if __name__ == "__main__":
+    n = 3
+
+    print(f"\nGenerating {n} samples for train\n")
+    train_metadata = pd.read_csv(train_data_path)
+    gen_n_samples(train_metadata, n)
+
+    print(f"\nGenerating {n} samples for val\n")
+    val_metadata = pd.read_csv(val_data_path)
+    gen_n_samples(val_metadata, n)
+
+    print(f"\nGenerating {n} samples for test\n")
+    test_metadata = pd.read_csv(test_data_path)
+    gen_n_samples(test_metadata, n)
