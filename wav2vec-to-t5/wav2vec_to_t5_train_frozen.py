@@ -8,6 +8,7 @@ from tqdm import tqdm
 import numpy as np
 from scipy.io import wavfile
 import torch.nn as nn
+from gcloud_helpers import upload_to_gcs
 
 # Paths
 train_data_path = "../data/splits/train.csv"
@@ -15,7 +16,7 @@ val_data_path = "../data/splits/val.csv"
 
 # Hyperparameters
 BATCH_SIZE = 16
-EPOCHS = 8
+EPOCHS = 10
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 NORMALIZING_INPUT = True  # Flag for normalization
@@ -25,15 +26,13 @@ MAX_TOKENS = 64
 print("Device:", DEVICE)
 
 # model_name = "facebook/wav2vec2-large-960h"
-# model_name = "facebook/wav2vec2-base-960h"
-model_name = "../models/fine_tuned_wav2vec_t5_e2"
+model_name = "facebook/wav2vec2-base-960h"
+# model_name = "../models/fine_tuned_wav2vec_t5_e2_frozen"
 
 # Save the fine-tuned model
-model_save_path = f"../models/fine_tuned_wav2vec_t5_e10"
+model_save_path = "../models/fine_tuned_wav2vec_t5_frozen"
+gcloud_path = "models/fine_tuned_wav2vec_t5_frozen"
 os.makedirs(model_save_path, exist_ok=True)
-os.makedirs(model_save_path + "/linear", exist_ok=True)
-os.makedirs(model_save_path + "/wav2vec", exist_ok=True)
-os.makedirs(model_save_path + "/t5", exist_ok=True)
 
 if model_name in ["facebook/wav2vec2-base-960h", "facebook/wav2vec2-large-960h"]:
     # Load pretrained models
@@ -137,7 +136,6 @@ def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
                 print("Labels shape:", labels.shape)
                 print("Decoder attention mask shape:", decoder_attention_mask.shape)
 
-
             # Extract embeddings
             with torch.no_grad():
                 wav2vec_outputs = wav2vec_model(input_values, attention_mask=attention_mask)
@@ -177,18 +175,26 @@ def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
         # Evaluate
         evaluate(model, wav2vec_model, val_loader)
 
-    # Save the T5 model
-    t5_model.save_pretrained(model_save_path + "/t5")
+        checkpoint_path = model_save_path + f"/e{epoch + 1}"
+        gcloud_checkpoint_path = gcloud_path + f"/e{epoch + 1}"
+        os.makedirs(checkpoint_path, exist_ok=True)
+    
+        # Save the T5 model
+        os.makedirs(checkpoint_path + "/t5", exist_ok=True)
+        t5_tokenizer.save_pretrained(checkpoint_path + "/t5")
+        t5_model.save_pretrained(checkpoint_path + "/t5")
+        upload_to_gcs(checkpoint_path + "/t5", gcloud_checkpoint_path + "/t5")
 
-    # Save the Wav2Vec2 model
-    wav2vec_model.save_pretrained(model_save_path + "/wav2vec")
+        # Save the Wav2Vec2 model
+        os.makedirs(checkpoint_path + "/wav2vec", exist_ok=True)
+        processor.save_pretrained(checkpoint_path + "/wav2vec")
+        wav2vec_model.save_pretrained(checkpoint_path + "/wav2vec")
+        upload_to_gcs(checkpoint_path + "/wav2vec", gcloud_checkpoint_path + "/wav2vec")
 
-    # Save the linear layer used for dimension reduction
-    torch.save(reduce_layer.state_dict(), os.path.join(model_save_path + "/linear", "reduce_layer.pth"))
-
-    # Save the processor and tokenizer
-    processor.save_pretrained(model_save_path + "/wav2vec")
-    t5_tokenizer.save_pretrained(model_save_path + "/t5")
+        # Save the linear layer used for dimension reduction
+        os.makedirs(checkpoint_path + "/linear", exist_ok=True)
+        torch.save(reduce_layer.state_dict(), checkpoint_path + "/linear" + "/reduce_layer.pth")
+        upload_to_gcs(checkpoint_path + "/linear", gcloud_checkpoint_path + "/linear")
 
 # Evaluation function
 def evaluate(model, wav2vec_model, val_loader):
