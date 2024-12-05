@@ -7,7 +7,7 @@ import os
 from wav2vec_to_t5_train import AudioCaptionDataset, preprocess_audio, MAX_TOKENS
 import pandas as pd
 
-model_save_path = "../models/fine_tuned_wav2vec_t5_e2"
+model_save_path = "../models/fine_tuned_wav2vec_t5_unfrozen/e1"
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print("Device:", DEVICE)

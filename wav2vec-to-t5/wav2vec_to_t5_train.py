@@ -18,7 +18,6 @@ def parse_args():
     parser.add_argument('--epochs', type=int, default=1, help="Number of epochs to train the model.")
     parser.add_argument('--last_epoch', type=int, default=0, help="The last epoch used for checkpointing.")
     parser.add_argument('--frozen', type=bool, default=False, help="Set whether to freeze the embedding model (True/False).")
-    parser.add_argument('--batch_size', type=bool, default=8, help="Set whether to freeze the embedding model (True/False).")
     
     return parser.parse_args()
 
