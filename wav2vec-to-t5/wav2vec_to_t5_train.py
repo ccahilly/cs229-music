@@ -1,15 +1,12 @@
 import os
-import pandas as pd
 from transformers import Wav2Vec2Processor, Wav2Vec2Model, T5Tokenizer, T5ForConditionalGeneration
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
 import torch
-import torchaudio
 from tqdm import tqdm
-import numpy as np
-from scipy.io import wavfile
 import torch.nn as nn
 from gcloud_helpers import upload_to_gcs
 import argparse
+from dataset_helpers import AudioCaptionDataset, BATCH_SIZE
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Fine-tuning Wav2Vec2 and T5 models for audio captioning.")
@@ -26,12 +23,9 @@ train_data_path = "../data/splits/train.csv"
 val_data_path = "../data/splits/val.csv"
 
 # Hyperparameters
-BATCH_SIZE = 8
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-NORMALIZING_INPUT = True  # Flag for normalization
 DEBUG = False
-MAX_TOKENS = 64
 
 print("Device:", DEVICE)
 
@@ -79,63 +73,6 @@ else: # Using previously fine tuned
 
     reduce_layer = nn.Linear(wav2vec_model.config.hidden_size, t5_model.config.d_model).to(DEVICE)
     reduce_layer.load_state_dict(torch.load(os.path.join(model_name + "/linear", "reduce_layer.pth")))
-
-def preprocess_audio(audio_path):
-    """
-    Preprocess audio file to ensure it is mono and normalized.
-    Args:
-        audio_path (str): Path to the audio file.
-    Returns:
-        np.ndarray: Preprocessed audio data.
-    """
-    # Load the audio file
-    sample_rate, audio = wavfile.read(audio_path)
-
-    # Convert stereo to mono if necessary
-    if audio.ndim == 2:  # Stereo audio
-        audio = audio.mean(axis=1)  # Average the two channels
-
-    # Normalize audio to the range [-1, 1] if required
-    if NORMALIZING_INPUT:
-        audio = audio.astype(np.float32) / np.iinfo(np.int16).max
-
-    return audio, sample_rate
-
-# Dataset class
-class AudioCaptionDataset(Dataset):
-    def __init__(self, data_path, processor, tokenizer):
-        self.data = pd.read_csv(data_path)
-        self.processor = processor
-        self.tokenizer = tokenizer
-
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, idx):
-        row = self.data.iloc[idx]
-        audio_path = row["file_path"]
-        caption = row["caption"]
-
-        # Load and preprocess audio
-        processed_audio, sample_rate = preprocess_audio(audio_path)
-        if sample_rate != 16000:
-            raise ValueError(f"Invalid sample rate: {sample_rate}. Expected 16000 Hz.")
-        
-        inputs = processor(processed_audio, sampling_rate=sample_rate, return_tensors="pt")
-
-        # Tokenize caption
-        labels = self.tokenizer(caption, return_tensors="pt", padding="max_length", truncation=True, max_length=MAX_TOKENS)
-
-        # Check if attention_mask is present
-        input_values = inputs["input_values"].squeeze(0)
-        attention_mask = inputs.get("attention_mask", torch.ones_like(input_values))  # Default to ones if missing
-
-        return {
-            "input_values": input_values,
-            "attention_mask": attention_mask,
-            "labels": labels["input_ids"].squeeze(0),
-            "decoder_attention_mask": labels["attention_mask"].squeeze(0)
-        }
 
 # Load data
 train_dataset = AudioCaptionDataset(train_data_path, processor, t5_tokenizer)

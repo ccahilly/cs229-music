@@ -1,0 +1,1360 @@
+Epoch 1: Test Loss = 2.591176708838097
+Epoch 1: Train Examples:
+../data/wav/-Vo4CAMX26U.wav
+
+Real: The low quality recording features a low windpipe vocal sound played in nature, surrounded by flowing water and chirping birds sound effects. Sounds a bit harsh and loud, as the tone of the windpipe is constantly changing.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. There is a male voice singing in the background. There is a male voice singing in the background. There is a male voice singing in the background. There is a male voice singing
+
+../data/wav/ktTrTDQidsE.wav
+
+Real: The low quality recording features a groovy Spanish acoustic guitar. It sounds very noisy, vintage and the guitar was recorded in mono.
+
+Generated: This is a snare piece. There is a male voice singing in the background. The voice is singing in a snare. The voice is singing in a snare.
+
+../data/wav/GkB_BkyVyPs.wav
+
+Real: The low quality recording features a live performance of a reggae song that consists of shimmering cymbals, addictive brass melody and muffled male vocal singing over it. It is noisy and in mono, and it sounds thin, harsh, muddy, messy and energetic.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. The voice is singing in a snare. The voice is singing in a snare.
+
+../data/wav/OB7GyVqufwQ.wav
+
+Real: A digital drum is playing a reggaeton groove along with some acoustic percussion while someone is playing a turkish baglama. A male voice is singing/shouting. This is an amateur recording. This song may be playing outside busking with a band.
+
+Generated: This is a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a saxophone
+
+../data/wav/1QFli7KSXAQ.wav
+
+Real: The Rock song features a passionate male vocalist singing over wide electric guitar melodies, groovy bass guitar, shimmering cymbals, groovy toms, punchy snare and kick hits. It sounds energetic, passionate, emotional and loud.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. The snare is playing a snare in the background. The snare is playing a snare.
+
+../data/wav/2xQuWif8axE.wav
+
+Real: This is a live recording of an instrumental progressive metal piece. A solo is being played on the electric guitar at a very fast pace using the technique of shredding. Rapid jumps from medium to high range notes can be heard. The atmosphere is aggressive.
+
+Generated: This is a snare piece. The tempo is medium with a snare, a snare, a snare, a snare, a snare, a snare, a snare
+
+../data/wav/_oNLyxk08oA.wav
+
+Real: Here we have a solo bass flute player. The music sounds mystical, like in a fantasy movie about dragons and fairies. There is reverb applied to the sound.
+
+Generated: This is a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a saxophone
+
+../data/wav/C4MeKaeaPcU.wav
+
+Real: This is a recording of a skilled organ player playing some intricate motifs on the organ. The music is soulful and also has a gospel feel to it. It's a live recording with low-quality audio.
+
+Generated: This is a snare piece. It is a snare piece. It is a snare piece. It is a snare piece. It is a snare piece.
+
+../data/wav/WvaIypMvAHY.wav
+
+Real: This is the recording of a guitar lesson video. There is a male speaking in an instructive manner, giving the name of the chord he is about to play next. The chords are being played gently on a clean sounding electric guitar. There is a mellow feel to the sound. Parts of this recording can be sampled for use in beat-making.
+
+Generated: This is a snare piece. There is a male voice singing in the background. The voice is singing in a snare. The voice is singing in a snare.
+
+../data/wav/Uvn7waPvseo.wav
+
+Real: This is an instrument showcase jam. It is an electronic music piece played on a drum machine. There is a booming electronic drum beat in the rhythmic background. There is a medium-to-high pitch melodic pad repeating the same tune. The sound of the piece is crisp and loud. This piece could be used in the soundtrack of a fast-paced video game in the arcade genre. It could also be playing in the background during breaks at a sports venue.
+
+Generated: This is a snare piece. It is a snare piece. It is a snare piece. It is a snare piece.
+
+../data/wav/3KdyWJ6wTOw.wav
+
+Real: This song features a male voice rapping the lyrics. Female voices sing vocables in the background. This is accompanied by programmed percussion playing a trap beat. The bass plays a groovy bassline by sliding to notes rather than pausing in between notes. A synth plays a repetitive melody in the background. This song can be played in a gangster movie.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. The voice is singing in a snare. The voice is singing in a snare.
+
+../data/wav/eStzDzEopDI.wav
+
+Real: The low quality recording features a traditional song sung by harmonizing female vocals over breathy flute melody and wooden percussion. It sounds harsh, muddy, passionate and soulful, as audio is distorted due to poor quality microphone.
+
+Generated: This is a live performance of a saxophone. The saxophone is playing a saxophone. The saxophone is playing a saxophone. The saxophone is playing a
+
+../data/wav/XxKlsW4H0qo.wav
+
+Real: This is a clip of a singing bowl. The tone is high pitched and sustained and ringing. The song would be suitable for a meditation room or for any kind of environment wherein tranquility is the end goal.
+
+Generated: The low quality recording features a snare, acoustic guitar playing a snare melody. It sounds a bit snare, but it sounds like it is a snare.
+
+../data/wav/fWwV7o4VjEQ.wav
+
+Real: An acoustic drum with a lot of reverb is playing a minimalistic slow groove along with an e-bass playing long single notes. A synth hit comes in for a moment and then an e-guitar is talking over it with a melody. The male voice sings with a lot of reverb, reverb and a chorus/flanger on his voice. The whole recording is full of reverb and the voice of the singer is using a ping pong delay. This song may be playing on a lazy day at home.
+
+Generated: This is a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a saxophone
+
+../data/wav/3w_LsKl-3Pk.wav
+
+Real: The low quality recording features a traditional song that consists of a passionate woodwind melody played over wooden percussive elements. It sounds soulful, passionate and emotional, even though the recording is in mono and noisy.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. The voice is singing in a snare. The voice is singing in a snare.
+
+../data/wav/1GCOnj53QYM.wav
+
+Real: This music is two separate tracks. The first track is electronic music with turn table scratching. The second track is a soft, romantic, mellow, harmonious melody with keyboard harmony, electric guitar, groovy bass and steady drumming with a man talking at the end. The two tracks are unrelated.
+
+Generated: This is a snare drum. There is a male voice singing in the background. The voice is a snare. The voice is a snare.
+
+../data/wav/NZ2kFIaW05k.wav
+
+Real: The low quality recording features an electric guitar melody played over a playback that consists of groovy bass, punchy snare and shimmering cymbals. At the end of the loop, there is a flat male vocal talking. It sounds groovy, fun and the recording is noisy and slightly distorted.
+
+Generated: This is a groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy,
+
+../data/wav/AgCSBCsHkMk.wav
+
+Real: The low quality recording features water and some metallic sound effects, followed by a dynamic orchestra that consists of a mellow string section, simple plucked harp and mystical woodwinds playing in the background. In the first part of the loop, the sound is completely muffled. It sounds like something you would hear in old movies.
+
+Generated: This is an acoustic guitar playing a melody in a snare. The tempo is medium with a snare and a snare. The snare is a snare. This is accompanied by a sn
+
+../data/wav/9ZWmZdgrE78.wav
+
+Real: The low quality video features a cover of a kids song and it consists of a sweet girl vocal singing over acoustic rhythm guitar. The recording is in mono, noisy and it sounds fun and happy.
+
+Generated: This is a groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy,
+
+../data/wav/XXBVsNt2Qr8.wav
+
+Real: A female singer sings this passionate melody. The song is medium tempo with steady drumming rhythm, groovy bass line, Caribbean percussion, guitar accompaniment and a brass band playing percussively. The song is emotional and spirited. The song is a classic renege hit.
+
+Generated: This is a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a saxophone
+
+Epoch 1: Val Examples:
+../data/wav/j8FYy5YfK7k.wav
+
+Real: This is a soul/R&B music piece. There is a trio of two male vocalists and a female vocalist singing melodically. The keyboard is holding the chords in the background while the electric guitar and the bass guitar are playing a groovy tune. The rhythmic background contains an electronic drum beat. The atmosphere is urban. The piece could be played during a retro-themed party at a nightclub.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. The snare is playing a snare in the background. The snare is playing a snare in the background. The snare is
+
+../data/wav/DhnNZn8JjEQ.wav
+
+Real: This song is an instrumental. The tempo is medium with simple keyboard harmony, melodious guitar rhythm with the sound of a bell, waves and fingers snapping which could be a friction of fingers against the strings.The song is soft, melodic, pleasant, simple, calming and peaceful.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. The voice is singing in a snare. The voice is singing in a snare.
+
+../data/wav/fpdgtpBOh-c.wav
+
+Real: This slow pop ballad features two cellos playing in harmony. One cello plays the high notes. The second cello plays the bass notes. This is accompanied by a piano playing chords in the background. The mood of this song is romantic. There are no voices in this song. This song can be played in a romantic movie.
+
+Generated: This is a snare piece. The tempo is medium with a snare, a snare, a snare, a snare, a snare, a snare, a snare
+
+../data/wav/_zQTlTCqMzs.wav
+
+Real: A male vocalist sings this powerful solo in a foreign language. The tempo is medium with a spanish guitar accompaniment. The song has minimalist music with captivating, lilting and almost haunting vocals. This is a live performance with ambient sounds of people talking. The audio  quality is inferior as it is an amateur recording. This song is a Latin/Spanish Folk song.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. The voice is singing in a snare. The voice is singing in a snare.
+
+../data/wav/Ve6Zy1BXBbY.wav
+
+Real: This low quality audio features a child singing the main melody. This is accompanied by other children's voices singing vocables in the background in harmony. An acoustic guitar strums chords. There are no other instruments in this song. This song has a holiday mood. This song can be played in a Christmas movie.
+
+Generated: The low quality recording features a snare, a snare, a snare, a snare, a snare, a snare, a snare, a snare, a
+
+../data/wav/ChyayWIp_vU.wav
+
+Real: A male voice is singing along to a fast paced reggae instrumental. The drums are playing a reggae-groove along with a harmonica on the offbeat. Two e-guitars are playing a single note melody. Both are following the bassline adding harmonies. A saxophone is adding a little melody after every end of a phrase. The male voice is singing in the mid-range and sounds doubled. Some of the instruments are panned to the left and right side of the speakers. This song may be playing at a local bar.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. The voice is singing in a snare. The voice is singing in a snare.
+
+../data/wav/MWS-Uxf1MRw.wav
+
+Real: This is a classical music piece. There is a piano playing an arpeggio in the background while a violin gently plays the main tune. The atmosphere of the piece is sentimental. This piece could be used in the background of tutorial videos. It could also be playing in the background at a coffee shop.
+
+Generated: This is a snare piece. It is a snare piece. It is a snare piece. It is a snare piece. It is a snare piece.
+
+../data/wav/qknDM3pcoD0.wav
+
+Real: This song carries a powerful air of conviction with it that is aided by  the singer's soulful performance. It's a heartbreak song and although it feels sad, it also feels like a reclamation of power. It's a live performance with a full band including guitarists, violinists, a pianist and a drummer who plays a pop beat. The genre for this song could be classified as pop-soul.
+
+Generated: This is an acoustic guitar piece. There is a male voice singing in the background. The voice is a snare. The voice is a snare.
+
+../data/wav/Q-ATDBgDbLE.wav
+
+Real: This is a chamber music piece. It is performed by a quintet of the harp, the flute, the violin, the viola and the cello. There is a constant rising and falling pattern, resembling the feeling of a wave. The piece has a mysterious atmosphere to it. This music would fit perfectly in the soundtrack of an adventure movie during scenes of a journey where the characters are crossing the sea.
+
+Generated: This is an acoustic guitar playing a snare melody. The tempo is medium with a snare, acoustic guitar, acoustic guitar chords, acoustic guitar chords, acoustic guitar chords
+
+../data/wav/fUC45bzOOJw.wav
+
+Real: The low quality recording features laser, buzzy and metallic sound effects with a haunting background music, which makes it sound like it was recorded in a game room. The recording is noisy, mono, distorted and it sounds creepy.
+
+Generated: The low quality recording features a snare melody, a snare melody, a snare melody, a snare melody, a snare melody, a snare melody, a snare melody, a
+
+../data/wav/0ewWspUqB6Y.wav
+
+Real: This is a Romanian folk music piece. It is a live performance. In the background, there is a contrabass and a cimbalom playing. The main melody is being played by the violin and the accordion. The atmosphere is vibrant and cheerful. This piece could be used in the soundtrack of a comedy movie that takes place in eastern Europe or the Balkans, especially during an escape scene.
+
+Generated: This is a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a saxophone
+
+../data/wav/L2-EGNKzUAQ.wav
+
+Real: The Pop song features a passionate male vocal, alongside wide harmonizing background vocals, singing over clapping, shimmering cymbals, groovy bass and soft kick hits. It sounds addictive, happy and joyful.
+
+Generated: This is a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a saxophone
+
+../data/wav/ojdqgnmcgYM.wav
+
+Real: The low quality recording features a pop song that consists a passionate female lead vocal, alongside harmonizing female vocal, singing over groovy synth bas, claps, shimmering hi hats, punchy "4 on the floor" kick pattern, electric guitar melody and short groovy synth keys chords. It sounds energetic, groovy and addictive. The recording is noisy.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. There is a male voice singing in the background. There is a male voice singing in the background. There is a male voice singing in the background. The voice is singing in the background
+
+../data/wav/GX-QhoihLeI.wav
+
+Real: The song is an instrumental with sounds of a woman screaming and running with huffing and puffing sounds. A chainsaw buzzes ominously , with a string section playing a scary and tense accompaniment along with a cello building the tension with a poignant harmony. The music is a horror movie soundtrack or an ad jingle. The song audio quality is very poor.
+
+Generated: This is a snare piece. There is a male voice singing in the background. The voice is a snare. The voice is a snare.
+
+../data/wav/Nqb7nw58q08.wav
+
+Real: The song is an instrumental. The song is medium tempo with a groovy drumming rhythm,  percussive bass line and cool electric guitar riff played repeatedly. The song is exciting and energetic. The song has smooth jazz or funk jazz roots.
+
+Generated: The low quality recording features a snare, acoustic guitar melody, acoustic guitar melody, acoustic guitar melody, acoustic guitar melody, acoustic guitar melody, acoustic guitar melody, acous
+
+../data/wav/ZJZxWLYzNh8.wav
+
+Real: This seems to be a life recording because you can hear people in the background cheering. An electric bass is playing a bluesy bassline along with the drums holding a simple steady groove. One guitar is panned to the right side of the speakers playing chords while another e-guitar is playing a melody on the left side of the speakers. Both are fairly in the background. A male mid ranged voice is singing with a little reverb on his voice. This song may be playing life at a festival.
+
+Generated: This is a live performance of a male vocalist singing in a saxophone. The saxophone is playing a saxophone in the background. The saxophone is playing a saxophone. The
+
+../data/wav/JHvLuYk6TfI.wav
+
+Real: This folk song features a kora being played in waltz time. This starts off with the strings being plucked in waltz time followed by a descending run. The waltz plucking is played twice more followed by another descending run. There are no other instruments in this song. There are no voices in this song. This is an instrumental song. This song can be sampled and played in a hip-hop song.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. The tempo is medium with a snare and a snare. The song is a snare.
+
+../data/wav/Al_OdIuqoe0.wav
+
+Real: This is the live performance of an afrobeat music piece. There is a male voice singing occasionally. The melody is being played by a wide variety of instruments such as the electric guitar, the keyboard and the bass guitar. There is a saxophone playing a solo. In the rhythmic background, there is an acoustic drum beat in the style of afrobeat. It is joined by percussive elements. There is a vibrant atmosphere in this recording. This piece could be playing in the background of a West African cuisine restaurant.
+
+Generated: A male vocalist sings a snare melody. The melody is a snare. The melody is a snare. The melody is a snare.
+
+../data/wav/LyTwxJiSt7A.wav
+
+Real: A xylophone or another bell sounding metal instrument is playing a melody that sounds like a lullaby. Someone is burping loud and with full force. Then  you can hear a high pitched voice laughing. These sounds don't seem to belong to the music. This song may be playing in a cartoon sequence.
+
+Generated: This is a snare drum. There is a male voice singing in the background. There is a male voice singing in the background. There is a male voice singing in the background. There is a male voice singing in the background. There is a male voice singing in the background
+
+../data/wav/GQz_u0Vc8Os.wav
+
+Real: The Soft Rock song features a soulful male vocal melody over widely spread acoustic rhythm guitar, arpeggiated electric guitar melody and smooth bass. At the end of the loop there is a short snippet of the drop that consists of energetic drums and solo electric guitar melody. Right before the drop, the drums are slowly fading into the drop. Overall it sounds passionate, soulful, emotional and energetic.
+
+Generated: Die nderung der nderungsanträge hat die nderung der nderungsanträge bewirkt.
+
+Epoch 1: Test Examples:
+../data/wav/r2gYE6-cGx8.wav
+
+Real: This clip would be suitable for a movie soundtrack during a scene that is thrilling, intense, exciting and fueled with adrenaline. The music is played by an orchestra, with several layers of violin and brass instruments. The song brings about an atmosphere that invites action.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. The voice is singing in a snare. The voice is singing in a snare.
+
+../data/wav/pSzTPGlNa5U.wav
+
+Real: This amateur recording features the main melody being played by a theremin. This is accompanied by a piano. There are no other instruments played in this clip. The mood of this song is relaxed. There are no voices in this song. This song can be played in a slow motion action scene in a superhero movie.
+
+Generated: This is a snare piece. There is a snare in the background. There is a snare in the background. There is a snare in the background. There is a snare in the background. There is a s
+
+../data/wav/uA-JpZppFsc.wav
+
+Real: The low quality recording features an accordion melody with some plastic tapping keys along the way. It sounds soulful and passionate and the recording is noisy.
+
+Generated: This is a snare piece. The snare is a snare piece. The snare is a snare piece. The snare is a snare piece. The snare is a snare
+
+../data/wav/ABVYSaLu_VM.wav
+
+Real: Here we have a slow piano piece played in a major key. The peace feels calm and happy.
+
+Generated: This is a snare piece. The snare is a snare piece. The snare is a snare piece. The snare is a snare piece. The snare is a snare
+
+../data/wav/zRixZ7mWwho.wav
+
+Real: This is a gear showcase jam. The only instrument being played is an electric guitar being strummed lightly. There is a chorus ensemble effect on the guitar making it sound like multiple guitars are being played at the same time. There is a dreamy atmosphere in this recording. Chorus guitar samples could be picked up from this recording. Some parts of it could also be mixed into advertisement jingles.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. There is a male voice singing in the background. There is a male voice singing in the background. There is a male voice singing in the background. The voice is singing in the background
+
+../data/wav/3bg0iy-ypcw.wav
+
+Real: The Hip Hip songs live performance consists of repetitive male vocal singing over repetitive piano melody, smooth bass, shimmering hi hats and soft kick and snare hits. It sounds jazzy and warm.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. The voice is singing in a snare. The voice is singing in a snare.
+
+../data/wav/q7s7C4oNlFo.wav
+
+Real: This is an intuitive folk/neo-folk music piece. There is a female vocalist singing over multiple tracks, one being the minor harmonies of the other. There is an acoustic guitar playing a gentle, simple tune. The atmosphere of this piece is heart-touching. The music could fit very well in the soundtrack of a drama movie or a TV show.
+
+Generated: The low quality recording features a male voice singing over a snare melody. It sounds a bit snare, but it sounds like it is a snare.
+
+../data/wav/dwSj0Rr3vFc.wav
+
+Real: A string section is playing a melody in the mid to high register. A bansuri flute is playing the same melody along. Digital and acoustic drum/percussion elements are playing a beat that does not occupy a lot of space. A male voice is singing at a higher pitch. This song may be playing in a hindi-movie.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. The voice is singing in a snare. The voice is singing in a snare.
+
+../data/wav/BT4env-Tw2o.wav
+
+Real: This song has a bassline that repeats itself playing along with a distorted guitar that supports the melody by playing the low notes along with slight variations and licks. The acoustic drums sound in the background but are played at full force. Fast paced with a lot of hits on different crashes and using a double bass kick. The male voice is screaming full force then a synthesizer lead sound is playing a simple melody that is panned to the right side of the speakers. This song may be playing at a live-concert jumping up and down enjoying the energetic energy of the surrounding and the music.
+
+Generated: . Then there is a snare of a snare. Then there is a snare of a snare. Then there is a snare of a snare. Then there is a s
+
+../data/wav/6Yh7Cdm2GgY.wav
+
+Real: The song is an instrumental. The song is medium tempo with drums playing in march style and a brass section plays this triumphant harmony. The song is spirited and gives an adrenaline rush. The song is a western movie soundtrack with an average sound quality.
+
+Generated: This is a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a saxophone
+
+../data/wav/aryufzYGhbM.wav
+
+Real: This song is in very poor audio-quality and seems to lag. A big pulsating synthesizer pad is creating tension along with some more single holding note, higher register synth pad. A riser effect tells us that this part of the song is about to break into another part that will bring relief from the created tension. A synthesizer pluck is playing a catchy repeating melody. The male voice sings/raps in the higher register a male backing voice is shouting in the background. This song may be played on a dj mix in a club.
+
+Generated: The song is a saxophone song. The song is a saxophone song. The song is a saxophone song. The song is a saxophone song. The song is a saxophone song
+
+../data/wav/qtnE1hnCD0M.wav
+
+Real: The low quality recording features a loud, gliding synth bass, muffled snare and kick hits, tinny hi hats and shimmering ride cymbals. There is a busy line sound effect and its rhythm is offbeat relative to the song. It sounds generic - like a song from a video game.
+
+Generated: This is a groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy,
+
+../data/wav/NX3KJ-tVdMI.wav
+
+Real: This audio contains a digital drum with a kick with a lot of overdrive, a snare on the backbeat and a long noisy snare sound. This song sounds very monoton. This song may be playing in a club.
+
+Generated: This is a snare drum. There is a male voice singing in the background. The snare is playing a snare in the background. The snare is playing a snare in the background. The snare is playing a
+
+../data/wav/R_HAtyDbw1M.wav
+
+Real: Someone is skillfully playing maracas playing different rhythms in the same tempo so they blend together. The audio-quality is poor.
+
+Generated: a song song song song song song song song song song song song song song. This song is instrumental instrumental instrumental instrumental instrumental song. This song song is a song song song. a song song song song song song song song song. aa song song song song song song song song.. a
+
+../data/wav/0OY8XXZ98rw.wav
+
+Real: The Metal song features a distorted flat male vocal singing over wide aggressive electric guitar riffs, distorted bass guitar, punchy snare, double pedal kick and shimmering cymbals. It sounds energetic, aggressive and manic - like something you would go into a mosh pit for.
+
+Generated: This is a saxophone recording of a saxophone. The saxophone is playing a saxophone. The saxophone is playing a saxophone. The saxophone
+
+../data/wav/kh6rmFg3U4k.wav
+
+Real: The low quality recording features a resonating bell in one shot. It sounds mellow, soft, calming, relaxing and hypnotic - like something you would listen to while meditating.
+
+Generated: Die nderung der nderungsanträge hat die nderung der nderungsanträge bewirkt.
+
+../data/wav/6c1vNidtVTc.wav
+
+Real: This is a military anthem sung by male voices in the French language. The choir sings in a grave but determined manner, implying a feeling of perseverance. There are no instruments. This piece could be used in parades or historical content related to the French army.
+
+Generated: This is a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a saxophone
+
+../data/wav/iEMTTKA7NxU.wav
+
+Real: The low quality recording features a ballad song sung by passionate female vocalists over groovy, mellow piano chords and shimmering shakers and tambourine. It sounds emotional and heartfelt - like something you would sing to your partner, out of love.
+
+Generated: This is a snare drumming song. There is a male voice singing in the background. The voice is singing in a snare. The voice is singing in a snare.
+
+../data/wav/uZHE9b1WDuM.wav
+
+Real: The song is an instrumental. The tempo is fast , with a philharmonic orchestra consisting of string section, rhythm section and horns accompanying a virtuoso wooden xylophone playing this western classical hit. The song is energetic and exciting.
+
+Generated: The song is a snare and it is a snare song. It is a snare song. It is a snare song. It is a snare song.
+
+../data/wav/B3q2wHpzhoM.wav
+
+Real: This composition contains a string section playing a rising and dissonant chord along with strings playing short notes. In the background you can hear atmospheric noises. This song may be playing in a scary movie scene.
+
+Generated: This is a live performance of a saxophone. The saxophone is playing a saxophone. The snare is playing a snare. The snare is playing a snare. The
+
+Epoch 2: Test Loss = 2.498944404429959
+Epoch 2: Train Examples:
+../data/wav/-Vo4CAMX26U.wav
+
+Real: The low quality recording features a low windpipe vocal sound played in nature, surrounded by flowing water and chirping birds sound effects. Sounds a bit harsh and loud, as the tone of the windpipe is constantly changing.
+
+Generated: The song is an instrumental. The song is a mellow instrumental. The song is a mellow, mellow, groovy, groovy, groovy, groovy, groovy, groovy
+
+../data/wav/ktTrTDQidsE.wav
+
+Real: The low quality recording features a groovy Spanish acoustic guitar. It sounds very noisy, vintage and the guitar was recorded in mono.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/GkB_BkyVyPs.wav
+
+Real: The low quality recording features a live performance of a reggae song that consists of shimmering cymbals, addictive brass melody and muffled male vocal singing over it. It is noisy and in mono, and it sounds thin, harsh, muddy, messy and energetic.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/OB7GyVqufwQ.wav
+
+Real: A digital drum is playing a reggaeton groove along with some acoustic percussion while someone is playing a turkish baglama. A male voice is singing/shouting. This is an amateur recording. This song may be playing outside busking with a band.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/1QFli7KSXAQ.wav
+
+Real: The Rock song features a passionate male vocalist singing over wide electric guitar melodies, groovy bass guitar, shimmering cymbals, groovy toms, punchy snare and kick hits. It sounds energetic, passionate, emotional and loud.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/2xQuWif8axE.wav
+
+Real: This is a live recording of an instrumental progressive metal piece. A solo is being played on the electric guitar at a very fast pace using the technique of shredding. Rapid jumps from medium to high range notes can be heard. The atmosphere is aggressive.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/_oNLyxk08oA.wav
+
+Real: Here we have a solo bass flute player. The music sounds mystical, like in a fantasy movie about dragons and fairies. There is reverb applied to the sound.
+
+Generated: The low quality recording features a live performance of a mellow snare hit. It sounds groovy, groovy, groovy, groovy, groovy, groovy, groovy
+
+../data/wav/C4MeKaeaPcU.wav
+
+Real: This is a recording of a skilled organ player playing some intricate motifs on the organ. The music is soulful and also has a gospel feel to it. It's a live recording with low-quality audio.
+
+Generated: This is a classical music piece. There is a male vocalist singing in the background. The tempo is medium with a snare, a snare, a snare, a snare and a snare. The song is
+
+../data/wav/WvaIypMvAHY.wav
+
+Real: This is the recording of a guitar lesson video. There is a male speaking in an instructive manner, giving the name of the chord he is about to play next. The chords are being played gently on a clean sounding electric guitar. There is a mellow feel to the sound. Parts of this recording can be sampled for use in beat-making.
+
+Generated: The low quality recording features a live performance of a mellow snare hit. It sounds energetic and energetic.
+
+../data/wav/Uvn7waPvseo.wav
+
+Real: This is an instrument showcase jam. It is an electronic music piece played on a drum machine. There is a booming electronic drum beat in the rhythmic background. There is a medium-to-high pitch melodic pad repeating the same tune. The sound of the piece is crisp and loud. This piece could be used in the soundtrack of a fast-paced video game in the arcade genre. It could also be playing in the background during breaks at a sports venue.
+
+Generated: The e-mail is a e-mail address. The e-mail is a bit noisy and it is noisy. The e-mail is a bit noisy.
+
+../data/wav/3KdyWJ6wTOw.wav
+
+Real: This song features a male voice rapping the lyrics. Female voices sing vocables in the background. This is accompanied by programmed percussion playing a trap beat. The bass plays a groovy bassline by sliding to notes rather than pausing in between notes. A synth plays a repetitive melody in the background. This song can be played in a gangster movie.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/eStzDzEopDI.wav
+
+Real: The low quality recording features a traditional song sung by harmonizing female vocals over breathy flute melody and wooden percussion. It sounds harsh, muddy, passionate and soulful, as audio is distorted due to poor quality microphone.
+
+Generated: This is a live performance of a saxophone song. There is a male vocalist singing in the background. The saxophone is playing a melody in the background. The song is a saxophone
+
+../data/wav/XxKlsW4H0qo.wav
+
+Real: This is a clip of a singing bowl. The tone is high pitched and sustained and ringing. The song would be suitable for a meditation room or for any kind of environment wherein tranquility is the end goal.
+
+Generated: The low quality recording features a live performance of a classical song that consists of a groovy bass line, a groovy bass line, a groovy bass line, a groovy bass line, a groov
+
+../data/wav/fWwV7o4VjEQ.wav
+
+Real: An acoustic drum with a lot of reverb is playing a minimalistic slow groove along with an e-bass playing long single notes. A synth hit comes in for a moment and then an e-guitar is talking over it with a melody. The male voice sings with a lot of reverb, reverb and a chorus/flanger on his voice. The whole recording is full of reverb and the voice of the singer is using a ping pong delay. This song may be playing on a lazy day at home.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/3w_LsKl-3Pk.wav
+
+Real: The low quality recording features a traditional song that consists of a passionate woodwind melody played over wooden percussive elements. It sounds soulful, passionate and emotional, even though the recording is in mono and noisy.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/1GCOnj53QYM.wav
+
+Real: This music is two separate tracks. The first track is electronic music with turn table scratching. The second track is a soft, romantic, mellow, harmonious melody with keyboard harmony, electric guitar, groovy bass and steady drumming with a man talking at the end. The two tracks are unrelated.
+
+Generated: The song is an instrumental. The song is medium tempo with a groovy bass line, a groovy bass line, a groovy bass line, a groovy bass line, a groovy bass line,
+
+../data/wav/NZ2kFIaW05k.wav
+
+Real: The low quality recording features an electric guitar melody played over a playback that consists of groovy bass, punchy snare and shimmering cymbals. At the end of the loop, there is a flat male vocal talking. It sounds groovy, fun and the recording is noisy and slightly distorted.
+
+Generated: The low quality recording features a male vocalist singing over a groovy bass line. It sounds groovy, groovy, groovy, groovy, groovy, groovy, groov
+
+../data/wav/AgCSBCsHkMk.wav
+
+Real: The low quality recording features water and some metallic sound effects, followed by a dynamic orchestra that consists of a mellow string section, simple plucked harp and mystical woodwinds playing in the background. In the first part of the loop, the sound is completely muffled. It sounds like something you would hear in old movies.
+
+Generated: This is a live performance of a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a
+
+../data/wav/9ZWmZdgrE78.wav
+
+Real: The low quality video features a cover of a kids song and it consists of a sweet girl vocal singing over acoustic rhythm guitar. The recording is in mono, noisy and it sounds fun and happy.
+
+Generated: The song is an instrumental. The song is a mellow, groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy,
+
+../data/wav/XXBVsNt2Qr8.wav
+
+Real: A female singer sings this passionate melody. The song is medium tempo with steady drumming rhythm, groovy bass line, Caribbean percussion, guitar accompaniment and a brass band playing percussively. The song is emotional and spirited. The song is a classic renege hit.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+Epoch 2: Val Examples:
+../data/wav/j8FYy5YfK7k.wav
+
+Real: This is a soul/R&B music piece. There is a trio of two male vocalists and a female vocalist singing melodically. The keyboard is holding the chords in the background while the electric guitar and the bass guitar are playing a groovy tune. The rhythmic background contains an electronic drum beat. The atmosphere is urban. The piece could be played during a retro-themed party at a nightclub.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/DhnNZn8JjEQ.wav
+
+Real: This song is an instrumental. The tempo is medium with simple keyboard harmony, melodious guitar rhythm with the sound of a bell, waves and fingers snapping which could be a friction of fingers against the strings.The song is soft, melodic, pleasant, simple, calming and peaceful.
+
+Generated: The song is a mellow, groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy,
+
+../data/wav/fpdgtpBOh-c.wav
+
+Real: This slow pop ballad features two cellos playing in harmony. One cello plays the high notes. The second cello plays the bass notes. This is accompanied by a piano playing chords in the background. The mood of this song is romantic. There are no voices in this song. This song can be played in a romantic movie.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/_zQTlTCqMzs.wav
+
+Real: A male vocalist sings this powerful solo in a foreign language. The tempo is medium with a spanish guitar accompaniment. The song has minimalist music with captivating, lilting and almost haunting vocals. This is a live performance with ambient sounds of people talking. The audio  quality is inferior as it is an amateur recording. This song is a Latin/Spanish Folk song.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/Ve6Zy1BXBbY.wav
+
+Real: This low quality audio features a child singing the main melody. This is accompanied by other children's voices singing vocables in the background in harmony. An acoustic guitar strums chords. There are no other instruments in this song. This song has a holiday mood. This song can be played in a Christmas movie.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/ChyayWIp_vU.wav
+
+Real: A male voice is singing along to a fast paced reggae instrumental. The drums are playing a reggae-groove along with a harmonica on the offbeat. Two e-guitars are playing a single note melody. Both are following the bassline adding harmonies. A saxophone is adding a little melody after every end of a phrase. The male voice is singing in the mid-range and sounds doubled. Some of the instruments are panned to the left and right side of the speakers. This song may be playing at a local bar.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/MWS-Uxf1MRw.wav
+
+Real: This is a classical music piece. There is a piano playing an arpeggio in the background while a violin gently plays the main tune. The atmosphere of the piece is sentimental. This piece could be used in the background of tutorial videos. It could also be playing in the background at a coffee shop.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/qknDM3pcoD0.wav
+
+Real: This song carries a powerful air of conviction with it that is aided by  the singer's soulful performance. It's a heartbreak song and although it feels sad, it also feels like a reclamation of power. It's a live performance with a full band including guitarists, violinists, a pianist and a drummer who plays a pop beat. The genre for this song could be classified as pop-soul.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/Q-ATDBgDbLE.wav
+
+Real: This is a chamber music piece. It is performed by a quintet of the harp, the flute, the violin, the viola and the cello. There is a constant rising and falling pattern, resembling the feeling of a wave. The piece has a mysterious atmosphere to it. This music would fit perfectly in the soundtrack of an adventure movie during scenes of a journey where the characters are crossing the sea.
+
+Generated: This is a live performance of a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a
+
+../data/wav/fUC45bzOOJw.wav
+
+Real: The low quality recording features laser, buzzy and metallic sound effects with a haunting background music, which makes it sound like it was recorded in a game room. The recording is noisy, mono, distorted and it sounds creepy.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/0ewWspUqB6Y.wav
+
+Real: This is a Romanian folk music piece. It is a live performance. In the background, there is a contrabass and a cimbalom playing. The main melody is being played by the violin and the accordion. The atmosphere is vibrant and cheerful. This piece could be used in the soundtrack of a comedy movie that takes place in eastern Europe or the Balkans, especially during an escape scene.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/L2-EGNKzUAQ.wav
+
+Real: The Pop song features a passionate male vocal, alongside wide harmonizing background vocals, singing over clapping, shimmering cymbals, groovy bass and soft kick hits. It sounds addictive, happy and joyful.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/ojdqgnmcgYM.wav
+
+Real: The low quality recording features a pop song that consists a passionate female lead vocal, alongside harmonizing female vocal, singing over groovy synth bas, claps, shimmering hi hats, punchy "4 on the floor" kick pattern, electric guitar melody and short groovy synth keys chords. It sounds energetic, groovy and addictive. The recording is noisy.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/GX-QhoihLeI.wav
+
+Real: The song is an instrumental with sounds of a woman screaming and running with huffing and puffing sounds. A chainsaw buzzes ominously , with a string section playing a scary and tense accompaniment along with a cello building the tension with a poignant harmony. The music is a horror movie soundtrack or an ad jingle. The song audio quality is very poor.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/Nqb7nw58q08.wav
+
+Real: The song is an instrumental. The song is medium tempo with a groovy drumming rhythm,  percussive bass line and cool electric guitar riff played repeatedly. The song is exciting and energetic. The song has smooth jazz or funk jazz roots.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/ZJZxWLYzNh8.wav
+
+Real: This seems to be a life recording because you can hear people in the background cheering. An electric bass is playing a bluesy bassline along with the drums holding a simple steady groove. One guitar is panned to the right side of the speakers playing chords while another e-guitar is playing a melody on the left side of the speakers. Both are fairly in the background. A male mid ranged voice is singing with a little reverb on his voice. This song may be playing life at a festival.
+
+Generated: This is a live performance of a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a
+
+../data/wav/JHvLuYk6TfI.wav
+
+Real: This folk song features a kora being played in waltz time. This starts off with the strings being plucked in waltz time followed by a descending run. The waltz plucking is played twice more followed by another descending run. There are no other instruments in this song. There are no voices in this song. This is an instrumental song. This song can be sampled and played in a hip-hop song.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/Al_OdIuqoe0.wav
+
+Real: This is the live performance of an afrobeat music piece. There is a male voice singing occasionally. The melody is being played by a wide variety of instruments such as the electric guitar, the keyboard and the bass guitar. There is a saxophone playing a solo. In the rhythmic background, there is an acoustic drum beat in the style of afrobeat. It is joined by percussive elements. There is a vibrant atmosphere in this recording. This piece could be playing in the background of a West African cuisine restaurant.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/LyTwxJiSt7A.wav
+
+Real: A xylophone or another bell sounding metal instrument is playing a melody that sounds like a lullaby. Someone is burping loud and with full force. Then  you can hear a high pitched voice laughing. These sounds don't seem to belong to the music. This song may be playing in a cartoon sequence.
+
+Generated: The low quality recording features a live performance of a mellow snare hit. It sounds energetic and energetic.
+
+../data/wav/GQz_u0Vc8Os.wav
+
+Real: The Soft Rock song features a soulful male vocal melody over widely spread acoustic rhythm guitar, arpeggiated electric guitar melody and smooth bass. At the end of the loop there is a short snippet of the drop that consists of energetic drums and solo electric guitar melody. Right before the drop, the drums are slowly fading into the drop. Overall it sounds passionate, soulful, emotional and energetic.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+Epoch 2: Test Examples:
+../data/wav/r2gYE6-cGx8.wav
+
+Real: This clip would be suitable for a movie soundtrack during a scene that is thrilling, intense, exciting and fueled with adrenaline. The music is played by an orchestra, with several layers of violin and brass instruments. The song brings about an atmosphere that invites action.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/pSzTPGlNa5U.wav
+
+Real: This amateur recording features the main melody being played by a theremin. This is accompanied by a piano. There are no other instruments played in this clip. The mood of this song is relaxed. There are no voices in this song. This song can be played in a slow motion action scene in a superhero movie.
+
+Generated: This is a classical music piece. There is a male vocalist singing in the background. The tempo is medium with a snare, a snare, a snare, a snare and a snare. The music is
+
+../data/wav/uA-JpZppFsc.wav
+
+Real: The low quality recording features an accordion melody with some plastic tapping keys along the way. It sounds soulful and passionate and the recording is noisy.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/ABVYSaLu_VM.wav
+
+Real: Here we have a slow piano piece played in a major key. The peace feels calm and happy.
+
+Generated: This is a live performance of a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a
+
+../data/wav/zRixZ7mWwho.wav
+
+Real: This is a gear showcase jam. The only instrument being played is an electric guitar being strummed lightly. There is a chorus ensemble effect on the guitar making it sound like multiple guitars are being played at the same time. There is a dreamy atmosphere in this recording. Chorus guitar samples could be picked up from this recording. Some parts of it could also be mixed into advertisement jingles.
+
+Generated: The low quality recording features a male vocalist singing over a groovy bass line, a groovy bass line, a groovy bass line, a groovy bass line, a groovy bass line, a
+
+../data/wav/3bg0iy-ypcw.wav
+
+Real: The Hip Hip songs live performance consists of repetitive male vocal singing over repetitive piano melody, smooth bass, shimmering hi hats and soft kick and snare hits. It sounds jazzy and warm.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/q7s7C4oNlFo.wav
+
+Real: This is an intuitive folk/neo-folk music piece. There is a female vocalist singing over multiple tracks, one being the minor harmonies of the other. There is an acoustic guitar playing a gentle, simple tune. The atmosphere of this piece is heart-touching. The music could fit very well in the soundtrack of a drama movie or a TV show.
+
+Generated: The song is an instrumental. The song is a mellow, groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy,
+
+../data/wav/dwSj0Rr3vFc.wav
+
+Real: A string section is playing a melody in the mid to high register. A bansuri flute is playing the same melody along. Digital and acoustic drum/percussion elements are playing a beat that does not occupy a lot of space. A male voice is singing at a higher pitch. This song may be playing in a hindi-movie.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/BT4env-Tw2o.wav
+
+Real: This song has a bassline that repeats itself playing along with a distorted guitar that supports the melody by playing the low notes along with slight variations and licks. The acoustic drums sound in the background but are played at full force. Fast paced with a lot of hits on different crashes and using a double bass kick. The male voice is screaming full force then a synthesizer lead sound is playing a simple melody that is panned to the right side of the speakers. This song may be playing at a live-concert jumping up and down enjoying the energetic energy of the surrounding and the music.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/6Yh7Cdm2GgY.wav
+
+Real: The song is an instrumental. The song is medium tempo with drums playing in march style and a brass section plays this triumphant harmony. The song is spirited and gives an adrenaline rush. The song is a western movie soundtrack with an average sound quality.
+
+Generated: This is a live performance of a saxophone song. There is a male vocalist singing in the background. The saxophone is playing a melody in the background. The song is a saxophone
+
+../data/wav/aryufzYGhbM.wav
+
+Real: This song is in very poor audio-quality and seems to lag. A big pulsating synthesizer pad is creating tension along with some more single holding note, higher register synth pad. A riser effect tells us that this part of the song is about to break into another part that will bring relief from the created tension. A synthesizer pluck is playing a catchy repeating melody. The male voice sings/raps in the higher register a male backing voice is shouting in the background. This song may be played on a dj mix in a club.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/qtnE1hnCD0M.wav
+
+Real: The low quality recording features a loud, gliding synth bass, muffled snare and kick hits, tinny hi hats and shimmering ride cymbals. There is a busy line sound effect and its rhythm is offbeat relative to the song. It sounds generic - like a song from a video game.
+
+Generated: The song is an instrumental. The song is a mellow, groovy, groovy, groovy, groovy, groovy, groovy, groovy, groovy,
+
+../data/wav/NX3KJ-tVdMI.wav
+
+Real: This audio contains a digital drum with a kick with a lot of overdrive, a snare on the backbeat and a long noisy snare sound. This song sounds very monoton. This song may be playing in a club.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/R_HAtyDbw1M.wav
+
+Real: Someone is skillfully playing maracas playing different rhythms in the same tempo so they blend together. The audio-quality is poor.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/0OY8XXZ98rw.wav
+
+Real: The Metal song features a distorted flat male vocal singing over wide aggressive electric guitar riffs, distorted bass guitar, punchy snare, double pedal kick and shimmering cymbals. It sounds energetic, aggressive and manic - like something you would go into a mosh pit for.
+
+Generated: The song is an instrumental. The song is a mellow instrumental. The song is a mellow, groovy, groovy, groovy, groovy, groovy, groovy, groo
+
+../data/wav/kh6rmFg3U4k.wav
+
+Real: The low quality recording features a resonating bell in one shot. It sounds mellow, soft, calming, relaxing and hypnotic - like something you would listen to while meditating.
+
+Generated: The song is a mellow instrumental. The song is a mellow, mellow, groovy, groovy, groovy, groovy, groovy, groovy, groovy
+
+../data/wav/6c1vNidtVTc.wav
+
+Real: This is a military anthem sung by male voices in the French language. The choir sings in a grave but determined manner, implying a feeling of perseverance. There are no instruments. This piece could be used in parades or historical content related to the French army.
+
+Generated: The low quality recording features a live performance of a mellow snare hit. It sounds groovy, groovy, groovy, groovy, groovy, groovy, groovy
+
+../data/wav/iEMTTKA7NxU.wav
+
+Real: The low quality recording features a ballad song sung by passionate female vocalists over groovy, mellow piano chords and shimmering shakers and tambourine. It sounds emotional and heartfelt - like something you would sing to your partner, out of love.
+
+Generated: This is a live performance of a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a
+
+../data/wav/uZHE9b1WDuM.wav
+
+Real: The song is an instrumental. The tempo is fast , with a philharmonic orchestra consisting of string section, rhythm section and horns accompanying a virtuoso wooden xylophone playing this western classical hit. The song is energetic and exciting.
+
+Generated: The e-mail is a e-mail address. The e-mail address is a bit noisy. The e-mail address is a bit noisy.
+
+../data/wav/B3q2wHpzhoM.wav
+
+Real: This composition contains a string section playing a rising and dissonant chord along with strings playing short notes. In the background you can hear atmospheric noises. This song may be playing in a scary movie scene.
+
+Generated: This is a live performance of a saxophone song. There is a male voice singing in the background. The voice is singing in a saxophone. The voice is singing in a saxophone. The voice is singing in a
+
+Epoch 3: Test Loss = 2.4893450378475332
+Epoch 3: Train Examples:
+../data/wav/-Vo4CAMX26U.wav
+
+Real: The low quality recording features a low windpipe vocal sound played in nature, surrounded by flowing water and chirping birds sound effects. Sounds a bit harsh and loud, as the tone of the windpipe is constantly changing.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/ktTrTDQidsE.wav
+
+Real: The low quality recording features a groovy Spanish acoustic guitar. It sounds very noisy, vintage and the guitar was recorded in mono.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/GkB_BkyVyPs.wav
+
+Real: The low quality recording features a live performance of a reggae song that consists of shimmering cymbals, addictive brass melody and muffled male vocal singing over it. It is noisy and in mono, and it sounds thin, harsh, muddy, messy and energetic.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/OB7GyVqufwQ.wav
+
+Real: A digital drum is playing a reggaeton groove along with some acoustic percussion while someone is playing a turkish baglama. A male voice is singing/shouting. This is an amateur recording. This song may be playing outside busking with a band.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/1QFli7KSXAQ.wav
+
+Real: The Rock song features a passionate male vocalist singing over wide electric guitar melodies, groovy bass guitar, shimmering cymbals, groovy toms, punchy snare and kick hits. It sounds energetic, passionate, emotional and loud.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/2xQuWif8axE.wav
+
+Real: This is a live recording of an instrumental progressive metal piece. A solo is being played on the electric guitar at a very fast pace using the technique of shredding. Rapid jumps from medium to high range notes can be heard. The atmosphere is aggressive.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+../data/wav/_oNLyxk08oA.wav
+
+Real: Here we have a solo bass flute player. The music sounds mystical, like in a fantasy movie about dragons and fairies. There is reverb applied to the sound.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/C4MeKaeaPcU.wav
+
+Real: This is a recording of a skilled organ player playing some intricate motifs on the organ. The music is soulful and also has a gospel feel to it. It's a live recording with low-quality audio.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+../data/wav/WvaIypMvAHY.wav
+
+Real: This is the recording of a guitar lesson video. There is a male speaking in an instructive manner, giving the name of the chord he is about to play next. The chords are being played gently on a clean sounding electric guitar. There is a mellow feel to the sound. Parts of this recording can be sampled for use in beat-making.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/Uvn7waPvseo.wav
+
+Real: This is an instrument showcase jam. It is an electronic music piece played on a drum machine. There is a booming electronic drum beat in the rhythmic background. There is a medium-to-high pitch melodic pad repeating the same tune. The sound of the piece is crisp and loud. This piece could be used in the soundtrack of a fast-paced video game in the arcade genre. It could also be playing in the background during breaks at a sports venue.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/3KdyWJ6wTOw.wav
+
+Real: This song features a male voice rapping the lyrics. Female voices sing vocables in the background. This is accompanied by programmed percussion playing a trap beat. The bass plays a groovy bassline by sliding to notes rather than pausing in between notes. A synth plays a repetitive melody in the background. This song can be played in a gangster movie.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/eStzDzEopDI.wav
+
+Real: The low quality recording features a traditional song sung by harmonizing female vocals over breathy flute melody and wooden percussion. It sounds harsh, muddy, passionate and soulful, as audio is distorted due to poor quality microphone.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/XxKlsW4H0qo.wav
+
+Real: This is a clip of a singing bowl. The tone is high pitched and sustained and ringing. The song would be suitable for a meditation room or for any kind of environment wherein tranquility is the end goal.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+../data/wav/fWwV7o4VjEQ.wav
+
+Real: An acoustic drum with a lot of reverb is playing a minimalistic slow groove along with an e-bass playing long single notes. A synth hit comes in for a moment and then an e-guitar is talking over it with a melody. The male voice sings with a lot of reverb, reverb and a chorus/flanger on his voice. The whole recording is full of reverb and the voice of the singer is using a ping pong delay. This song may be playing on a lazy day at home.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/3w_LsKl-3Pk.wav
+
+Real: The low quality recording features a traditional song that consists of a passionate woodwind melody played over wooden percussive elements. It sounds soulful, passionate and emotional, even though the recording is in mono and noisy.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/1GCOnj53QYM.wav
+
+Real: This music is two separate tracks. The first track is electronic music with turn table scratching. The second track is a soft, romantic, mellow, harmonious melody with keyboard harmony, electric guitar, groovy bass and steady drumming with a man talking at the end. The two tracks are unrelated.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/NZ2kFIaW05k.wav
+
+Real: The low quality recording features an electric guitar melody played over a playback that consists of groovy bass, punchy snare and shimmering cymbals. At the end of the loop, there is a flat male vocal talking. It sounds groovy, fun and the recording is noisy and slightly distorted.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/AgCSBCsHkMk.wav
+
+Real: The low quality recording features water and some metallic sound effects, followed by a dynamic orchestra that consists of a mellow string section, simple plucked harp and mystical woodwinds playing in the background. In the first part of the loop, the sound is completely muffled. It sounds like something you would hear in old movies.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+../data/wav/9ZWmZdgrE78.wav
+
+Real: The low quality video features a cover of a kids song and it consists of a sweet girl vocal singing over acoustic rhythm guitar. The recording is in mono, noisy and it sounds fun and happy.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/XXBVsNt2Qr8.wav
+
+Real: A female singer sings this passionate melody. The song is medium tempo with steady drumming rhythm, groovy bass line, Caribbean percussion, guitar accompaniment and a brass band playing percussively. The song is emotional and spirited. The song is a classic renege hit.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+Epoch 3: Val Examples:
+../data/wav/j8FYy5YfK7k.wav
+
+Real: This is a soul/R&B music piece. There is a trio of two male vocalists and a female vocalist singing melodically. The keyboard is holding the chords in the background while the electric guitar and the bass guitar are playing a groovy tune. The rhythmic background contains an electronic drum beat. The atmosphere is urban. The piece could be played during a retro-themed party at a nightclub.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/DhnNZn8JjEQ.wav
+
+Real: This song is an instrumental. The tempo is medium with simple keyboard harmony, melodious guitar rhythm with the sound of a bell, waves and fingers snapping which could be a friction of fingers against the strings.The song is soft, melodic, pleasant, simple, calming and peaceful.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/fpdgtpBOh-c.wav
+
+Real: This slow pop ballad features two cellos playing in harmony. One cello plays the high notes. The second cello plays the bass notes. This is accompanied by a piano playing chords in the background. The mood of this song is romantic. There are no voices in this song. This song can be played in a romantic movie.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/_zQTlTCqMzs.wav
+
+Real: A male vocalist sings this powerful solo in a foreign language. The tempo is medium with a spanish guitar accompaniment. The song has minimalist music with captivating, lilting and almost haunting vocals. This is a live performance with ambient sounds of people talking. The audio  quality is inferior as it is an amateur recording. This song is a Latin/Spanish Folk song.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/Ve6Zy1BXBbY.wav
+
+Real: This low quality audio features a child singing the main melody. This is accompanied by other children's voices singing vocables in the background in harmony. An acoustic guitar strums chords. There are no other instruments in this song. This song has a holiday mood. This song can be played in a Christmas movie.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+../data/wav/ChyayWIp_vU.wav
+
+Real: A male voice is singing along to a fast paced reggae instrumental. The drums are playing a reggae-groove along with a harmonica on the offbeat. Two e-guitars are playing a single note melody. Both are following the bassline adding harmonies. A saxophone is adding a little melody after every end of a phrase. The male voice is singing in the mid-range and sounds doubled. Some of the instruments are panned to the left and right side of the speakers. This song may be playing at a local bar.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/MWS-Uxf1MRw.wav
+
+Real: This is a classical music piece. There is a piano playing an arpeggio in the background while a violin gently plays the main tune. The atmosphere of the piece is sentimental. This piece could be used in the background of tutorial videos. It could also be playing in the background at a coffee shop.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/qknDM3pcoD0.wav
+
+Real: This song carries a powerful air of conviction with it that is aided by  the singer's soulful performance. It's a heartbreak song and although it feels sad, it also feels like a reclamation of power. It's a live performance with a full band including guitarists, violinists, a pianist and a drummer who plays a pop beat. The genre for this song could be classified as pop-soul.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/Q-ATDBgDbLE.wav
+
+Real: This is a chamber music piece. It is performed by a quintet of the harp, the flute, the violin, the viola and the cello. There is a constant rising and falling pattern, resembling the feeling of a wave. The piece has a mysterious atmosphere to it. This music would fit perfectly in the soundtrack of an adventure movie during scenes of a journey where the characters are crossing the sea.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/fUC45bzOOJw.wav
+
+Real: The low quality recording features laser, buzzy and metallic sound effects with a haunting background music, which makes it sound like it was recorded in a game room. The recording is noisy, mono, distorted and it sounds creepy.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/0ewWspUqB6Y.wav
+
+Real: This is a Romanian folk music piece. It is a live performance. In the background, there is a contrabass and a cimbalom playing. The main melody is being played by the violin and the accordion. The atmosphere is vibrant and cheerful. This piece could be used in the soundtrack of a comedy movie that takes place in eastern Europe or the Balkans, especially during an escape scene.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/L2-EGNKzUAQ.wav
+
+Real: The Pop song features a passionate male vocal, alongside wide harmonizing background vocals, singing over clapping, shimmering cymbals, groovy bass and soft kick hits. It sounds addictive, happy and joyful.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/ojdqgnmcgYM.wav
+
+Real: The low quality recording features a pop song that consists a passionate female lead vocal, alongside harmonizing female vocal, singing over groovy synth bas, claps, shimmering hi hats, punchy "4 on the floor" kick pattern, electric guitar melody and short groovy synth keys chords. It sounds energetic, groovy and addictive. The recording is noisy.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/GX-QhoihLeI.wav
+
+Real: The song is an instrumental with sounds of a woman screaming and running with huffing and puffing sounds. A chainsaw buzzes ominously , with a string section playing a scary and tense accompaniment along with a cello building the tension with a poignant harmony. The music is a horror movie soundtrack or an ad jingle. The song audio quality is very poor.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+../data/wav/Nqb7nw58q08.wav
+
+Real: The song is an instrumental. The song is medium tempo with a groovy drumming rhythm,  percussive bass line and cool electric guitar riff played repeatedly. The song is exciting and energetic. The song has smooth jazz or funk jazz roots.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/ZJZxWLYzNh8.wav
+
+Real: This seems to be a life recording because you can hear people in the background cheering. An electric bass is playing a bluesy bassline along with the drums holding a simple steady groove. One guitar is panned to the right side of the speakers playing chords while another e-guitar is playing a melody on the left side of the speakers. Both are fairly in the background. A male mid ranged voice is singing with a little reverb on his voice. This song may be playing life at a festival.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/JHvLuYk6TfI.wav
+
+Real: This folk song features a kora being played in waltz time. This starts off with the strings being plucked in waltz time followed by a descending run. The waltz plucking is played twice more followed by another descending run. There are no other instruments in this song. There are no voices in this song. This is an instrumental song. This song can be sampled and played in a hip-hop song.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/Al_OdIuqoe0.wav
+
+Real: This is the live performance of an afrobeat music piece. There is a male voice singing occasionally. The melody is being played by a wide variety of instruments such as the electric guitar, the keyboard and the bass guitar. There is a saxophone playing a solo. In the rhythmic background, there is an acoustic drum beat in the style of afrobeat. It is joined by percussive elements. There is a vibrant atmosphere in this recording. This piece could be playing in the background of a West African cuisine restaurant.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+../data/wav/LyTwxJiSt7A.wav
+
+Real: A xylophone or another bell sounding metal instrument is playing a melody that sounds like a lullaby. Someone is burping loud and with full force. Then  you can hear a high pitched voice laughing. These sounds don't seem to belong to the music. This song may be playing in a cartoon sequence.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/GQz_u0Vc8Os.wav
+
+Real: The Soft Rock song features a soulful male vocal melody over widely spread acoustic rhythm guitar, arpeggiated electric guitar melody and smooth bass. At the end of the loop there is a short snippet of the drop that consists of energetic drums and solo electric guitar melody. Right before the drop, the drums are slowly fading into the drop. Overall it sounds passionate, soulful, emotional and energetic.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+Epoch 3: Test Examples:
+../data/wav/r2gYE6-cGx8.wav
+
+Real: This clip would be suitable for a movie soundtrack during a scene that is thrilling, intense, exciting and fueled with adrenaline. The music is played by an orchestra, with several layers of violin and brass instruments. The song brings about an atmosphere that invites action.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/pSzTPGlNa5U.wav
+
+Real: This amateur recording features the main melody being played by a theremin. This is accompanied by a piano. There are no other instruments played in this clip. The mood of this song is relaxed. There are no voices in this song. This song can be played in a slow motion action scene in a superhero movie.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+../data/wav/uA-JpZppFsc.wav
+
+Real: The low quality recording features an accordion melody with some plastic tapping keys along the way. It sounds soulful and passionate and the recording is noisy.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing device that is being used in the background. It is a e-mailing device that is being used in the background.
+
+../data/wav/ABVYSaLu_VM.wav
+
+Real: Here we have a slow piano piece played in a major key. The peace feels calm and happy.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+../data/wav/zRixZ7mWwho.wav
+
+Real: This is a gear showcase jam. The only instrument being played is an electric guitar being strummed lightly. There is a chorus ensemble effect on the guitar making it sound like multiple guitars are being played at the same time. There is a dreamy atmosphere in this recording. Chorus guitar samples could be picked up from this recording. Some parts of it could also be mixed into advertisement jingles.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/3bg0iy-ypcw.wav
+
+Real: The Hip Hip songs live performance consists of repetitive male vocal singing over repetitive piano melody, smooth bass, shimmering hi hats and soft kick and snare hits. It sounds jazzy and warm.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/q7s7C4oNlFo.wav
+
+Real: This is an intuitive folk/neo-folk music piece. There is a female vocalist singing over multiple tracks, one being the minor harmonies of the other. There is an acoustic guitar playing a gentle, simple tune. The atmosphere of this piece is heart-touching. The music could fit very well in the soundtrack of a drama movie or a TV show.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/dwSj0Rr3vFc.wav
+
+Real: A string section is playing a melody in the mid to high register. A bansuri flute is playing the same melody along. Digital and acoustic drum/percussion elements are playing a beat that does not occupy a lot of space. A male voice is singing at a higher pitch. This song may be playing in a hindi-movie.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/BT4env-Tw2o.wav
+
+Real: This song has a bassline that repeats itself playing along with a distorted guitar that supports the melody by playing the low notes along with slight variations and licks. The acoustic drums sound in the background but are played at full force. Fast paced with a lot of hits on different crashes and using a double bass kick. The male voice is screaming full force then a synthesizer lead sound is playing a simple melody that is panned to the right side of the speakers. This song may be playing at a live-concert jumping up and down enjoying the energetic energy of the surrounding and the music.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/6Yh7Cdm2GgY.wav
+
+Real: The song is an instrumental. The song is medium tempo with drums playing in march style and a brass section plays this triumphant harmony. The song is spirited and gives an adrenaline rush. The song is a western movie soundtrack with an average sound quality.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/aryufzYGhbM.wav
+
+Real: This song is in very poor audio-quality and seems to lag. A big pulsating synthesizer pad is creating tension along with some more single holding note, higher register synth pad. A riser effect tells us that this part of the song is about to break into another part that will bring relief from the created tension. A synthesizer pluck is playing a catchy repeating melody. The male voice sings/raps in the higher register a male backing voice is shouting in the background. This song may be played on a dj mix in a club.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/qtnE1hnCD0M.wav
+
+Real: The low quality recording features a loud, gliding synth bass, muffled snare and kick hits, tinny hi hats and shimmering ride cymbals. There is a busy line sound effect and its rhythm is offbeat relative to the song. It sounds generic - like a song from a video game.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/NX3KJ-tVdMI.wav
+
+Real: This audio contains a digital drum with a kick with a lot of overdrive, a snare on the backbeat and a long noisy snare sound. This song sounds very monoton. This song may be playing in a club.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/R_HAtyDbw1M.wav
+
+Real: Someone is skillfully playing maracas playing different rhythms in the same tempo so they blend together. The audio-quality is poor.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/0OY8XXZ98rw.wav
+
+Real: The Metal song features a distorted flat male vocal singing over wide aggressive electric guitar riffs, distorted bass guitar, punchy snare, double pedal kick and shimmering cymbals. It sounds energetic, aggressive and manic - like something you would go into a mosh pit for.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/kh6rmFg3U4k.wav
+
+Real: The low quality recording features a resonating bell in one shot. It sounds mellow, soft, calming, relaxing and hypnotic - like something you would listen to while meditating.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+../data/wav/6c1vNidtVTc.wav
+
+Real: This is a military anthem sung by male voices in the French language. The choir sings in a grave but determined manner, implying a feeling of perseverance. There are no instruments. This piece could be used in parades or historical content related to the French army.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+../data/wav/iEMTTKA7NxU.wav
+
+Real: The low quality recording features a ballad song sung by passionate female vocalists over groovy, mellow piano chords and shimmering shakers and tambourine. It sounds emotional and heartfelt - like something you would sing to your partner, out of love.
+
+Generated: The e-mail is a e-mailing. It is a e-mailing and the e-mailing is a bit noisy.
+
+../data/wav/uZHE9b1WDuM.wav
+
+Real: The song is an instrumental. The tempo is fast , with a philharmonic orchestra consisting of string section, rhythm section and horns accompanying a virtuoso wooden xylophone playing this western classical hit. The song is energetic and exciting.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+../data/wav/B3q2wHpzhoM.wav
+
+Real: This composition contains a string section playing a rising and dissonant chord along with strings playing short notes. In the background you can hear atmospheric noises. This song may be playing in a scary movie scene.
+
+Generated: The e-mail is a e-mailing. It is a bit noisy and it is a bit noisy.
+
+Epoch 4: Test Loss = 2.386371007539276
+Epoch 4: Train Examples:
+../data/wav/-Vo4CAMX26U.wav
+
+Real: The low quality recording features a low windpipe vocal sound played in nature, surrounded by flowing water and chirping birds sound effects. Sounds a bit harsh and loud, as the tone of the windpipe is constantly changing.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/ktTrTDQidsE.wav
+
+Real: The low quality recording features a groovy Spanish acoustic guitar. It sounds very noisy, vintage and the guitar was recorded in mono.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/GkB_BkyVyPs.wav
+
+Real: The low quality recording features a live performance of a reggae song that consists of shimmering cymbals, addictive brass melody and muffled male vocal singing over it. It is noisy and in mono, and it sounds thin, harsh, muddy, messy and energetic.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/OB7GyVqufwQ.wav
+
+Real: A digital drum is playing a reggaeton groove along with some acoustic percussion while someone is playing a turkish baglama. A male voice is singing/shouting. This is an amateur recording. This song may be playing outside busking with a band.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/1QFli7KSXAQ.wav
+
+Real: The Rock song features a passionate male vocalist singing over wide electric guitar melodies, groovy bass guitar, shimmering cymbals, groovy toms, punchy snare and kick hits. It sounds energetic, passionate, emotional and loud.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/2xQuWif8axE.wav
+
+Real: This is a live recording of an instrumental progressive metal piece. A solo is being played on the electric guitar at a very fast pace using the technique of shredding. Rapid jumps from medium to high range notes can be heard. The atmosphere is aggressive.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/_oNLyxk08oA.wav
+
+Real: Here we have a solo bass flute player. The music sounds mystical, like in a fantasy movie about dragons and fairies. There is reverb applied to the sound.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/C4MeKaeaPcU.wav
+
+Real: This is a recording of a skilled organ player playing some intricate motifs on the organ. The music is soulful and also has a gospel feel to it. It's a live recording with low-quality audio.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/WvaIypMvAHY.wav
+
+Real: This is the recording of a guitar lesson video. There is a male speaking in an instructive manner, giving the name of the chord he is about to play next. The chords are being played gently on a clean sounding electric guitar. There is a mellow feel to the sound. Parts of this recording can be sampled for use in beat-making.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/Uvn7waPvseo.wav
+
+Real: This is an instrument showcase jam. It is an electronic music piece played on a drum machine. There is a booming electronic drum beat in the rhythmic background. There is a medium-to-high pitch melodic pad repeating the same tune. The sound of the piece is crisp and loud. This piece could be used in the soundtrack of a fast-paced video game in the arcade genre. It could also be playing in the background during breaks at a sports venue.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/3KdyWJ6wTOw.wav
+
+Real: This song features a male voice rapping the lyrics. Female voices sing vocables in the background. This is accompanied by programmed percussion playing a trap beat. The bass plays a groovy bassline by sliding to notes rather than pausing in between notes. A synth plays a repetitive melody in the background. This song can be played in a gangster movie.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/eStzDzEopDI.wav
+
+Real: The low quality recording features a traditional song sung by harmonizing female vocals over breathy flute melody and wooden percussion. It sounds harsh, muddy, passionate and soulful, as audio is distorted due to poor quality microphone.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/XxKlsW4H0qo.wav
+
+Real: This is a clip of a singing bowl. The tone is high pitched and sustained and ringing. The song would be suitable for a meditation room or for any kind of environment wherein tranquility is the end goal.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/fWwV7o4VjEQ.wav
+
+Real: An acoustic drum with a lot of reverb is playing a minimalistic slow groove along with an e-bass playing long single notes. A synth hit comes in for a moment and then an e-guitar is talking over it with a melody. The male voice sings with a lot of reverb, reverb and a chorus/flanger on his voice. The whole recording is full of reverb and the voice of the singer is using a ping pong delay. This song may be playing on a lazy day at home.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/3w_LsKl-3Pk.wav
+
+Real: The low quality recording features a traditional song that consists of a passionate woodwind melody played over wooden percussive elements. It sounds soulful, passionate and emotional, even though the recording is in mono and noisy.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/1GCOnj53QYM.wav
+
+Real: This music is two separate tracks. The first track is electronic music with turn table scratching. The second track is a soft, romantic, mellow, harmonious melody with keyboard harmony, electric guitar, groovy bass and steady drumming with a man talking at the end. The two tracks are unrelated.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/NZ2kFIaW05k.wav
+
+Real: The low quality recording features an electric guitar melody played over a playback that consists of groovy bass, punchy snare and shimmering cymbals. At the end of the loop, there is a flat male vocal talking. It sounds groovy, fun and the recording is noisy and slightly distorted.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/AgCSBCsHkMk.wav
+
+Real: The low quality recording features water and some metallic sound effects, followed by a dynamic orchestra that consists of a mellow string section, simple plucked harp and mystical woodwinds playing in the background. In the first part of the loop, the sound is completely muffled. It sounds like something you would hear in old movies.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/9ZWmZdgrE78.wav
+
+Real: The low quality video features a cover of a kids song and it consists of a sweet girl vocal singing over acoustic rhythm guitar. The recording is in mono, noisy and it sounds fun and happy.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/XXBVsNt2Qr8.wav
+
+Real: A female singer sings this passionate melody. The song is medium tempo with steady drumming rhythm, groovy bass line, Caribbean percussion, guitar accompaniment and a brass band playing percussively. The song is emotional and spirited. The song is a classic renege hit.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+Epoch 4: Val Examples:
+../data/wav/j8FYy5YfK7k.wav
+
+Real: This is a soul/R&B music piece. There is a trio of two male vocalists and a female vocalist singing melodically. The keyboard is holding the chords in the background while the electric guitar and the bass guitar are playing a groovy tune. The rhythmic background contains an electronic drum beat. The atmosphere is urban. The piece could be played during a retro-themed party at a nightclub.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/DhnNZn8JjEQ.wav
+
+Real: This song is an instrumental. The tempo is medium with simple keyboard harmony, melodious guitar rhythm with the sound of a bell, waves and fingers snapping which could be a friction of fingers against the strings.The song is soft, melodic, pleasant, simple, calming and peaceful.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/fpdgtpBOh-c.wav
+
+Real: This slow pop ballad features two cellos playing in harmony. One cello plays the high notes. The second cello plays the bass notes. This is accompanied by a piano playing chords in the background. The mood of this song is romantic. There are no voices in this song. This song can be played in a romantic movie.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/_zQTlTCqMzs.wav
+
+Real: A male vocalist sings this powerful solo in a foreign language. The tempo is medium with a spanish guitar accompaniment. The song has minimalist music with captivating, lilting and almost haunting vocals. This is a live performance with ambient sounds of people talking. The audio  quality is inferior as it is an amateur recording. This song is a Latin/Spanish Folk song.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/Ve6Zy1BXBbY.wav
+
+Real: This low quality audio features a child singing the main melody. This is accompanied by other children's voices singing vocables in the background in harmony. An acoustic guitar strums chords. There are no other instruments in this song. This song has a holiday mood. This song can be played in a Christmas movie.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/ChyayWIp_vU.wav
+
+Real: A male voice is singing along to a fast paced reggae instrumental. The drums are playing a reggae-groove along with a harmonica on the offbeat. Two e-guitars are playing a single note melody. Both are following the bassline adding harmonies. A saxophone is adding a little melody after every end of a phrase. The male voice is singing in the mid-range and sounds doubled. Some of the instruments are panned to the left and right side of the speakers. This song may be playing at a local bar.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/MWS-Uxf1MRw.wav
+
+Real: This is a classical music piece. There is a piano playing an arpeggio in the background while a violin gently plays the main tune. The atmosphere of the piece is sentimental. This piece could be used in the background of tutorial videos. It could also be playing in the background at a coffee shop.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/qknDM3pcoD0.wav
+
+Real: This song carries a powerful air of conviction with it that is aided by  the singer's soulful performance. It's a heartbreak song and although it feels sad, it also feels like a reclamation of power. It's a live performance with a full band including guitarists, violinists, a pianist and a drummer who plays a pop beat. The genre for this song could be classified as pop-soul.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/Q-ATDBgDbLE.wav
+
+Real: This is a chamber music piece. It is performed by a quintet of the harp, the flute, the violin, the viola and the cello. There is a constant rising and falling pattern, resembling the feeling of a wave. The piece has a mysterious atmosphere to it. This music would fit perfectly in the soundtrack of an adventure movie during scenes of a journey where the characters are crossing the sea.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/fUC45bzOOJw.wav
+
+Real: The low quality recording features laser, buzzy and metallic sound effects with a haunting background music, which makes it sound like it was recorded in a game room. The recording is noisy, mono, distorted and it sounds creepy.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/0ewWspUqB6Y.wav
+
+Real: This is a Romanian folk music piece. It is a live performance. In the background, there is a contrabass and a cimbalom playing. The main melody is being played by the violin and the accordion. The atmosphere is vibrant and cheerful. This piece could be used in the soundtrack of a comedy movie that takes place in eastern Europe or the Balkans, especially during an escape scene.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/L2-EGNKzUAQ.wav
+
+Real: The Pop song features a passionate male vocal, alongside wide harmonizing background vocals, singing over clapping, shimmering cymbals, groovy bass and soft kick hits. It sounds addictive, happy and joyful.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/ojdqgnmcgYM.wav
+
+Real: The low quality recording features a pop song that consists a passionate female lead vocal, alongside harmonizing female vocal, singing over groovy synth bas, claps, shimmering hi hats, punchy "4 on the floor" kick pattern, electric guitar melody and short groovy synth keys chords. It sounds energetic, groovy and addictive. The recording is noisy.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/GX-QhoihLeI.wav
+
+Real: The song is an instrumental with sounds of a woman screaming and running with huffing and puffing sounds. A chainsaw buzzes ominously , with a string section playing a scary and tense accompaniment along with a cello building the tension with a poignant harmony. The music is a horror movie soundtrack or an ad jingle. The song audio quality is very poor.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/Nqb7nw58q08.wav
+
+Real: The song is an instrumental. The song is medium tempo with a groovy drumming rhythm,  percussive bass line and cool electric guitar riff played repeatedly. The song is exciting and energetic. The song has smooth jazz or funk jazz roots.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/ZJZxWLYzNh8.wav
+
+Real: This seems to be a life recording because you can hear people in the background cheering. An electric bass is playing a bluesy bassline along with the drums holding a simple steady groove. One guitar is panned to the right side of the speakers playing chords while another e-guitar is playing a melody on the left side of the speakers. Both are fairly in the background. A male mid ranged voice is singing with a little reverb on his voice. This song may be playing life at a festival.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/JHvLuYk6TfI.wav
+
+Real: This folk song features a kora being played in waltz time. This starts off with the strings being plucked in waltz time followed by a descending run. The waltz plucking is played twice more followed by another descending run. There are no other instruments in this song. There are no voices in this song. This is an instrumental song. This song can be sampled and played in a hip-hop song.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/Al_OdIuqoe0.wav
+
+Real: This is the live performance of an afrobeat music piece. There is a male voice singing occasionally. The melody is being played by a wide variety of instruments such as the electric guitar, the keyboard and the bass guitar. There is a saxophone playing a solo. In the rhythmic background, there is an acoustic drum beat in the style of afrobeat. It is joined by percussive elements. There is a vibrant atmosphere in this recording. This piece could be playing in the background of a West African cuisine restaurant.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/LyTwxJiSt7A.wav
+
+Real: A xylophone or another bell sounding metal instrument is playing a melody that sounds like a lullaby. Someone is burping loud and with full force. Then  you can hear a high pitched voice laughing. These sounds don't seem to belong to the music. This song may be playing in a cartoon sequence.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/GQz_u0Vc8Os.wav
+
+Real: The Soft Rock song features a soulful male vocal melody over widely spread acoustic rhythm guitar, arpeggiated electric guitar melody and smooth bass. At the end of the loop there is a short snippet of the drop that consists of energetic drums and solo electric guitar melody. Right before the drop, the drums are slowly fading into the drop. Overall it sounds passionate, soulful, emotional and energetic.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+Epoch 4: Test Examples:
+../data/wav/r2gYE6-cGx8.wav
+
+Real: This clip would be suitable for a movie soundtrack during a scene that is thrilling, intense, exciting and fueled with adrenaline. The music is played by an orchestra, with several layers of violin and brass instruments. The song brings about an atmosphere that invites action.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/pSzTPGlNa5U.wav
+
+Real: This amateur recording features the main melody being played by a theremin. This is accompanied by a piano. There are no other instruments played in this clip. The mood of this song is relaxed. There are no voices in this song. This song can be played in a slow motion action scene in a superhero movie.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/uA-JpZppFsc.wav
+
+Real: The low quality recording features an accordion melody with some plastic tapping keys along the way. It sounds soulful and passionate and the recording is noisy.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
+../data/wav/ABVYSaLu_VM.wav
+
+Real: Here we have a slow piano piece played in a major key. The peace feels calm and happy.
+
+Generated: The e-guitar is a reverberant and reverberant e-guitar. It is a reverberant and a bit reverberant.
+
