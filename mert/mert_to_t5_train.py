@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from transformers import Wav2Vec2FeatureExtractor, T5Tokenizer, T5ForConditionalGeneration, AutoModel
+from transformers import Wav2Vec2FeatureExtractor, T5Tokenizer, T5ForConditionalGeneration, AutoModel, AutoConfig
 from datasets import Dataset
 from torch.utils.data import Dataset, DataLoader
 import torch
@@ -80,7 +80,11 @@ else: # Using previously fine tuned
     old_model_save_path += f"/e{last_epoch}"
 
     mert_processor = Wav2Vec2FeatureExtractor.from_pretrained(old_model_save_path + "/mert")
+    # config = AutoConfig.from_pretrained("m-a-p/MERT-v1-95M",trust_remote_code=True)
+    # print(type(config))
+    print(old_model_save_path + "/mert")
     mert_model = AutoModel.from_pretrained(old_model_save_path + "/mert", trust_remote_code=True).to(DEVICE)
+    # mert_model.config_class = type(config)
     
     t5_tokenizer = T5Tokenizer.from_pretrained(old_model_save_path + "/t5")
     t5_model = T5ForConditionalGeneration.from_pretrained(old_model_save_path + "/t5").to(DEVICE)
