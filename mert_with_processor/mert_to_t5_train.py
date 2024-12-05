@@ -24,7 +24,7 @@ data_dir = "../data/splits"
 # Hyperparameters
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-DEBUG = True
+DEBUG = False
 
 print("Device:", DEVICE)
 
@@ -42,11 +42,11 @@ else:
 
 # Save the fine-tuned model
 if FROZEN:
-    model_save_path = "../models/fine_tuned_mert_t5_frozen"
-    gcloud_path = "models/fine_tuned_mert_t5_frozen"
+    model_save_path = "../models/fine_tuned_mert_pro_t5_frozen"
+    gcloud_path = "models/fine_tuned_mert_pro_t5_frozen"
 else:
-    model_save_path = "../models/fine_tuned_mert_t5_unfrozen"
-    gcloud_path = "models/fine_tuned_mert_t5_unfrozen"
+    model_save_path = "../models/fine_tuned_mert_pro_t5_unfrozen"
+    gcloud_path = "models/fine_tuned_mert_pro_t5_unfrozen"
 os.makedirs(model_save_path, exist_ok=True)
 
 mert_model_name = "m-a-p/MERT-v1-95M"
@@ -65,7 +65,7 @@ if last_epoch == 0:
     reduce_layer = nn.Linear(768, t5_model.config.d_model).to(DEVICE)
 
 else: # Using previously fine tuned
-    old_model_save_path = "../models/fine_tuned_mert_t5"
+    old_model_save_path = "../models/fine_tuned_mert_pro_t5"
     if FROZEN:
         old_model_save_path += "_frozen"
     else:
@@ -74,11 +74,7 @@ else: # Using previously fine tuned
     old_model_save_path += f"/e{last_epoch}"
 
     mert_processor = Wav2Vec2FeatureExtractor.from_pretrained(old_model_save_path + "/mert")
-    # config = AutoConfig.from_pretrained("m-a-p/MERT-v1-95M",trust_remote_code=True)
-    # print(type(config))
-    print(old_model_save_path + "/mert")
     mert_model = AutoModel.from_pretrained(old_model_save_path + "/mert", trust_remote_code=True).to(DEVICE)
-    # mert_model.config_class = type(config)
     
     t5_tokenizer = T5Tokenizer.from_pretrained(old_model_save_path + "/t5")
     t5_model = T5ForConditionalGeneration.from_pretrained(old_model_save_path + "/t5").to(DEVICE)
@@ -131,20 +127,21 @@ def train(model, train_loader, val_loader, epochs):
         train_loss = 0
         for batch in tqdm(train_loader, desc=f"Epoch {epoch + 1}/{epochs}"):
             inputs = batch["inputs"].to(DEVICE)
+            inputs["input_values"] = inputs["input_values"].squeeze(1)
             labels = batch["labels"].to(DEVICE)
             decoder_attention_mask = batch["decoder_attention_mask"].to(DEVICE)
 
             if DEBUG:
-                print(f"inputs shape: {inputs.shape}")
+                print(inputs["input_values"].shape)
                 print(f"labels shape: {labels.shape}")
                 print(f"decoder_attention_mask shape: {decoder_attention_mask.shape}")
 
             # Extract embeddings
             if FROZEN:
                 with torch.no_grad():
-                    mert_outputs = mert_model(inputs, output_hidden_states=True)
+                    mert_outputs = mert_model(inputs["input_values"], output_hidden_states=True)
             else:
-                mert_outputs = mert_model(inputs, output_hidden_states=True)
+                mert_outputs = mert_model(inputs["input_values"], output_hidden_states=True)
             
             all_layer_hidden_states = torch.stack(mert_outputs.hidden_states).squeeze()
             if DEBUG:
@@ -237,11 +234,12 @@ def evaluate(model, val_loader):
     with torch.no_grad():
         for batch in tqdm(val_loader, desc="Evaluating"):
             inputs = batch["inputs"].to(DEVICE)
+            inputs["input_values"] = inputs["input_values"].squeeze(1)
             labels = batch["labels"].to(DEVICE)
             decoder_attention_mask = batch["decoder_attention_mask"].to(DEVICE)
 
             # Extract embeddings
-            mert_outputs = mert_model(inputs, output_hidden_states=True)
+            mert_outputs = mert_model(inputs["input_values"], output_hidden_states=True)
             all_layer_hidden_states = torch.stack(mert_outputs.hidden_states).squeeze()
             combined_dim = all_layer_hidden_states.view(BATCH_SIZE, 13, -1)
             aggregated_embedding = aggregator(combined_dim)  # [batch_size, 1, time_steps * features]
