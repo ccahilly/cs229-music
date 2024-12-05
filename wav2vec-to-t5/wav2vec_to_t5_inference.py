@@ -6,10 +6,11 @@ import torch.nn as nn
 import os
 from dataset_helpers import AudioCaptionDataset, preprocess_audio, MAX_TOKENS, BATCH_SIZE
 import pandas as pd
-from gcloud_helpers import download_from_gcs, delete_local_copy, upload_to_gcs
+from gcloud_helpers import download_from_gcs, delete_local_copy
 from tqdm import tqdm
 import argparse
 from torch.utils.data import DataLoader
+import pickle
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print("Device:", DEVICE)
@@ -37,26 +38,6 @@ def load_model_checkpoint(model_name, epoch):
     delete_local_copy(local_path)
 
     return t5_model, t5_tokenizer, wav2vec_model, processor, reduce_layer
-
-def preprocess_audio(audio_path):
-    """
-    Preprocess audio file to ensure it is mono and normalized.
-    Args:
-        audio_path (str): Path to the audio file.
-    Returns:
-        np.ndarray: Preprocessed audio data.
-    """
-    # Load the audio file
-    sample_rate, audio = wavfile.read(audio_path)
-
-    # Convert stereo to mono if necessary
-    if audio.ndim == 2:  # Stereo audio
-        audio = audio.mean(axis=1)  # Average the two channels
-
-    # Normalize audio to the range [-1, 1] if required
-    audio = audio.astype(np.float32) / np.iinfo(np.int16).max
-
-    return audio, sample_rate
 
 def infer(t5_model, t5_tokenizer, wav2vec_model, processor, reduce_layer, audio_paths):
     captions = []
@@ -115,6 +96,19 @@ def sample_examples(metadata, n):
     metadata = metadata[metadata["file_path"].apply(os.path.exists)]
     return metadata.sample(n=n).to_dict('records')  # Convert to list of dicts for ease of access
 
+def load_or_sample_examples(metadata, n, file_name):
+    # Check if the file exists
+    if os.path.exists(file_name):
+        print(f"Loading samples from {file_name}...")
+        with open(file_name, 'rb') as f:
+            samples = pickle.load(f)
+    else:
+        print(f"Sampling {n} examples and saving to {file_name}...")
+        samples = sample_examples(metadata, n)
+        with open(file_name, 'wb') as f:
+            pickle.dump(samples, f)
+    return samples
+
 # Generate captions for sampled examples
 def generate_captions(t5_model, t5_tokenizer, wav2vec_model, processor, reduce_layer, samples):
     captions = []
@@ -145,9 +139,9 @@ def main():
 
     with open("inference_data_" + args.frozen + ".txt", "w") as file:
         # Pre-sample examples
-        train_samples = sample_examples(train_metadata, n)
-        val_samples = sample_examples(val_metadata, n)
-        test_samples = sample_examples(test_metadata, n)
+        train_samples = load_or_sample_examples(train_metadata, n, f"../data/samples-{n}-train.pkl")
+        val_samples = load_or_sample_examples(val_metadata, n, f"../data/samples-{n}-val.pkl")
+        test_samples = load_or_sample_examples(test_metadata, n, f"../data/samples-{n}-test.pkl")
 
         for epoch in range(1, 16):  # Iterate through all epochs
             print(f"Processing epoch {epoch}...")
