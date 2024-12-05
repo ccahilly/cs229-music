@@ -47,12 +47,11 @@ def infer(t5_model, t5_tokenizer, mert_model, processor, reduce_layer, aggregato
     captions = []
     for audio_path in audio_paths:
         processed_audio, sample_rate = preprocess_audio(audio_path, processor)
-
-        # inputs = processor(processed_audio, sampling_rate = sample_rate, return_tensors="pt")
-        input_values = torch.tensor(processed_audio).to(DEVICE)
+        inputs = processor(processed_audio, sampling_rate = sample_rate, return_tensors="pt").to(DEVICE)
+        # input_values = torch.tensor(processed_audio).to(DEVICE)
         
         with torch.no_grad():
-            mert_outputs = mert_model(input_values, output_hidden_states=True)
+            mert_outputs = mert_model(**inputs, output_hidden_states=True)
             all_layer_hidden_states = torch.stack(mert_outputs.hidden_states).squeeze()
             combined_dim = all_layer_hidden_states.view(batch_size, 13, -1)
             aggregated_embedding = aggregator(combined_dim)  # [batch_size, 1, time_steps * features]
