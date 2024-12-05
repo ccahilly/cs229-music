@@ -35,8 +35,8 @@ old_model_save_path = None
 model_save_path = "../models/fine_tuned_mert_t5_e1"
 os.makedirs(model_save_path, exist_ok=True)
 os.makedirs(model_save_path + "/mert", exist_ok=True)
-os.makedirs(model_save_path + "/conv1d", exist_ok=True)
 os.makedirs(model_save_path + "/linear", exist_ok=True)
+os.makedirs(model_save_path + "/aggregator", exist_ok=True)
 os.makedirs(model_save_path + "/t5", exist_ok=True)
 
 if old_model_save_path is None:
@@ -63,25 +63,7 @@ else: # Using previously fine tuned
     reduce_layer = nn.Linear(768, t5_model.config.d_model).to(DEVICE)
     reduce_layer.load_state_dict(torch.load(os.path.join(old_model_save_path + "/linear", "reduce_layer.pth")))
 
-# def load_dataset(data_folder):
-#     data = []
-#     captions = []
-#     metadata = pd.read_csv("../data/musiccaps-train-data.csv")
-#     npy_files = [os.path.join(data_folder, f) for f in os.listdir(data_folder) if f.endswith('.npy')]
-#     for f in npy_files:
-#         base_path = f.split("/")[-1]
-#         ytid = base_path[:-4]
-#         # print(ytid)
-#         data.append({
-#             "audio_array": np.load(f),
-#             "ytid": ytid,
-#             # "sampling_rate": mert_processor.desired_sampling_rate
-#         })
-#         captions.append(metadata[metadata["ytid"] == ytid]["caption"].values[0])
-#     print(f"Example caption: {captions[0]}")
-#     return Dataset.from_dict({"audio": data, "labels": captions})
-
-def preprocess_audio(audio_path):
+def preprocess_audio(audio_path, processor):
     """
     Preprocess audio file to ensure it is mono and normalized.
     Args:
@@ -92,9 +74,9 @@ def preprocess_audio(audio_path):
     # Load the audio file
     waveform, sample_rate = torchaudio.load(audio_path)
 
-    if sample_rate != mert_processor.sampling_rate:
-        # print(f"resampling from {sample_rate} to {mert_processor.sampling_rate}")
-        resampler = T.Resample(orig_freq=sample_rate, new_freq=mert_processor.sampling_rate)
+    if sample_rate != processor.sampling_rate:
+        # print(f"resampling from {sample_rate} to {processor.sampling_rate}")
+        resampler = T.Resample(orig_freq=sample_rate, new_freq=processor.sampling_rate)
         waveform = resampler(waveform)
 
     # Convert stereo to mono if necessary
@@ -108,8 +90,8 @@ def preprocess_audio(audio_path):
     waveform = waveform.squeeze().numpy()
     # print(f"Waveform type: {type(waveform)}, shape: {waveform.shape}")
 
-    # print(f"mert {mert_processor.sampling_rate}")
-    return waveform, mert_processor.sampling_rate
+    # print(f"mert {processor.sampling_rate}")
+    return waveform, processor.sampling_rate
 
 # Dataset class
 class AudioCaptionDataset(Dataset):
@@ -127,7 +109,7 @@ class AudioCaptionDataset(Dataset):
         caption = row["caption"]
 
         # Load and preprocess audio
-        processed_audio, sample_rate = preprocess_audio(audio_path)
+        processed_audio, sample_rate = preprocess_audio(audio_path, self.processor)
         # if sample_rate != self.processor.sampling_rate:
         #     print("Value error")
         #     print(sample_rate)
