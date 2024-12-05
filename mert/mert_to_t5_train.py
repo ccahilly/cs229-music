@@ -9,13 +9,16 @@ from tqdm import tqdm
 import numpy as np
 from scipy.io import wavfile
 import torch.nn as nn
-# from prep_all_data import data_dir
 import torchaudio.transforms as T
+from gcloud_helpers import upload_to_gcs
+
+FROZEN = True
+print(f"Frozen: {FROZEN}")
 
 data_dir = "../data/splits"
 
 # Hyperparameters
-BATCH_SIZE = 16
+BATCH_SIZE = 8
 EPOCHS = 4
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -25,21 +28,20 @@ MAX_TOKENS = 64
 
 print("Device:", DEVICE)
 
+# Save the fine-tuned model
+if FROZEN:
+    model_save_path = "../models/fine_tuned_mert_t5_frozen"
+    gcloud_path = "models/fine_tuned_mert_t5_frozen"
+else:
+    model_save_path = "../models/fine_tuned_mert_t5_unfrozen"
+    gcloud_path = "models/fine_tuned_mert_t5_unfrozen"
+os.makedirs(model_save_path, exist_ok=True)
+
 mert_model_name = "m-a-p/MERT-v1-95M"
 t5_model_name = "t5-small"
+last_epoch = 0
 
-old_model_save_path = "../models/fine_tuned_mert_t5_e1"
-# old_model_save_path = None
-
-# Save the fine-tuned model
-model_save_path = "../models/fine_tuned_mert_t5_e5"
-os.makedirs(model_save_path, exist_ok=True)
-os.makedirs(model_save_path + "/mert", exist_ok=True)
-os.makedirs(model_save_path + "/linear", exist_ok=True)
-os.makedirs(model_save_path + "/aggregator", exist_ok=True)
-os.makedirs(model_save_path + "/t5", exist_ok=True)
-
-if old_model_save_path is None:
+if last_epoch == 0:
     # Load pretrained models
     mert_processor = Wav2Vec2FeatureExtractor.from_pretrained("m-a-p/MERT-v1-95M",trust_remote_code=True)
     mert_model = AutoModel.from_pretrained("m-a-p/MERT-v1-95M", trust_remote_code=True).to(DEVICE)
@@ -50,7 +52,16 @@ if old_model_save_path is None:
     # Define the linear and aggregator layers
     aggregator = nn.Conv1d(in_channels=13, out_channels=1, kernel_size=1).to(DEVICE)
     reduce_layer = nn.Linear(768, t5_model.config.d_model).to(DEVICE)
+
 else: # Using previously fine tuned
+    old_model_save_path = "../models/fine_tuned_mert_t5"
+    if FROZEN:
+        old_model_save_path += "_frozen"
+    else:
+        old_model_save_path += "_unfrozen"
+    
+    old_model_save_path += f"/e{last_epoch}"
+
     mert_processor = Wav2Vec2FeatureExtractor.from_pretrained(old_model_save_path + "/mert")
     mert_model = AutoModel.from_pretrained(old_model_save_path + "/mert").to(DEVICE)
     
@@ -143,8 +154,34 @@ val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, drop_
 
 # Training function
 def train(model, train_loader, val_loader, epochs):
+    for param in mert_model.parameters():
+        param.requires_grad = not FROZEN # true when frozen is false
+    for param in aggregator.parameters():
+        param.requires_grad = True
+    for param in reduce_layer.parameters():
+        param.requires_grad = True
+    for param in model.parameters():
+        param.requires_grad = True
+    
+    if not FROZEN:
+        mert_model.train()
+    else:
+        mert_model.eval()
+
+    aggregator.train()
+    reduce_layer.train()
     model.train()
-    optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE)
+
+    if FROZEN:
+        optimizer = torch.optim.AdamW(
+        list(aggregator.parameters()) + list(reduce_layer.parameters()) + list(model.parameters()),
+        lr=LEARNING_RATE
+        )
+    else:
+        optimizer = torch.optim.AdamW(
+        list(mert_model.parameters()) + list(aggregator.parameters()) + list(reduce_layer.parameters()) + list(model.parameters()),
+        lr=LEARNING_RATE
+        )
 
     for epoch in range(epochs):
         train_loss = 0
@@ -155,19 +192,21 @@ def train(model, train_loader, val_loader, epochs):
             decoder_attention_mask = batch["decoder_attention_mask"].to(DEVICE)
 
             if DEBUG:
-                # val = inputs["input_values"]
                 print(f"inputs shape: {inputs.shape}")
                 print(f"attention_mask shape: {attention_mask.shape}")
                 print(f"labels shape: {labels.shape}")
                 print(f"decoder_attention_mask shape: {decoder_attention_mask.shape}")
 
             # Extract embeddings
-            with torch.no_grad():
+            if FROZEN:
+                with torch.no_grad():
+                    mert_outputs = mert_model(inputs, output_hidden_states=True)
+            else:
                 mert_outputs = mert_model(inputs, output_hidden_states=True)
-                all_layer_hidden_states = torch.stack(mert_outputs.hidden_states).squeeze()
-
-                if DEBUG:
-                    print(f"all_layer_hidden_states shape: {all_layer_hidden_states.shape}")
+            
+            all_layer_hidden_states = torch.stack(mert_outputs.hidden_states).squeeze()
+            if DEBUG:
+                print(f"all_layer_hidden_states shape: {all_layer_hidden_states.shape}")
                 
             combined_dim = all_layer_hidden_states.view(BATCH_SIZE, 13, -1)  # [batch_size, layers, time_steps * features]
 
@@ -210,25 +249,47 @@ def train(model, train_loader, val_loader, epochs):
         print(f"Epoch {epoch + 1}: Train Loss = {avg_train_loss}")
 
         # Evaluate
-        evaluate(model, val_loader)
+        avg_val_loss = evaluate(model, val_loader)
 
-    # Save the T5 model
-    t5_model.save_pretrained(model_save_path + "/t5")
+        checkpoint_path = model_save_path + f"/e{last_epoch + epoch + 1}"
+        gcloud_checkpoint_path = gcloud_path + f"/e{last_epoch + epoch + 1}"
+        os.makedirs(checkpoint_path, exist_ok=True)
 
-    # Save the Wav2Vec2 model
-    mert_model.save_pretrained(model_save_path + "/mert")
+        # Save the loss
+        with open(checkpoint_path + "/loss.txt", "w") as f:
+            f.write(f"Epoch {last_epoch + epoch + 1}: Train Loss = {avg_train_loss:.4f}, Validation Loss = {avg_val_loss:.4f}\n")
+        upload_to_gcs(checkpoint_path + "/loss.txt", gcloud_checkpoint_path + "/loss.txt")
 
-    # Save the linear layer used for dimension reduction
-    torch.save(reduce_layer.state_dict(), os.path.join(model_save_path + "/linear", "reduce_layer.pth"))
-    torch.save(aggregator.state_dict(), os.path.join(model_save_path + "/aggregator", "aggregator.pth"))
+        # Save the T5 model
+        os.makedirs(checkpoint_path + "/t5", exist_ok=True)
+        t5_tokenizer.save_pretrained(checkpoint_path + "/t5")
+        model.save_pretrained(checkpoint_path + "/t5")
+        upload_to_gcs(checkpoint_path + "/t5", gcloud_checkpoint_path + "/t5")
 
-    # Save the processor and tokenizer
-    mert_processor.save_pretrained(model_save_path + "/mert")
-    t5_tokenizer.save_pretrained(model_save_path + "/t5")
+        # Save the MERT model
+        os.makedirs(checkpoint_path + "/mert", exist_ok=True)
+        mert_processor.save_pretrained(checkpoint_path + "/mert")
+        mert_model.save_pretrained(checkpoint_path + "/mert")
+        upload_to_gcs(checkpoint_path + "/mert", gcloud_checkpoint_path + "/mert")
+
+        # Save the linear layer
+        os.makedirs(checkpoint_path + "/linear", exist_ok=True)
+        torch.save(reduce_layer.state_dict(), checkpoint_path + "/linear" + "/reduce_layer.pth")
+        upload_to_gcs(checkpoint_path + "/linear", gcloud_checkpoint_path + "/linear")
+
+        # Save the aggregator layer
+        os.makedirs(checkpoint_path + "/aggregator", exist_ok=True)
+        torch.save(aggregator.state_dict(), os.path.join(model_save_path + "/aggregator", "aggregator.pth"))
+        upload_to_gcs(checkpoint_path + "/aggregator", gcloud_checkpoint_path + "/aggregator")
 
 # Evaluation function
 def evaluate(model, val_loader):
     model.eval()
+    reduce_layer.eval()
+    aggregator.eval()
+    if not FROZEN:
+        mert_model.eval()
+
     val_loss = 0
 
     with torch.no_grad():
@@ -257,7 +318,14 @@ def evaluate(model, val_loader):
 
     avg_val_loss = val_loss / len(val_loader)
     print(f"Validation Loss = {avg_val_loss}")
+    
     model.train()
+    reduce_layer.train()
+    aggregator.train()
+    if not FROZEN:
+        mert_model.train()
+
+    return avg_val_loss
 
 if __name__ == "__main__":
     train(t5_model, train_loader, val_loader, EPOCHS)
