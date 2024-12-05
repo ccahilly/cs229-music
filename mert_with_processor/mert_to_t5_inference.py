@@ -14,7 +14,7 @@ import pickle
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print("Device:", DEVICE)
 
-DEBUG = False
+DEBUG = True
 
 # Load the fine-tuned model, Wav2Vec2 model, linear layer, and processor
 train_data_path = "../data/splits/train.csv"
@@ -49,15 +49,15 @@ def infer(t5_model, t5_tokenizer, mert_model, processor, reduce_layer, aggregato
     captions = []
     for audio_path in audio_paths:
         processed_audio, sample_rate = preprocess_audio(audio_path, processor)
-        processed_audio = torch.tensor(processed_audio).unsqueeze(0).to(DEVICE)
+        input = processor(processed_audio, sampling_rate=sample_rate, return_tensors="pt").to(DEVICE)
+        input["input_values"] = input["input_values"].squeeze(1)
 
         if DEBUG:
             print(f"processed_audio shape: {processed_audio.shape}")
-
-        # input_values = torch.tensor(processed_audio).to(DEVICE)
+            print(input["input_values"].shape)
         
         with torch.no_grad():
-            mert_outputs = mert_model(processed_audio, output_hidden_states=True)
+            mert_outputs = mert_model(input["input_values"], output_hidden_states=True)
             all_layer_hidden_states = torch.stack(mert_outputs.hidden_states).squeeze()
             if DEBUG:
                 print(f"all_layer_hidden_states shape: {all_layer_hidden_states.shape}")
@@ -177,8 +177,8 @@ def main():
 
             # Evaluate loss
             test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, drop_last=True)
-            loss = evaluate(t5_model, mert_model, aggregator, reduce_layer, test_loader, batch_size)
-            file.write(f"Epoch {epoch}: Test Loss = {loss}\n")
+            # loss = evaluate(t5_model, mert_model, aggregator, reduce_layer, test_loader, batch_size)
+            # file.write(f"Epoch {epoch}: Test Loss = {loss}\n")
 
             # Process samples
             for split_name, samples in [("Train", train_samples), ("Val", val_samples), ("Test", test_samples)]:

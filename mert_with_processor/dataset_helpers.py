@@ -55,21 +55,15 @@ class AudioCaptionDataset(Dataset):
 
         # Load and preprocess audio
         processed_audio, sample_rate = preprocess_audio(audio_path, self.processor)
-        # if sample_rate != self.processor.sampling_rate:
-        #     print("Value error")
-        #     print(sample_rate)
+        # print(f"processed_audio.shape: {processed_audio.shape}")
 
-        #     sample_rate = self.processor.sampling_rate
-
-        # print(f"Processed audio shape: {processed_audio.shape}")
-        input_values = torch.tensor(processed_audio)
-        # print(input_values.shape)
+        input = self.processor(processed_audio, sampling_rate=sample_rate, return_tensors="pt")
 
         # Tokenize caption
         labels = self.tokenizer(caption, return_tensors="pt", padding="max_length", truncation=True, max_length=MAX_TOKENS)
 
         return {
-            "inputs": input_values,
+            "inputs": input,
             "labels": labels["input_ids"].squeeze(0),
             "decoder_attention_mask": labels["attention_mask"].squeeze(0)
         }
