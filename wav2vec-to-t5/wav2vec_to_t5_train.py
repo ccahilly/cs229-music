@@ -146,12 +146,12 @@ def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
                 if DEBUG:
                     print("Wav2Vec2 last hidden state shape:", audio_embeddings.shape)
 
-                # Reduce Wav2Vec2 embeddings
-                reduced_embeddings = reduce_layer(audio_embeddings)
+            # Reduce Wav2Vec2 embeddings
+            reduced_embeddings = reduce_layer(audio_embeddings)
 
-                if DEBUG:
-                    print("Reduced embeddings shape:", reduced_embeddings.shape)
-                    print("Expected T5 embedding size:", t5_model.config.d_model)
+            if DEBUG:
+                print("Reduced embeddings shape:", reduced_embeddings.shape)
+                print("Expected T5 embedding size:", t5_model.config.d_model)
 
             # Feed embeddings to T5
             outputs = model(
