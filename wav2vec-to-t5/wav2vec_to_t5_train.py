@@ -10,13 +10,16 @@ from scipy.io import wavfile
 import torch.nn as nn
 from gcloud_helpers import upload_to_gcs
 
+FROZEN = False
+print(f"Frozen: {FROZEN}")
+
 # Paths
 train_data_path = "../data/splits/train.csv"
 val_data_path = "../data/splits/val.csv"
 
 # Hyperparameters
-BATCH_SIZE = 16
-EPOCHS = 10
+BATCH_SIZE = 8
+EPOCHS = 1
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 NORMALIZING_INPUT = True  # Flag for normalization
@@ -25,25 +28,36 @@ MAX_TOKENS = 64
 
 print("Device:", DEVICE)
 
-# model_name = "facebook/wav2vec2-large-960h"
-model_name = "facebook/wav2vec2-base-960h"
-# model_name = "../models/fine_tuned_wav2vec_t5_e2_frozen"
-
 # Save the fine-tuned model
-model_save_path = "../models/fine_tuned_wav2vec_t5_frozen"
-gcloud_path = "models/fine_tuned_wav2vec_t5_frozen"
+if FROZEN:
+    model_save_path = "../models/fine_tuned_wav2vec_t5_frozen"
+    gcloud_path = "models/fine_tuned_wav2vec_t5_frozen"
+else:
+    model_save_path = "../models/fine_tuned_wav2vec_t5_unfrozen"
+    gcloud_path = "models/fine_tuned_wav2vec_t5_unfrozen"
 os.makedirs(model_save_path, exist_ok=True)
 
-if model_name in ["facebook/wav2vec2-base-960h", "facebook/wav2vec2-large-960h"]:
+# model_name = "facebook/wav2vec2-large-960h"
+model_name = "facebook/wav2vec2-base-960h"
+last_epoch = 0
+
+if last_epoch == 0:
     # Load pretrained models
     processor = Wav2Vec2Processor.from_pretrained(model_name)
     wav2vec_model = Wav2Vec2Model.from_pretrained(model_name).to(DEVICE)
     t5_tokenizer = T5Tokenizer.from_pretrained("t5-small")
     t5_model = T5ForConditionalGeneration.from_pretrained("t5-small").to(DEVICE)
-
-    # Define the linear layer outside the loop to reduce Wav2Vec2 embeddings to T5's input size
     reduce_layer = nn.Linear(wav2vec_model.config.hidden_size, t5_model.config.d_model).to(DEVICE)
+
 else: # Using previously fine tuned
+    model_name = "../models/fine_tuned_wav2vec_t5"
+    if FROZEN:
+        model_name += "_frozen"
+    else:
+        model_name += "_unfrozen"
+    
+    model_name += f"/e{last_epoch}"
+
     t5_model = T5ForConditionalGeneration.from_pretrained(model_name + "/t5").to(DEVICE)
     t5_tokenizer = T5Tokenizer.from_pretrained(model_name + "/t5")
 
@@ -118,9 +132,32 @@ train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, dr
 val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, drop_last=True)
 
 # Training function
-def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
+def train(model, wav2vec_model, train_loader, val_loader, epochs):
+    for param in wav2vec_model.parameters():
+        param.requires_grad = not FROZEN # true when frozen is false
+    for param in reduce_layer.parameters():
+        param.requires_grad = True
+    for param in model.parameters():
+        param.requires_grad = True
+    
+    if not FROZEN:
+        wav2vec_model.train()
+    else:
+        wav2vec_model.eval()
+
+    reduce_layer.train()
     model.train()
-    optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE)
+
+    if FROZEN:
+        optimizer = torch.optim.AdamW(
+        list(reduce_layer.parameters()) + list(model.parameters()),
+        lr=LEARNING_RATE
+        )
+    else:
+        optimizer = torch.optim.AdamW(
+        list(wav2vec_model.parameters()) + list(reduce_layer.parameters()) + list(model.parameters()),
+        lr=LEARNING_RATE
+        )
 
     for epoch in range(epochs):
         train_loss = 0
@@ -137,12 +174,15 @@ def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
                 print("Decoder attention mask shape:", decoder_attention_mask.shape)
 
             # Extract embeddings
-            with torch.no_grad():
+            if FROZEN:
+                with torch.no_grad():
+                    wav2vec_outputs = wav2vec_model(input_values, attention_mask=attention_mask)
+            else:
                 wav2vec_outputs = wav2vec_model(input_values, attention_mask=attention_mask)
-                audio_embeddings = wav2vec_outputs.last_hidden_state
-
-                if DEBUG:
-                    print("Wav2Vec2 last hidden state shape:", audio_embeddings.shape)
+            
+            audio_embeddings = wav2vec_outputs.last_hidden_state
+            if DEBUG:
+                print("Wav2Vec2 last hidden state shape:", audio_embeddings.shape)
 
             # Reduce Wav2Vec2 embeddings
             reduced_embeddings = reduce_layer(audio_embeddings)
@@ -173,16 +213,21 @@ def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
         print(f"Epoch {epoch + 1}: Train Loss = {avg_train_loss}")
 
         # Evaluate
-        evaluate(model, wav2vec_model, val_loader)
+        avg_val_loss = evaluate(model, wav2vec_model, val_loader)
 
-        checkpoint_path = model_save_path + f"/e{epoch + 1}"
-        gcloud_checkpoint_path = gcloud_path + f"/e{epoch + 1}"
+        checkpoint_path = model_save_path + f"/e{last_epoch + epoch + 1}"
+        gcloud_checkpoint_path = gcloud_path + f"/e{last_epoch + epoch + 1}"
         os.makedirs(checkpoint_path, exist_ok=True)
+
+        # Save the loss
+        with open(checkpoint_path + "/loss.txt", "w") as f:
+            f.write(f"Epoch {last_epoch + epoch + 1}: Train Loss = {avg_train_loss:.4f}, Validation Loss = {avg_val_loss:.4f}\n")
+        upload_to_gcs(checkpoint_path + "/loss.txt", gcloud_checkpoint_path + "/loss.txt")
     
         # Save the T5 model
         os.makedirs(checkpoint_path + "/t5", exist_ok=True)
         t5_tokenizer.save_pretrained(checkpoint_path + "/t5")
-        t5_model.save_pretrained(checkpoint_path + "/t5")
+        model.save_pretrained(checkpoint_path + "/t5")
         upload_to_gcs(checkpoint_path + "/t5", gcloud_checkpoint_path + "/t5")
 
         # Save the Wav2Vec2 model
@@ -199,6 +244,10 @@ def train(model, wav2vec_model, train_loader, val_loader, optimizer, epochs):
 # Evaluation function
 def evaluate(model, wav2vec_model, val_loader):
     model.eval()
+    reduce_layer.eval()
+    if not FROZEN:
+        wav2vec_model.eval()
+
     val_loss = 0
 
     with torch.no_grad():
@@ -226,10 +275,13 @@ def evaluate(model, wav2vec_model, val_loader):
 
     avg_val_loss = val_loss / len(val_loader)
     print(f"Validation Loss = {avg_val_loss}")
+    
     model.train()
-
-# Initialize optimizer
-optimizer = torch.optim.AdamW(t5_model.parameters(), lr=LEARNING_RATE)
+    reduce_layer.train()
+    if not FROZEN:
+        wav2vec_model.train()
+    
+    return avg_val_loss
 
 if __name__ == "__main__":
-    train(t5_model, wav2vec_model, train_loader, val_loader, optimizer, EPOCHS)
+    train(t5_model, wav2vec_model, train_loader, val_loader, EPOCHS)
