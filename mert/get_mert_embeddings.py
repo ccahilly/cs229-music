@@ -7,6 +7,7 @@ import torchaudio.transforms as T
 from datasets import load_from_disk
 from prep_data_for_cos_sim import data_dir 
 from scipy.spatial.distance import cosine
+import numpy as np
 
 # loading our model weights
 model = AutoModel.from_pretrained("m-a-p/MERT-v1-95M", trust_remote_code=True)
@@ -18,8 +19,10 @@ dataset = load_from_disk(data_dir)
 all_embeddings = []
 for i in range(len(dataset)):
     input_audio = dataset[i]["audio"]["audio_array"]
+    # print(np.array(input_audio).shape)
     
     input = processor(input_audio, sampling_rate=processor.sampling_rate, return_tensors="pt")
+    # print(input["input_values"].shape)
     with torch.no_grad():
         outputs = model(**input, output_hidden_states=True)
 
