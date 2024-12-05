@@ -9,9 +9,18 @@ import numpy as np
 from scipy.io import wavfile
 import torch.nn as nn
 from gcloud_helpers import upload_to_gcs
+import argparse
 
-FROZEN = False
-print(f"Frozen: {FROZEN}")
+def parse_args():
+    parser = argparse.ArgumentParser(description="Fine-tuning Wav2Vec2 and T5 models for audio captioning.")
+    
+    # Adding arguments for epochs, last_epoch, and frozen status
+    parser.add_argument('--epochs', type=int, default=1, help="Number of epochs to train the model.")
+    parser.add_argument('--last_epoch', type=int, default=0, help="The last epoch used for checkpointing.")
+    parser.add_argument('--frozen', type=bool, default=False, help="Set whether to freeze the embedding model (True/False).")
+    parser.add_argument('--batch_size', type=bool, default=8, help="Set whether to freeze the embedding model (True/False).")
+    
+    return parser.parse_args()
 
 # Paths
 train_data_path = "../data/splits/train.csv"
@@ -19,7 +28,6 @@ val_data_path = "../data/splits/val.csv"
 
 # Hyperparameters
 BATCH_SIZE = 8
-EPOCHS = 1
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 NORMALIZING_INPUT = True  # Flag for normalization
@@ -27,6 +35,13 @@ DEBUG = False
 MAX_TOKENS = 64
 
 print("Device:", DEVICE)
+
+# Update variables based on command-line arguments
+args = parse_args()
+EPOCHS = args.epochs
+last_epoch = args.last_epoch
+FROZEN = args.frozen
+print(f"Training configuration: Epochs = {EPOCHS}, Last Epoch = {last_epoch}, Frozen = {FROZEN}")
 
 # Save the fine-tuned model
 if FROZEN:
@@ -39,7 +54,6 @@ os.makedirs(model_save_path, exist_ok=True)
 
 # model_name = "facebook/wav2vec2-large-960h"
 model_name = "facebook/wav2vec2-base-960h"
-last_epoch = 0
 
 if last_epoch == 0:
     # Load pretrained models
@@ -284,4 +298,5 @@ def evaluate(model, wav2vec_model, val_loader):
     return avg_val_loss
 
 if __name__ == "__main__":
+    # Now call your train function
     train(t5_model, wav2vec_model, train_loader, val_loader, EPOCHS)

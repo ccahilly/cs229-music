@@ -11,15 +11,22 @@ from scipy.io import wavfile
 import torch.nn as nn
 import torchaudio.transforms as T
 from gcloud_helpers import upload_to_gcs
+import argparse
 
-FROZEN = True
-print(f"Frozen: {FROZEN}")
+def parse_args():
+    parser = argparse.ArgumentParser(description="Fine-tuning Wav2Vec2 and T5 models for audio captioning.")
+    
+    # Adding arguments for epochs, last_epoch, and frozen status
+    parser.add_argument('--epochs', type=int, default=1, help="Number of epochs to train the model.")
+    parser.add_argument('--last_epoch', type=int, default=0, help="The last epoch used for checkpointing.")
+    parser.add_argument('--frozen', type=bool, default=False, help="Set whether to freeze the embedding model (True/False).")
+    parser.add_argument('--batch_size', type=bool, default=8, help="Set whether to freeze the embedding model (True/False).")
+    
+    return parser.parse_args()
 
 data_dir = "../data/splits"
 
 # Hyperparameters
-BATCH_SIZE = 8
-EPOCHS = 4
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 NORMALIZING_INPUT = True  # Flag for normalization
@@ -27,6 +34,18 @@ DEBUG = False
 MAX_TOKENS = 64
 
 print("Device:", DEVICE)
+
+# Update variables based on command-line arguments
+args = parse_args()
+EPOCHS = args.epochs
+last_epoch = args.last_epoch
+FROZEN = args.frozen
+print(f"Training configuration: Epochs = {EPOCHS}, Last Epoch = {last_epoch}, Frozen = {FROZEN}")
+
+if FROZEN:
+    BATCH_SIZE = 8
+else:
+    BATCH_SIZE = 4
 
 # Save the fine-tuned model
 if FROZEN:
@@ -39,7 +58,6 @@ os.makedirs(model_save_path, exist_ok=True)
 
 mert_model_name = "m-a-p/MERT-v1-95M"
 t5_model_name = "t5-small"
-last_epoch = 0
 
 if last_epoch == 0:
     # Load pretrained models
@@ -279,7 +297,7 @@ def train(model, train_loader, val_loader, epochs):
 
         # Save the aggregator layer
         os.makedirs(checkpoint_path + "/aggregator", exist_ok=True)
-        torch.save(aggregator.state_dict(), os.path.join(model_save_path + "/aggregator", "aggregator.pth"))
+        torch.save(aggregator.state_dict(), os.path.join(checkpoint_path + "/aggregator", "aggregator.pth"))
         upload_to_gcs(checkpoint_path + "/aggregator", gcloud_checkpoint_path + "/aggregator")
 
 # Evaluation function
@@ -328,4 +346,5 @@ def evaluate(model, val_loader):
     return avg_val_loss
 
 if __name__ == "__main__":
+    # Now call your train function
     train(t5_model, train_loader, val_loader, EPOCHS)
