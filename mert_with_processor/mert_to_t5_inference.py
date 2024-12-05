@@ -171,16 +171,16 @@ def main():
         val_samples = load_or_sample_examples(val_metadata, n, f"../data/samples-{n}-val.pkl")
         test_samples = load_or_sample_examples(test_metadata, n, f"../data/samples-{n}-test.pkl")
 
-        for epoch in range(1, 16):  # Iterate through all epochs
-        # for epoch in range(1, 2):  # Iterate through all epochs
+        # for epoch in range(1, 16):  # Iterate through all epochs
+        for epoch in range(1, 2):  # Iterate through all epochs
             print(f"Processing epoch {epoch}...")
             t5_model, t5_tokenizer, mert_model, processor, reduce_layer, aggregator = load_model_checkpoint(model_name, epoch)
             test_dataset = AudioCaptionDataset(test_data_path, processor, t5_tokenizer)
 
             # Evaluate loss
             test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, drop_last=True)
-            loss = evaluate(t5_model, mert_model, aggregator, reduce_layer, test_loader, batch_size)
-            file.write(f"Epoch {epoch}: Test Loss = {loss}\n")
+            # loss = evaluate(t5_model, mert_model, aggregator, reduce_layer, test_loader, batch_size)
+            # file.write(f"Epoch {epoch}: Test Loss = {loss}\n")
 
             # Process samples
             for split_name, samples in [("Train", train_samples), ("Val", val_samples), ("Test", test_samples)]:
