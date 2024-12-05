@@ -14,7 +14,7 @@ import pickle
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print("Device:", DEVICE)
 
-DEBUG = True
+DEBUG = False
 
 # Load the fine-tuned model, Wav2Vec2 model, linear layer, and processor
 train_data_path = "../data/splits/train.csv"
@@ -88,11 +88,12 @@ def evaluate(model, mert_model, aggregator, reduce_layer, val_loader, batch_size
     with torch.no_grad():
         for batch in tqdm(val_loader, desc="Evaluating"):
             inputs = batch["inputs"].to(DEVICE)
+            inputs["input_values"] = inputs["input_values"].squeeze(1)
             labels = batch["labels"].to(DEVICE)
             decoder_attention_mask = batch["decoder_attention_mask"].to(DEVICE)
 
             # Extract embeddings
-            mert_outputs = mert_model(inputs, output_hidden_states=True)
+            mert_outputs = mert_model(inputs["input_values"], output_hidden_states=True)
             all_layer_hidden_states = torch.stack(mert_outputs.hidden_states).squeeze()
             combined_dim = all_layer_hidden_states.view(batch_size, 13, -1)
             aggregated_embedding = aggregator(combined_dim)  # [batch_size, 1, time_steps * features]
@@ -151,7 +152,7 @@ def main():
     parser.add_argument("--n", type=int, default=20, help="Number of random examples to sample.")
     args = parser.parse_args()
 
-    model_name = "fine_tuned_mert_t5_"
+    model_name = "fine_tuned_mert_pro_t5_"
     model_name += args.frozen
     n = args.n
 
@@ -171,14 +172,15 @@ def main():
         test_samples = load_or_sample_examples(test_metadata, n, f"../data/samples-{n}-test.pkl")
 
         for epoch in range(1, 16):  # Iterate through all epochs
+        # for epoch in range(1, 2):  # Iterate through all epochs
             print(f"Processing epoch {epoch}...")
             t5_model, t5_tokenizer, mert_model, processor, reduce_layer, aggregator = load_model_checkpoint(model_name, epoch)
             test_dataset = AudioCaptionDataset(test_data_path, processor, t5_tokenizer)
 
             # Evaluate loss
             test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, drop_last=True)
-            # loss = evaluate(t5_model, mert_model, aggregator, reduce_layer, test_loader, batch_size)
-            # file.write(f"Epoch {epoch}: Test Loss = {loss}\n")
+            loss = evaluate(t5_model, mert_model, aggregator, reduce_layer, test_loader, batch_size)
+            file.write(f"Epoch {epoch}: Test Loss = {loss}\n")
 
             # Process samples
             for split_name, samples in [("Train", train_samples), ("Val", val_samples), ("Test", test_samples)]:
