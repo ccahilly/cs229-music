@@ -8,7 +8,7 @@ from mert_to_t5_train import AudioCaptionDataset, preprocess_audio, MAX_TOKENS
 import pandas as pd
 
 data_dir = "../data/splits"
-model_save_path = "../models/fine_tuned_mert_t5_e1"
+model_save_path = "../models/fine_tuned_mert_t5_e5"
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print("Device:", DEVICE)

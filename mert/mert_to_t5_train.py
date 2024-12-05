@@ -16,7 +16,7 @@ data_dir = "../data/splits"
 
 # Hyperparameters
 BATCH_SIZE = 16
-EPOCHS = 1
+EPOCHS = 4
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 NORMALIZING_INPUT = True  # Flag for normalization
@@ -28,11 +28,11 @@ print("Device:", DEVICE)
 mert_model_name = "m-a-p/MERT-v1-95M"
 t5_model_name = "t5-small"
 
-# old_model_save_path = "../models/fine_tuned_mert_t5_e1"
-old_model_save_path = None
+old_model_save_path = "../models/fine_tuned_mert_t5_e1"
+# old_model_save_path = None
 
 # Save the fine-tuned model
-model_save_path = "../models/fine_tuned_mert_t5_e1"
+model_save_path = "../models/fine_tuned_mert_t5_e5"
 os.makedirs(model_save_path, exist_ok=True)
 os.makedirs(model_save_path + "/mert", exist_ok=True)
 os.makedirs(model_save_path + "/linear", exist_ok=True)
