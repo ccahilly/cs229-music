@@ -21,3 +21,5 @@ py-cpuinfo
 pydantic
 tqdm
 nnAudio
+nltk
+sentence_transformers

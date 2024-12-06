@@ -3,6 +3,12 @@ from sklearn.metrics.pairwise import cosine_similarity
 from nltk.translate.bleu_score import sentence_bleu
 from sentence_transformers import SentenceTransformer
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
+import pickle
+
+def load_generated_captions(file_path):
+    with open(file_path, "rb") as f:
+        data = pickle.load(f)
+    return data
 
 def average_pairwise_sim(embeddings):
     pairwise_similarities = cosine_similarity(embeddings)
@@ -58,3 +64,66 @@ def calculate_bleu_score(reference, candidate):
     smoothing = SmoothingFunction().method1
     
     return sentence_bleu([reference], candidate, smoothing_function=smoothing)
+
+def calculate_scores(captions):
+    bert_model = SentenceTransformer('bert-base-nli-mean-tokens')
+    
+    scores = {"bleu": [], "bert_sim": []}
+    
+    i = 0
+    for true_caption, generated_caption in captions:
+        # BLEU score
+        reference = true_caption.split()
+        candidate = generated_caption.split()
+        smoothing = SmoothingFunction().method1
+        bleu_score = sentence_bleu([reference], candidate, smoothing_function=smoothing)
+        scores["bleu"].append(bleu_score)
+        
+        # BERT similarity
+        sentence_embeddings = bert_model.encode([true_caption, generated_caption])
+        similarity_score = cosine_similarity(
+            [sentence_embeddings[0]], [sentence_embeddings[1]]
+        )[0][0]
+        scores["bert_sim"].append(similarity_score)
+
+        if i % 100 == 0:
+            print(f"Done with {i+1} of {len(captions)} captions")
+        i += 1
+
+    return scores
+
+# Summarize the results
+def summarize_scores(scores):
+    bleu_avg = np.mean(scores["bleu"])
+    bert_sim_avg = np.mean(scores["bert_sim"])
+    return {"bleu_avg": bleu_avg, "bert_sim_avg": bert_sim_avg}
+
+# Main function
+def main():
+    frozen_file = "wav2vec-to-t5/generated_captions_frozen_e15.pkl"
+    unfrozen_file = "wav2vec-to-t5/generated_captions_unfrozen_e15.pkl"
+
+    # Load generated captions
+    frozen_captions = load_generated_captions(frozen_file)
+    unfrozen_captions = load_generated_captions(unfrozen_file)
+    
+    # Calculate scores
+    print("Calculating scores for frozen model...")
+    frozen_scores = calculate_scores(frozen_captions)
+    frozen_summary = summarize_scores(frozen_scores)
+
+    print("Calculating scores for unfrozen model...")
+    unfrozen_scores = calculate_scores(unfrozen_captions)
+    unfrozen_summary = summarize_scores(unfrozen_scores)
+
+    # Print summaries
+    print("\nFrozen Model Results:")
+    print(f"Average BLEU Score: {frozen_summary['bleu_avg']:.4f}")
+    print(f"Average BERT Similarity: {frozen_summary['bert_sim_avg']:.4f}")
+
+    print("\nUnfrozen Model Results:")
+    print(f"Average BLEU Score: {unfrozen_summary['bleu_avg']:.4f}")
+    print(f"Average BERT Similarity: {unfrozen_summary['bert_sim_avg']:.4f}")
+
+if __name__ == "__main__":
+    main()
