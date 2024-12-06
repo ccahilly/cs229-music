@@ -15,8 +15,9 @@ def parse_args():
     # Adding arguments for epochs, last_epoch, and frozen status
     parser.add_argument('--epochs', type=int, default=1, help="Number of epochs to train the model.")
     parser.add_argument('--last_epoch', type=int, default=0, help="The last epoch used for checkpointing.")
-    parser.add_argument('--frozen', type=bool, default=False, help="Set whether to freeze the embedding model (True/False).")
-    
+    parser.add_argument('--freeze_embed', type=bool, default=False, help="Set whether to freeze the embedding model (True/False).")
+    parser.add_argument('--freeze_t5', type=bool, default=False, help="Set whether to freeze the embedding model (True/False).")
+
     return parser.parse_args()
 
 data_dir = "../data/splits"
@@ -32,16 +33,20 @@ print("Device:", DEVICE)
 args = parse_args()
 EPOCHS = args.epochs
 last_epoch = args.last_epoch
-FROZEN = args.frozen
-print(f"Training configuration: Epochs = {EPOCHS}, Last Epoch = {last_epoch}, Frozen = {FROZEN}")
+FROZEN_EMBED = args.freeze_embed
+FROZEN_T5 = args.freeze_t5
+print(f"Training configuration: Epochs = {EPOCHS}, Last Epoch = {last_epoch}, Freeze Embed = {FROZEN_EMBED}, Freeze T5 = {FROZEN_T5}")
 
-if FROZEN:
+if FROZEN_EMBED or FROZEN_T5:
     BATCH_SIZE = 8
 else:
     BATCH_SIZE = 4
 
 # Save the fine-tuned model
-if FROZEN:
+if FROZEN_EMBED and FROZEN_T5:
+    model_save_path = "../models/fine_tuned_mert_pro_t5_all_frozen"
+    gcloud_path = "models/fine_tuned_mert_pro_t5_all_frozen"
+elif FROZEN_EMBED:
     model_save_path = "../models/fine_tuned_mert_pro_t5_frozen"
     gcloud_path = "models/fine_tuned_mert_pro_t5_frozen"
 else:
@@ -66,7 +71,9 @@ if last_epoch == 0:
 
 else: # Using previously fine tuned
     old_model_save_path = "../models/fine_tuned_mert_pro_t5"
-    if FROZEN:
+    if FROZEN_EMBED and FROZEN_T5:
+        old_model_save_path += "_all_frozen"
+    elif FROZEN_EMBED:
         old_model_save_path += "_frozen"
     else:
         old_model_save_path += "_unfrozen"
@@ -95,24 +102,33 @@ val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, drop_
 # Training function
 def train(model, train_loader, val_loader, epochs):
     for param in mert_model.parameters():
-        param.requires_grad = not FROZEN # true when frozen is false
+        param.requires_grad = not FROZEN_EMBED # true when frozen is false
     for param in aggregator.parameters():
         param.requires_grad = True
     for param in reduce_layer.parameters():
         param.requires_grad = True
     for param in model.parameters():
-        param.requires_grad = True
+        param.requires_grad = not FROZEN_T5
     
-    if not FROZEN:
+    if not FROZEN_EMBED:
         mert_model.train()
     else:
         mert_model.eval()
 
     aggregator.train()
     reduce_layer.train()
-    model.train()
 
-    if FROZEN:
+    if not FROZEN_T5:
+        model.train()
+    else:
+        model.eval()
+
+    if FROZEN_EMBED and FROZEN_T5:
+        optimizer = torch.optim.AdamW(
+        list(aggregator.parameters()) + list(reduce_layer.parameters()),
+        lr=LEARNING_RATE
+        )
+    elif FROZEN_EMBED:
         optimizer = torch.optim.AdamW(
         list(aggregator.parameters()) + list(reduce_layer.parameters()) + list(model.parameters()),
         lr=LEARNING_RATE
@@ -137,7 +153,7 @@ def train(model, train_loader, val_loader, epochs):
                 print(f"decoder_attention_mask shape: {decoder_attention_mask.shape}")
 
             # Extract embeddings
-            if FROZEN:
+            if FROZEN_EMBED:
                 with torch.no_grad():
                     mert_outputs = mert_model(inputs["input_values"], output_hidden_states=True)
             else:
@@ -223,10 +239,11 @@ def train(model, train_loader, val_loader, epochs):
 
 # Evaluation function
 def evaluate(model, val_loader):
-    model.eval()
+    if not FROZEN_T5:
+        model.eval()
     reduce_layer.eval()
     aggregator.eval()
-    if not FROZEN:
+    if not FROZEN_EMBED:
         mert_model.eval()
 
     val_loss = 0
@@ -258,10 +275,11 @@ def evaluate(model, val_loader):
     avg_val_loss = val_loss / len(val_loader)
     print(f"Validation Loss = {avg_val_loss}")
     
-    model.train()
+    if not FROZEN_T5:
+        model.train()
     reduce_layer.train()
     aggregator.train()
-    if not FROZEN:
+    if not FROZEN_EMBED:
         mert_model.train()
 
     return avg_val_loss
