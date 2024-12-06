@@ -23,7 +23,7 @@ def parse_loss_file(loss_file_path):
     
     return train_losses, val_losses
 
-def plot_losses(model_name, base_local_path='models', save_path=None):
+def plot_losses(model_name, plot_title, base_local_path='models', save_path=None):
     """
     Plot the training and validation loss across epochs for the given model and save the plot to a file.
 
@@ -56,7 +56,7 @@ def plot_losses(model_name, base_local_path='models', save_path=None):
     plt.plot(range(1, 16), all_val_losses, label='Validation Loss', marker='o')
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
-    plt.title(f'Training and Validation Loss for {model_name}')
+    plt.title(f'Training and Validation Loss for {plot_title}')
     plt.legend()
     plt.grid(True)
 
@@ -67,17 +67,31 @@ def plot_losses(model_name, base_local_path='models', save_path=None):
         plt.show()
 
 model_name = "fine_tuned_wav2vec_t5_frozen"
+plot_title = "frozen wav2vec 2.0 to t5"
 save_path = "plots/" + model_name + '_loss_plot.png' 
-plot_losses(model_name, save_path=save_path)
+plot_losses(model_name, plot_title, save_path=save_path)
 
 model_name = "fine_tuned_wav2vec_t5_unfrozen" 
+plot_title = "unrozen wav2vec 2.0 to t5"
 save_path = "plots/" + model_name + '_loss_plot.png'
-plot_losses(model_name, save_path=save_path)
+plot_losses(model_name, plot_title, save_path=save_path)
 
 model_name = "fine_tuned_mert_pro_t5_frozen" 
+plot_title = "frozen mert to t5"
 save_path = "plots/" + model_name + '_loss_plot.png'
-plot_losses(model_name, save_path=save_path)
+plot_losses(model_name, plot_title, save_path=save_path)
 
 model_name = "fine_tuned_mert_pro_t5_unfrozen" 
+plot_title = "ufnrozen mert to t5"
 save_path = "plots/" + model_name + '_loss_plot.png'
-plot_losses(model_name, save_path=save_path)
+plot_losses(model_name, plot_title, save_path=save_path)
+
+model_name = "fine_tuned_clap_t5_unfrozen" 
+plot_title = "frozen clap to t5"
+save_path = "plots/" + model_name + '_loss_plot.png'
+plot_losses(model_name, plot_title, save_path=save_path)
+
+model_name = "fine_tuned_clap_t5_unfrozen" 
+plot_title = "unfrozen clap to t5"
+save_path = "plots/" + model_name + '_loss_plot.png'
+plot_losses(model_name, plot_title, save_path=save_path)

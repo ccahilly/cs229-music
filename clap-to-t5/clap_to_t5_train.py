@@ -180,6 +180,7 @@ def evaluate(model, clap_model, val_loader):
     with torch.no_grad():
         for batch in tqdm(val_loader, desc="Evaluating"):
             inputs = batch["inputs"].to(DEVICE)
+            inputs["input_features"] = inputs["input_features"].squeeze(1)
             labels = batch["labels"].to(DEVICE)
             decoder_attention_mask = batch["decoder_attention_mask"].to(DEVICE)
 
