@@ -105,7 +105,7 @@ def main():
     # frozen_file_mert = "mert_with_processor/generated_captions_frozen_e13.pkl"
     # unfrozen_file_mert = "mert_with_processor/generated_captions_unfrozen_e14.pkl"
     # frozen_file_clap = "clap-to-t5/generated_captions_frozen_e15.pkl"
-    unfrozen_file_clap = None
+    unfrozen_file_clap = "clap-to-t5/generated_captions_unfrozen_e15.pkl"
 
     # Load generated captions
     # frozen_captions = load_generated_captions(frozen_file)
@@ -161,7 +161,7 @@ def main():
     # print(f"Average BLEU Score: {frozen_summary_clap['bleu_avg']:.4f}")
     # print(f"Average BERT Similarity: {frozen_summary_clap['bert_sim_avg']:.4f}")
 
-    print("\Unfrozen Clap Model Results:")
+    print("\nUnfrozen Clap Model Results:")
     print(f"Average BLEU Score: {unfrozen_summary_clap['bleu_avg']:.4f}")
     print(f"Average BERT Similarity: {unfrozen_summary_clap['bert_sim_avg']:.4f}")
 

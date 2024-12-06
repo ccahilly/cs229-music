@@ -73,7 +73,7 @@ def infer(t5_model, t5_tokenizer, clap_model, processor, audio_paths, frozen, ba
             if frozen:
                 clap_outputs = clap_model.get_audio_features(batch_inputs)
             else:
-                outputs = clap_model(inputs["input_features"])
+                outputs = clap_model(batch_inputs)
                 clap_outputs = outputs.audio_embeds
 
             # Generate captions
