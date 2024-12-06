@@ -67,31 +67,31 @@ def plot_losses(model_name, plot_title, base_local_path='models', save_path=None
         plt.show()
 
 model_name = "fine_tuned_wav2vec_t5_frozen"
-plot_title = "frozen wav2vec 2.0 to t5"
+plot_title = "Frozen wav2vec 2.0 to T5"
 save_path = "plots/" + model_name + '_loss_plot.png' 
 plot_losses(model_name, plot_title, save_path=save_path)
 
 model_name = "fine_tuned_wav2vec_t5_unfrozen" 
-plot_title = "unrozen wav2vec 2.0 to t5"
+plot_title = "Unrozen wav2vec 2.0 to T5"
 save_path = "plots/" + model_name + '_loss_plot.png'
 plot_losses(model_name, plot_title, save_path=save_path)
 
 model_name = "fine_tuned_mert_pro_t5_frozen" 
-plot_title = "frozen mert to t5"
+plot_title = "Frozen Mert to T5"
 save_path = "plots/" + model_name + '_loss_plot.png'
 plot_losses(model_name, plot_title, save_path=save_path)
 
 model_name = "fine_tuned_mert_pro_t5_unfrozen" 
-plot_title = "ufnrozen mert to t5"
+plot_title = "Ufnrozen Mert to T5"
+save_path = "plots/" + model_name + '_loss_plot.png'
+plot_losses(model_name, plot_title, save_path=save_path)
+
+model_name = "fine_tuned_clap_t5_frozen" 
+plot_title = "Frozen Clap to T5"
 save_path = "plots/" + model_name + '_loss_plot.png'
 plot_losses(model_name, plot_title, save_path=save_path)
 
 model_name = "fine_tuned_clap_t5_unfrozen" 
-plot_title = "frozen clap to t5"
-save_path = "plots/" + model_name + '_loss_plot.png'
-plot_losses(model_name, plot_title, save_path=save_path)
-
-model_name = "fine_tuned_clap_t5_unfrozen" 
-plot_title = "unfrozen clap to t5"
+plot_title = "Unfrozen Clap to T5"
 save_path = "plots/" + model_name + '_loss_plot.png'
 plot_losses(model_name, plot_title, save_path=save_path)
