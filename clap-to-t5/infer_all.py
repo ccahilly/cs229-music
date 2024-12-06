@@ -32,10 +32,7 @@ def load_model_checkpoint(model_name, epoch, frozen):
 
     t5_model = T5ForConditionalGeneration.from_pretrained(local_path + "/t5").to(DEVICE)
     t5_tokenizer = T5Tokenizer.from_pretrained(local_path + "/t5")
-    if frozen:
-        clap_model = AutoModel.from_pretrained(local_path + "/clap").to(DEVICE)
-    else:
-        clap_model = ClapAudioModelWithProjection.from_pretrained(local_path + "/clap").to(DEVICE)
+    clap_model = ClapAudioModelWithProjection.from_pretrained(local_path + "/clap").to(DEVICE)
     processor = AutoProcessor.from_pretrained(local_path + "/clap")
 
     delete_local_copy(local_path)
@@ -70,11 +67,11 @@ def infer(t5_model, t5_tokenizer, clap_model, processor, audio_paths, frozen, ba
 
         with torch.no_grad():
             # Pass batch inputs through the clap model
-            if frozen:
-                clap_outputs = clap_model.get_audio_features(batch_inputs)
-            else:
-                outputs = clap_model(batch_inputs)
-                clap_outputs = outputs.audio_embeds
+            # if frozen:
+            #     clap_outputs = clap_model.get_audio_features(batch_inputs)
+            # else:
+            outputs = clap_model(batch_inputs)
+            clap_outputs = outputs.audio_embeds
 
             # Generate captions
             generated_ids = t5_model.generate(inputs_embeds=clap_outputs.unsqueeze(1), max_new_tokens=MAX_TOKENS)
@@ -100,12 +97,13 @@ def main():
     # Load test metadata
     if args.dataset == "val":
         metadata = pd.read_csv(val_data_path)
+        output_file = f"generated_captions_{args.frozen}_e{args.epoch}_{args.dataset}.pkl"
     elif args.dataset == "train":
         metadata = pd.read_csv(train_data_path)
+        output_file = f"generated_captions_{args.frozen}_e{args.epoch}_{args.dataset}.pkl"
     else:
         metadata = pd.read_csv(test_data_path)
-    
-    output_file = f"generated_captions_{args.frozen}_e{args.epoch}_{args.dataset}.pkl"
+        output_file = f"generated_captions_{args.frozen}_e{args.epoch}.pkl"
     
     epoch = args.epoch
     print(f"Processing epoch {epoch}...")

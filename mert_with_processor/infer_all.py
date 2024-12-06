@@ -108,12 +108,13 @@ def main():
         # Load test metadata
     if args.dataset == "val":
         metadata = pd.read_csv(val_data_path)
+        output_file = f"generated_captions_{args.frozen}_e{args.epoch}_{args.dataset}.pkl"
     elif args.dataset == "train":
         metadata = pd.read_csv(train_data_path)
+        output_file = f"generated_captions_{args.frozen}_e{args.epoch}_{args.dataset}.pkl"
     else:
         metadata = pd.read_csv(test_data_path)
-    
-    output_file = f"generated_captions_{args.frozen}_e{args.epoch}_{args.dataset}.pkl"
+        output_file = f"generated_captions_{args.frozen}_e{args.epoch}.pkl"
     
     epoch = args.epoch
     print(f"Processing epoch {epoch}...")
