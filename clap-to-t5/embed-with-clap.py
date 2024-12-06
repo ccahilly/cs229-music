@@ -100,6 +100,8 @@ all_audio_embeddings = []
 for i, batch in enumerate(batches):
     # Process each batch: pass it to the processor
     inputs = processor(audios=batch, return_tensors="pt", sampling_rate=SAMPLE_RATE).to(device)
+    print(inputs["input_features"].shape)
+    print(len(batch))
     
     print(f"Processing batch {i+1}/{len(batches)}")
 
