@@ -77,3 +77,7 @@ plot_losses(model_name, save_path=save_path)
 model_name = "fine_tuned_mert_pro_t5_frozen" 
 save_path = "plots/" + model_name + '_loss_plot.png'
 plot_losses(model_name, save_path=save_path)
+
+model_name = "fine_tuned_mert_pro_t5_unfrozen" 
+save_path = "plots/" + model_name + '_loss_plot.png'
+plot_losses(model_name, save_path=save_path)
