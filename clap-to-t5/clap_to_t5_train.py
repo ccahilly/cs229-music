@@ -50,10 +50,11 @@ model_name = "laion/larger_clap_music"
 if last_epoch == 0:
     # Load pretrained models
     processor = AutoProcessor.from_pretrained(model_name)
-    if FROZEN_EMBED:
-        clap_model = AutoModel.from_pretrained(model_name).to(DEVICE)
-    else:
-        clap_model = ClapAudioModelWithProjection.from_pretrained(model_name).to(DEVICE)
+    # if FROZEN_EMBED:
+    #     clap_model = AutoModel.from_pretrained(model_name).to(DEVICE)
+    # else:
+    #     clap_model = ClapAudioModelWithProjection.from_pretrained(model_name).to(DEVICE)
+    clap_model = ClapAudioModelWithProjection.from_pretrained(model_name).to(DEVICE)
     t5_tokenizer = T5Tokenizer.from_pretrained("t5-small")
     t5_model = T5ForConditionalGeneration.from_pretrained("t5-small").to(DEVICE)
 
@@ -69,10 +70,11 @@ else: # Using previously fine tuned
     t5_model = T5ForConditionalGeneration.from_pretrained(model_name + "/t5").to(DEVICE)
     t5_tokenizer = T5Tokenizer.from_pretrained(model_name + "/t5")
 
-    if FROZEN_EMBED:
-        clap_model = AutoModel.from_pretrained(model_name + "/clap").to(DEVICE)
-    else:
-        clap_model = ClapAudioModelWithProjection.from_pretrained(model_name + "/clap").to(DEVICE)
+    # if FROZEN_EMBED:
+    #     clap_model = AutoModel.from_pretrained(model_name + "/clap").to(DEVICE)
+    # else:
+    #     clap_model = ClapAudioModelWithProjection.from_pretrained(model_name + "/clap").to(DEVICE)
+    clap_model = ClapAudioModelWithProjection.from_pretrained(model_name + "/clap").to(DEVICE)
     processor = AutoProcessor.from_pretrained(model_name + "/clap")
 
 # Load data
@@ -133,7 +135,9 @@ def train(model, clap_model, train_loader, val_loader, epochs):
             # Extract embeddings
             if FROZEN_EMBED:
                 with torch.no_grad():
-                    clap_outputs = clap_model.get_audio_features(**inputs)
+                    # clap_outputs = clap_model.get_audio_features(**inputs)
+                    outputs = clap_model(inputs["input_features"])
+                    clap_outputs = outputs.audio_embeds
             else:
                 # clap_outputs = clap_model.get_audio_features(**inputs)
                 outputs = clap_model(inputs["input_features"])
@@ -207,11 +211,14 @@ def evaluate(model, clap_model, val_loader):
             decoder_attention_mask = batch["decoder_attention_mask"].to(DEVICE)
 
             # Extract embeddings
-            if FROZEN_EMBED:
-                clap_outputs = clap_model.get_audio_features(**inputs)
-            else:
-                outputs = clap_model(inputs["input_features"])
-                clap_outputs = outputs.audio_embeds
+            # if FROZEN_EMBED:
+            #     clap_outputs = clap_model.get_audio_features(**inputs)
+            # else:
+            #     outputs = clap_model(inputs["input_features"])
+            #     clap_outputs = outputs.audio_embeds
+
+            outputs = clap_model(inputs["input_features"])
+            clap_outputs = outputs.audio_embeds
 
             # Feed embeddings to T5
             outputs = model(
