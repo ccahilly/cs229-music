@@ -72,7 +72,7 @@ save_path = "plots/" + model_name + '_loss_plot.png'
 plot_losses(model_name, plot_title, save_path=save_path)
 
 model_name = "fine_tuned_wav2vec_t5_unfrozen" 
-plot_title = "Unrozen wav2vec 2.0 to T5"
+plot_title = "Unfrozen wav2vec 2.0 to T5"
 save_path = "plots/" + model_name + '_loss_plot.png'
 plot_losses(model_name, plot_title, save_path=save_path)
 
@@ -82,7 +82,7 @@ save_path = "plots/" + model_name + '_loss_plot.png'
 plot_losses(model_name, plot_title, save_path=save_path)
 
 model_name = "fine_tuned_mert_pro_t5_unfrozen" 
-plot_title = "Ufnrozen Mert to T5"
+plot_title = "Unfrozen Mert to T5"
 save_path = "plots/" + model_name + '_loss_plot.png'
 plot_losses(model_name, plot_title, save_path=save_path)
 
