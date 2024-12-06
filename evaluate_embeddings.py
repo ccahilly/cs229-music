@@ -100,50 +100,70 @@ def summarize_scores(scores):
 
 # Main function
 def main():
-    frozen_file = "wav2vec-to-t5/generated_captions_frozen_e15.pkl"
-    unfrozen_file = "wav2vec-to-t5/generated_captions_unfrozen_e14.pkl"
-    frozen_file_mert = "mert_with_processor/generated_captions_frozen_e13.pkl"
-    unfrozen_file_mert = "mert_with_processor/generated_captions_unfrozen_e14.pkl"
+    # frozen_file = "wav2vec-to-t5/generated_captions_frozen_e15.pkl"
+    # unfrozen_file = "wav2vec-to-t5/generated_captions_unfrozen_e14.pkl"
+    # frozen_file_mert = "mert_with_processor/generated_captions_frozen_e13.pkl"
+    # unfrozen_file_mert = "mert_with_processor/generated_captions_unfrozen_e14.pkl"
+    # frozen_file_clap = "clap-to-t5/generated_captions_frozen_e15.pkl"
+    unfrozen_file_clap = None
 
     # Load generated captions
-    frozen_captions = load_generated_captions(frozen_file)
-    unfrozen_captions = load_generated_captions(unfrozen_file)
-    frozen_captions_mert = load_generated_captions(frozen_file_mert)
-    unfrozen_captions_mert = load_generated_captions(unfrozen_file_mert)
+    # frozen_captions = load_generated_captions(frozen_file)
+    # unfrozen_captions = load_generated_captions(unfrozen_file)
+    # frozen_captions_mert = load_generated_captions(frozen_file_mert)
+    # unfrozen_captions_mert = load_generated_captions(unfrozen_file_mert)
+    # frozen_captions_clap = load_generated_captions(frozen_file_clap)
+    unfrozen_captions_clap = load_generated_captions(unfrozen_file_clap)
     
     # Calculate scores
-    print("Calculating scores for frozen wav2vec model...")
-    frozen_scores = calculate_scores(frozen_captions)
-    frozen_summary = summarize_scores(frozen_scores)
+    # print("Calculating scores for frozen wav2vec model...")
+    # frozen_scores = calculate_scores(frozen_captions)
+    # frozen_summary = summarize_scores(frozen_scores)
 
-    print("Calculating scores for unfrozen wav2vec model...")
-    unfrozen_scores = calculate_scores(unfrozen_captions)
-    unfrozen_summary = summarize_scores(unfrozen_scores)
+    # print("Calculating scores for unfrozen wav2vec model...")
+    # unfrozen_scores = calculate_scores(unfrozen_captions)
+    # unfrozen_summary = summarize_scores(unfrozen_scores)
 
-    print("Calculating scores for frozen mert model...")
-    frozen_scores_mert = calculate_scores(frozen_captions_mert)
-    frozen_summary_mert = summarize_scores(frozen_scores_mert)
+    # print("Calculating scores for frozen mert model...")
+    # frozen_scores_mert = calculate_scores(frozen_captions_mert)
+    # frozen_summary_mert = summarize_scores(frozen_scores_mert)
 
-    print("Calculating scores for unfrozen mert model...")
-    unfrozen_scores_mert = calculate_scores(unfrozen_captions_mert)
-    unfrozen_summary_mert = summarize_scores(unfrozen_scores_mert)
+    # print("Calculating scores for unfrozen mert model...")
+    # unfrozen_scores_mert = calculate_scores(unfrozen_captions_mert)
+    # unfrozen_summary_mert = summarize_scores(unfrozen_scores_mert)
+
+    # print("Calculating scores for frozen clap model...")
+    # frozen_scores_clap = calculate_scores(frozen_captions_clap)
+    # frozen_summary_clap = summarize_scores(frozen_scores_clap)
+
+    print("Calculating scores for unfrozen clap model...")
+    unfrozen_scores_clap = calculate_scores(unfrozen_captions_clap)
+    unfrozen_summary_clap = summarize_scores(unfrozen_scores_clap)
 
     # Print summaries
-    print("\nFrozen Wav2Vec Model Results:")
-    print(f"Average BLEU Score: {frozen_summary['bleu_avg']:.4f}")
-    print(f"Average BERT Similarity: {frozen_summary['bert_sim_avg']:.4f}")
+    # print("\nFrozen Wav2Vec Model Results:")
+    # print(f"Average BLEU Score: {frozen_summary['bleu_avg']:.4f}")
+    # print(f"Average BERT Similarity: {frozen_summary['bert_sim_avg']:.4f}")
 
-    print("\nUnfrozen Wav2Vec Model Results:")
-    print(f"Average BLEU Score: {unfrozen_summary['bleu_avg']:.4f}")
-    print(f"Average BERT Similarity: {unfrozen_summary['bert_sim_avg']:.4f}")
+    # print("\nUnfrozen Wav2Vec Model Results:")
+    # print(f"Average BLEU Score: {unfrozen_summary['bleu_avg']:.4f}")
+    # print(f"Average BERT Similarity: {unfrozen_summary['bert_sim_avg']:.4f}")
 
-    print("\nFrozen Mert Model Results:")
-    print(f"Average BLEU Score: {frozen_summary_mert['bleu_avg']:.4f}")
-    print(f"Average BERT Similarity: {frozen_summary_mert['bert_sim_avg']:.4f}")
+    # print("\nFrozen Mert Model Results:")
+    # print(f"Average BLEU Score: {frozen_summary_mert['bleu_avg']:.4f}")
+    # print(f"Average BERT Similarity: {frozen_summary_mert['bert_sim_avg']:.4f}")
 
-    print("\nUnfrozen Mert Model Results:")
-    print(f"Average BLEU Score: {unfrozen_summary_mert['bleu_avg']:.4f}")
-    print(f"Average BERT Similarity: {unfrozen_summary_mert['bert_sim_avg']:.4f}")
+    # print("\nUnfrozen Mert Model Results:")
+    # print(f"Average BLEU Score: {unfrozen_summary_mert['bleu_avg']:.4f}")
+    # print(f"Average BERT Similarity: {unfrozen_summary_mert['bert_sim_avg']:.4f}")
+
+    # print("\nFrozen Clap Model Results:")
+    # print(f"Average BLEU Score: {frozen_summary_clap['bleu_avg']:.4f}")
+    # print(f"Average BERT Similarity: {frozen_summary_clap['bert_sim_avg']:.4f}")
+
+    print("\Unfrozen Clap Model Results:")
+    print(f"Average BLEU Score: {unfrozen_summary_clap['bleu_avg']:.4f}")
+    print(f"Average BERT Similarity: {unfrozen_summary_clap['bert_sim_avg']:.4f}")
 
 if __name__ == "__main__":
     main()

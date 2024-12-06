@@ -1,5 +1,5 @@
 import torch
-from transformers import AutoModel, AutoProcessor, T5Tokenizer, T5ForConditionalGeneration
+from transformers import AutoModel, AutoProcessor, T5Tokenizer, T5ForConditionalGeneration, ClapAudioModelWithProjection
 import numpy as np
 from scipy.io import wavfile
 import torch.nn as nn
@@ -22,7 +22,7 @@ train_data_path = "../data/splits/train.csv"
 val_data_path = "../data/splits/val.csv"
 test_data_path = "../data/splits/test.csv"
 
-def load_model_checkpoint(model_name, epoch):
+def load_model_checkpoint(model_name, epoch, frozen):
     """
     Load the models from a specific checkpoint.
     """
@@ -32,14 +32,17 @@ def load_model_checkpoint(model_name, epoch):
 
     t5_model = T5ForConditionalGeneration.from_pretrained(local_path + "/t5").to(DEVICE)
     t5_tokenizer = T5Tokenizer.from_pretrained(local_path + "/t5")
-    clap_model = AutoModel.from_pretrained(local_path + "/clap").to(DEVICE)
+    if frozen:
+        clap_model = AutoModel.from_pretrained(local_path + "/clap").to(DEVICE)
+    else:
+        clap_model = ClapAudioModelWithProjection.from_pretrained(local_path + "/clap").to(DEVICE)
     processor = AutoProcessor.from_pretrained(local_path + "/clap")
 
     delete_local_copy(local_path)
 
     return t5_model, t5_tokenizer, clap_model, processor
 
-def infer(t5_model, t5_tokenizer, clap_model, processor, audio_paths, batch_size=8):
+def infer(t5_model, t5_tokenizer, clap_model, processor, audio_paths, frozen, batch_size=8):
     captions = []
     num_batches = len(audio_paths) // batch_size + (len(audio_paths) % batch_size != 0)
 
@@ -67,7 +70,11 @@ def infer(t5_model, t5_tokenizer, clap_model, processor, audio_paths, batch_size
 
         with torch.no_grad():
             # Pass batch inputs through the clap model
-            clap_outputs = clap_model.get_audio_features(batch_inputs)
+            if frozen:
+                clap_outputs = clap_model.get_audio_features(batch_inputs)
+            else:
+                outputs = clap_model(inputs["input_features"])
+                clap_outputs = outputs.audio_embeds
 
             # Generate captions
             generated_ids = t5_model.generate(inputs_embeds=clap_outputs.unsqueeze(1), max_new_tokens=MAX_TOKENS)
@@ -100,11 +107,11 @@ def main():
         print(f"Processing epoch {epoch}...")
         
         # Load model components
-        t5_model, t5_tokenizer, clap_model, processor= load_model_checkpoint(model_name, epoch)
+        t5_model, t5_tokenizer, clap_model, processor= load_model_checkpoint(model_name, epoch, args.frozen == "frozen")
         
         # Perform inference
         generated_captions = infer(
-            t5_model, t5_tokenizer, clap_model, processor, metadata["file_path"]
+            t5_model, t5_tokenizer, clap_model, processor, metadata["file_path"], args.frozen == "frozen"
         )
 
         # Combine true captions and generated captions for saving
