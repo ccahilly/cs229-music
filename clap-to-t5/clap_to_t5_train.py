@@ -1,5 +1,5 @@
 import os
-from transformers import AutoModel, AutoProcessor, T5Tokenizer, T5ForConditionalGeneration
+from transformers import AutoModel, AutoProcessor, T5Tokenizer, T5ForConditionalGeneration, ClapAudioModelWithProjection
 from torch.utils.data import DataLoader
 import torch
 from tqdm import tqdm
@@ -50,7 +50,10 @@ model_name = "laion/larger_clap_music"
 if last_epoch == 0:
     # Load pretrained models
     processor = AutoProcessor.from_pretrained(model_name)
-    clap_model = AutoModel.from_pretrained(model_name).to(DEVICE)
+    if FROZEN_EMBED:
+        clap_model = AutoModel.from_pretrained(model_name).to(DEVICE)
+    else:
+        clap_model = ClapAudioModelWithProjection.from_pretrained(model_name).to(DEVICE)
     t5_tokenizer = T5Tokenizer.from_pretrained("t5-small")
     t5_model = T5ForConditionalGeneration.from_pretrained("t5-small").to(DEVICE)
 
@@ -66,7 +69,10 @@ else: # Using previously fine tuned
     t5_model = T5ForConditionalGeneration.from_pretrained(model_name + "/t5").to(DEVICE)
     t5_tokenizer = T5Tokenizer.from_pretrained(model_name + "/t5")
 
-    clap_model = AutoModel.from_pretrained(model_name + "/clap").to(DEVICE)
+    if FROZEN_EMBED:
+        clap_model = AutoModel.from_pretrained(model_name + "/clap").to(DEVICE)
+    else:
+        clap_model = ClapAudioModelWithProjection.from_pretrained(model_name + "/clap").to(DEVICE)
     processor = AutoProcessor.from_pretrained(model_name + "/clap")
 
 # Load data
@@ -76,12 +82,22 @@ val_dataset = AudioCaptionDataset(val_data_path, processor, t5_tokenizer)
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
 val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, drop_last=True)
 
+def track_optimizer_params(optimizer):
+    for group in optimizer.param_groups:
+        for param in group['params']:
+            if param.grad is not None:
+                print(f"Param {param.shape} gradient norm: {param.grad.norm().item()}")
+
 # Training function
 def train(model, clap_model, train_loader, val_loader, epochs):
     for param in clap_model.parameters():
-        param.requires_grad = not FROZEN_EMBED # true when frozen is false
+        param.requires_grad = not FROZEN_EMBED # true when frozen is false'
+        # if DEBUG:
+        #     print(f"clap param: {param.shape}")
     for param in model.parameters():
         param.requires_grad = True
+        # if DEBUG:
+        #     print(f"t5 param: {param.shape}")
 
     if not FROZEN_EMBED:
         clap_model.train()
@@ -119,7 +135,9 @@ def train(model, clap_model, train_loader, val_loader, epochs):
                 with torch.no_grad():
                     clap_outputs = clap_model.get_audio_features(**inputs)
             else:
-                clap_outputs = clap_model.get_audio_features(**inputs)
+                # clap_outputs = clap_model.get_audio_features(**inputs)
+                outputs = clap_model(inputs["input_features"])
+                clap_outputs = outputs.audio_embeds
             
             if DEBUG:
                 print("Clap last hidden state shape:", clap_outputs.shape)
@@ -140,6 +158,10 @@ def train(model, clap_model, train_loader, val_loader, epochs):
 
             optimizer.zero_grad()
             loss.backward()
+
+            if DEBUG:
+                track_optimizer_params(optimizer)
+
             optimizer.step()
 
         avg_train_loss = train_loss / len(train_loader)
@@ -185,7 +207,11 @@ def evaluate(model, clap_model, val_loader):
             decoder_attention_mask = batch["decoder_attention_mask"].to(DEVICE)
 
             # Extract embeddings
-            clap_outputs = clap_model.get_audio_features(**inputs)
+            if FROZEN_EMBED:
+                clap_outputs = clap_model.get_audio_features(**inputs)
+            else:
+                outputs = clap_model(inputs["input_features"])
+                clap_outputs = outputs.audio_embeds
 
             # Feed embeddings to T5
             outputs = model(
