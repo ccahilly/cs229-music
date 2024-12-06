@@ -101,7 +101,7 @@ def summarize_scores(scores):
 # Main function
 def main():
     frozen_file = "wav2vec-to-t5/generated_captions_frozen_e15.pkl"
-    unfrozen_file = "wav2vec-to-t5/generated_captions_unfrozen_e15.pkl"
+    unfrozen_file = "wav2vec-to-t5/generated_captions_unfrozen_e14.pkl"
 
     # Load generated captions
     frozen_captions = load_generated_captions(frozen_file)
