@@ -67,6 +67,11 @@ def plot_losses(model_name, base_local_path='models', save_path=None):
         plt.show()
 
 # Example usage
+model_name = "fine_tuned_wav2vec_t5_frozen"  # Replace with your actual model name
+save_path = "plots/" + model_name + '_loss_plot.png'  # Specify the path to save the plot
+plot_losses(model_name, save_path=save_path)
+
+# Example usage
 model_name = "fine_tuned_wav2vec_t5_unfrozen"  # Replace with your actual model name
 save_path = "plots/" + model_name + '_loss_plot.png'  # Specify the path to save the plot
 plot_losses(model_name, save_path=save_path)
