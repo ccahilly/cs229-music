@@ -90,6 +90,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--frozen", type=str, default="frozen", help="frozen or unfrozen")
     parser.add_argument("--epoch", type=int, default=15, help="Model checkpoint epoch to load")
+    parser.add_argument("--dataset", type=str, default="test", help="test, train, or val")
     args = parser.parse_args()
 
     model_name = "fine_tuned_wav2vec_t5_"
@@ -98,33 +99,38 @@ def main():
     batch_size = 8
 
     # Load test metadata
-    test_metadata = pd.read_csv(test_data_path)
-    output_file = "generated_captions_" + args.frozen + f"_e{args.epoch}" + ".pkl"
+    if args.dataset == "val":
+        metadata = pd.read_csv(val_data_path)
+    elif args.dataset == "train":
+        metadata = pd.read_csv(train_data_path)
+    else:
+        metadata = pd.read_csv(test_data_path)
+    
+    output_file = f"generated_captions_{args.frozen}_e{args.epoch}_{args.dataset}.pkl"
 
-    for metadata in [test_metadata]:
-        epoch = args.epoch
-        print(f"Processing epoch {epoch}...")
-        
-        # Load model components
-        t5_model, t5_tokenizer, wav2vec_model, processor, reduce_layer = load_model_checkpoint(model_name, epoch)
-        
-        # Perform inference
-        generated_captions = infer(
-            t5_model, t5_tokenizer, wav2vec_model, processor, reduce_layer, metadata["file_path"]
-        )
+    epoch = args.epoch
+    print(f"Processing epoch {epoch}...")
+    
+    # Load model components
+    t5_model, t5_tokenizer, wav2vec_model, processor, reduce_layer = load_model_checkpoint(model_name, epoch)
+    
+    # Perform inference
+    generated_captions = infer(
+        t5_model, t5_tokenizer, wav2vec_model, processor, reduce_layer, metadata["file_path"]
+    )
 
-        # Combine true captions and generated captions for saving
-        combined_captions = [
-            (true_caption, generated_caption)
-            for true_caption, generated_caption in zip(metadata["caption"], generated_captions)
-        ]
-        # print(combined_captions)
-        
-        # Save combined captions to a pickle file
-        with open(output_file, "wb") as f:
-            pickle.dump(combined_captions, f)
-        
-        print(f"True and generated captions saved to {output_file}")
+    # Combine true captions and generated captions for saving
+    combined_captions = [
+        (true_caption, generated_caption)
+        for true_caption, generated_caption in zip(metadata["caption"], generated_captions)
+    ]
+    # print(combined_captions)
+    
+    # Save combined captions to a pickle file
+    with open(output_file, "wb") as f:
+        pickle.dump(combined_captions, f)
+    
+    print(f"True and generated captions saved to {output_file}")
 
 if __name__ == "__main__":
     main()

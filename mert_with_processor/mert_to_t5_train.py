@@ -25,7 +25,7 @@ data_dir = "../data/splits"
 # Hyperparameters
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-DEBUG = False
+DEBUG = True
 
 print("Device:", DEVICE)
 

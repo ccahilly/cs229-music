@@ -25,7 +25,7 @@ val_data_path = "../data/splits/val.csv"
 # Hyperparameters
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-DEBUG = False
+DEBUG = True
 
 print("Device:", DEVICE)
 
@@ -135,13 +135,9 @@ def train(model, clap_model, train_loader, val_loader, epochs):
             # Extract embeddings
             if FROZEN_EMBED:
                 with torch.no_grad():
-                    # clap_outputs = clap_model.get_audio_features(**inputs)
-                    outputs = clap_model(inputs["input_features"])
-                    clap_outputs = outputs.audio_embeds
+                    clap_outputs = clap_model.get_audio_features(**inputs)
             else:
-                # clap_outputs = clap_model.get_audio_features(**inputs)
-                outputs = clap_model(inputs["input_features"])
-                clap_outputs = outputs.audio_embeds
+                clap_outputs = clap_model.get_audio_features(**inputs)
             
             if DEBUG:
                 print("Clap last hidden state shape:", clap_outputs.shape)
@@ -211,14 +207,8 @@ def evaluate(model, clap_model, val_loader):
             decoder_attention_mask = batch["decoder_attention_mask"].to(DEVICE)
 
             # Extract embeddings
-            # if FROZEN_EMBED:
-            #     clap_outputs = clap_model.get_audio_features(**inputs)
-            # else:
-            #     outputs = clap_model(inputs["input_features"])
-            #     clap_outputs = outputs.audio_embeds
-
-            outputs = clap_model(inputs["input_features"])
-            clap_outputs = outputs.audio_embeds
+            if FROZEN_EMBED:
+                clap_outputs = clap_model.get_audio_features(**inputs)
 
             # Feed embeddings to T5
             outputs = model(
