@@ -142,6 +142,7 @@ This project highlights the importance of model selection and fine-tuning for au
 ├── dpo/                      # Progress towards using direct preference optimization on MusicGen
 ├── embedding_analysis/       # Training and evaluation scripts
 ├── music_samples/            # Sample wav files
+├── plot_loss.py              # Plot the loss given loss files creating while training
 ├── README.md                 # Project description and setup instructions
 └── requirements.txt          # Required Python packages
 ```
