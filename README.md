@@ -133,9 +133,9 @@ This project highlights the importance of model selection and fine-tuning for au
 
 ```
 .
-├── data/                     # Dataset files and preprocessed data
-├── models/                   # Pre-trained and fine-tuned embedding models
-├── scripts/                  # Training and evaluation scripts
+├── clap-to-t5/               # Caption generation using CLAP to T5 model
+├── dpo/                      # Progress towards using direct preference optimization on MusicGen
+├── embedding_analysis/       # Training and evaluation scripts
 ├── results/                  # Logs, visualizations, and output predictions
 ├── README.md                 # Project description and setup instructions
 └── requirements.txt          # Required Python packages
