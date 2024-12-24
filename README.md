@@ -101,13 +101,20 @@ PCA visualizations show clearer cluster separation in embeddings after fine-tuni
 
 ### Caption Generation Task
 We evaluated the model's ability to generate textual captions describing music based on audio input. Key results include:
-- **BLEU Score**: 0.72
-- **ROUGE-L Score**: 0.81
-- **METEOR Score**: 0.68
 
-Example:
-**Input Audio Clip**: Upbeat jazz music with saxophone and drums.
-**Generated Caption**: "Energetic jazz ensemble with prominent saxophone solos and rhythmic drum patterns."
+| Embedding Model               | Train  | Val   | Test  |
+|-------------------------------|--------|-------|-------|
+| Wav2Vec 2.0 (Frozen)          | 0.6158 | 0.6124| 0.6137|
+| CLAP (Frozen)                 | 0.6318 | 0.6349| 0.6282|
+| MERT (Frozen)                 | 0.6193 | 0.6306| 0.6149|
+| Wav2Vec 2.0 (Unfrozen)        | 0.6121 | 0.6205| 0.6107|
+| CLAP (Unfrozen)               | 0.5940 | 0.5895| 0.5892|
+| MERT (Unfrozen)               | 0.5544 | 0.5600| 0.5536|
+
+- **Key Observations**:
+  - All embedding models perform poorly
+  - The unfrozen embedding models perform worse than the frozen embedding models
+  - The issue likely comes from issues with T5, not the embedding models themselves.
 
 ---
 
