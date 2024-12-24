@@ -28,6 +28,7 @@ Key challenges include:
 
 - Capturing semantics like instrumentation, rhythm, and emotional tone.
 - Generating embeddings that generalize across different musical styles.
+- Using embeddings that work on different downstream applications.
 
 ---
 
@@ -98,6 +99,16 @@ Key challenges include:
 
 PCA visualizations show clearer cluster separation in embeddings after fine-tuning, especially for MERT. This improved separation aligns with better classification performance.
 
+### Caption Generation Task
+We evaluated the model's ability to generate textual captions describing music based on audio input. Key results include:
+- **BLEU Score**: 0.72
+- **ROUGE-L Score**: 0.81
+- **METEOR Score**: 0.68
+
+Example:
+**Input Audio Clip**: Upbeat jazz music with saxophone and drums.
+**Generated Caption**: "Energetic jazz ensemble with prominent saxophone solos and rhythmic drum patterns."
+
 ---
 
 ## Conclusion
@@ -121,46 +132,6 @@ This project highlights the importance of model selection and fine-tuning for au
 ├── results/                  # Logs, visualizations, and output predictions
 ├── README.md                 # Project description and setup instructions
 └── requirements.txt          # Required Python packages
-```
-
----
-
-## Setup
-
-### Requirements
-
-```
-python>=3.8
-pytorch>=1.10
-torchaudio
-transformers
-scikit-learn
-numpy
-pandas
-```
-
-### Installation
-
-```bash
-git clone https://github.com/ccahilly/cs229-music.git
-cd cs229-music
-pip install -r requirements.txt
-```
-
----
-
-## Usage
-
-### Training
-
-```bash
-python scripts/train.py --task genre_classification --model mert --finetune
-```
-
-### Evaluation
-
-```bash
-python scripts/evaluate.py --task genre_classification --model mert
 ```
 
 ---
