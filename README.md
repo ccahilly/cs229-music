@@ -157,4 +157,4 @@ This project highlights the importance of model selection and fine-tuning for au
 - GTZAN Dataset: [https://www.tensorflow.org/datasets/catalog/gtzan](https://www.tensorflow.org/datasets/catalog/gtzan)
 - MusicCaps Dataset: [https://google-research.github.io/musiccaps/](https://google-research.github.io/musiccaps/)
 
-For more details, see the full report in `docs`.
+For more details, see the full report in `docs/`.
