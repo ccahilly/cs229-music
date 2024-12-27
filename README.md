@@ -143,6 +143,7 @@ This project highlights the importance of model selection and fine-tuning for au
 ├── embedding_analysis/       # Training and evaluation scripts
 ├── music_samples/            # Sample wav files
 ├── plot_loss.py              # Plot the loss given loss files creating while training
+├── docs             # Contains final write-up in full
 ├── README.md                 # Project description and setup instructions
 └── requirements.txt          # Required Python packages
 ```
@@ -155,3 +156,5 @@ This project highlights the importance of model selection and fine-tuning for au
 - Perera, M. et al., "Contrastive Learning for Audio Classification," 2024.
 - GTZAN Dataset: [https://www.tensorflow.org/datasets/catalog/gtzan](https://www.tensorflow.org/datasets/catalog/gtzan)
 - MusicCaps Dataset: [https://google-research.github.io/musiccaps/](https://google-research.github.io/musiccaps/)
+
+For more details, see the full report in `docs`.
