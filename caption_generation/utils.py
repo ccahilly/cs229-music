@@ -1,13 +1,7 @@
 import argparse
 import torch
 import shutil
-from google.cloud import storage
 import os
-
-# Initialize Google Cloud Storage client
-gcs_bucket_name = "musiccaps-wav-16khz"
-storage_client = storage.Client()
-bucket = storage_client.bucket(gcs_bucket_name)
 
 def delete_local_copy(local_path):
     """
@@ -20,7 +14,7 @@ def delete_local_copy(local_path):
     elif os.path.isdir(local_path):
         shutil.rmtree(local_path)
 
-def upload_to_gcs(local_path, gcs_path, delete_locally=True):
+def upload_to_gcs(local_path, gcs_path, bucket, delete_locally=True):
     """
     Upload a local file or directory to Google Cloud Storage.
     Args:
@@ -44,7 +38,7 @@ def upload_to_gcs(local_path, gcs_path, delete_locally=True):
     else:
         raise ValueError("Invalid local path: Must be a file or directory")
 
-def download_from_gcs(gcs_path, local_path):
+def download_from_gcs(gcs_path, local_path, bucket):
     """
     Download a file or directory from GCS to a local path.
     """

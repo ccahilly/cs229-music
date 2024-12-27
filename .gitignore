@@ -1,3 +1,4 @@
 data/
 models/
 *.sh
+caption_generation/checkpoints/

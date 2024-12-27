@@ -3,24 +3,22 @@
 
 import torch
 from torch.utils.data import DataLoader
-import argparse
 import os
 from models import ClapT5Model
-# from ..models.mert_t5_model import MertT5Model
-# from ..models.wav2vec2_t5_model import Wav2Vec2T5Model
-from transformers import AutoProcessor, T5Tokenizer
+from models import MertT5Model
+from models import Wav2Vec2T5Model
+from transformers import AutoProcessor, T5Tokenizer, Wav2Vec2FeatureExtractor, Wav2Vec2Processor
 from tqdm import tqdm
 from utils import parse_args, save_checkpoint, load_checkpoint, upload_to_gcs
+from google.cloud import storage
 
 # Evaluation function
-def evaluate(model, val_loader, device):
+def evaluate(model, val_loader):
     model.eval()  # Set the model to evaluation mode
     total_loss = 0
     with torch.no_grad():  # Don't compute gradients during evaluation
         for batch in tqdm(val_loader, desc="Evaluating"):
-            inputs = batch["inputs"].to(device)
-            labels = batch["labels"].to(device)
-            outputs = model(inputs, labels=labels)
+            outputs = model(batch)
             total_loss += outputs.loss.item()
     
     avg_loss = total_loss / len(val_loader)
@@ -35,6 +33,11 @@ if __name__ == "__main__":
     val_data_path = "../data/splits/val.csv"
 
     print("Device:", DEVICE)
+    if USE_GCP:
+        # Initialize Google Cloud Storage client
+        gcs_bucket_name = "musiccaps-wav-16khz"
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(gcs_bucket_name)
 
     args = parse_args()
     EMBED_MODEL = args.embed_model
@@ -56,17 +59,20 @@ if __name__ == "__main__":
 
     t5_tokenizer = T5Tokenizer.from_pretrained("t5-small")
     if EMBED_MODEL == "clap":
+        BATCH_SIZE = 8
         audio_processor = AutoProcessor.from_pretrained("laion/larger_clap_music")
         model = ClapT5Model(DEVICE, frozen=FROZEN)
         from dataset import ClapAudioCaptionDataset as AudioCaptionDataset
-        BATCH_SIZE = 8
-    
     elif EMBED_MODEL == "mert":
-        embed_model_name = "m-a-p/MERT-v1-95M"
-        # from dataset import MertAudioCaptionDataset as AudioCaptionDataset
+        BATCH_SIZE = 4
+        audio_processor = Wav2Vec2FeatureExtractor.from_pretrained("m-a-p/MERT-v1-95M")
+        model = MertT5Model(DEVICE, frozen=FROZEN, batch_size=BATCH_SIZE)
+        from dataset import MertAudioCaptionDataset as AudioCaptionDataset
     elif EMBED_MODEL == "wav2vec2":
-        embed_model_name = "facebook/wav2vec2-base-960h"
-        # from dataset import Wav2Vec2AudioCaptionDataset as AudioCaptionDataset
+        BATCH_SIZE = 8
+        audio_processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
+        model = Wav2Vec2T5Model(DEVICE, frozen=FROZEN)
+        from dataset import Wav2Vec2AudioCaptionDataset as AudioCaptionDataset
     else:
         raise ValueError("Invalid embedding model specified.")
 
@@ -82,13 +88,13 @@ if __name__ == "__main__":
 
     # Load checkpoint if available
     if LAST_EPOCH != 0:
-        model, optimizer, start_epoch, _ = load_checkpoint(model, optimizer, model_save_path + f"checkpoint{LAST_EPOCH}.pth")
+        model, optimizer, start_epoch, _ = load_checkpoint(model, optimizer, model_save_path + f"/checkpoint{LAST_EPOCH}.pth")
 
     # Training loop
     for epoch in range(LAST_EPOCH + 1, LAST_EPOCH + EPOCHS + 1):
         model.train()  # Ensure the model is in training mode
         total_train_loss = 0
-        for batch in tqdm(train_loader, desc=f"Epoch {epoch}/{EPOCHS}"):
+        for batch in tqdm(train_loader, desc=f"Epoch {epoch}/{LAST_EPOCH + EPOCHS}"):
             optimizer.zero_grad()
             outputs = model(batch)
             loss = outputs.loss
@@ -104,4 +110,4 @@ if __name__ == "__main__":
         checkpoint_name = f"/checkpoint{epoch}.pth"
         save_checkpoint(model, optimizer, epoch, avg_val_loss, model_save_path + checkpoint_name)
         if USE_GCP:
-            upload_to_gcs(model_save_path + checkpoint_name, gcloud_path + checkpoint_name, delete_locally=False)
+            upload_to_gcs(model_save_path + checkpoint_name, gcloud_path + checkpoint_name, bucket, delete_locally=False)

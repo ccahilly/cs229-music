@@ -180,7 +180,7 @@ def train(model, train_loader, val_loader, epochs):
             if DEBUG:
                 print(f"aggregated_embedding shape: {aggregated_embedding.shape}")
 
-            # Reduce Wav2Vec2 embeddings
+            # Reduce embeddings
             reduced_embeddings = reduce_layer(aggregated_embedding)
 
             if DEBUG:
