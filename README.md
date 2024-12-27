@@ -143,7 +143,7 @@ This project highlights the importance of model selection and fine-tuning for au
 ├── embedding_analysis/       # Training and evaluation scripts
 ├── music_samples/            # Sample wav files
 ├── plot_loss.py              # Plot the loss given loss files creating while training
-├── docs             # Contains final write-up in full
+├── docs/                     # Contains final write-up in full
 ├── README.md                 # Project description and setup instructions
 └── requirements.txt          # Required Python packages
 ```
