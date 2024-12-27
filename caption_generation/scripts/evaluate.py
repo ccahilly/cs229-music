@@ -1,1 +1,0 @@
-val_data_path = "../data/splits/val.csv"
