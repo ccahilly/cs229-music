@@ -52,3 +52,36 @@ class MertT5Model(nn.Module):
             decoder_attention_mask=decoder_attention_mask,
         )
         return outputs
+    
+    def inference(self, batch, tokenizer, max_length=50):
+        """Run inference to generate captions."""
+        with torch.no_grad():
+            # Extract inputs
+            inputs = batch["inputs"].to(self.device)
+            inputs["input_values"] = inputs["input_values"].squeeze(1)
+
+            # Extract embeddings from MERT
+            mert_outputs = self.mert_model(inputs["input_values"], output_hidden_states=True)
+
+            all_layer_hidden_states = torch.stack(mert_outputs.hidden_states).squeeze()
+            combined_dim = all_layer_hidden_states.view(self.batch_size, 13, -1)
+
+            # Aggregate embeddings
+            aggregated_embedding = self.aggregator(combined_dim)
+            aggregated_embedding = aggregated_embedding.view(self.batch_size, 749, 768)
+
+            # Reduce embeddings
+            reduced_embeddings = self.reduction_layer(aggregated_embedding)
+
+            # Generate predictions
+            outputs = self.t5_model.generate(
+                inputs_embeds=reduced_embeddings,
+                max_length=max_length,
+                num_beams=5,  # Beam search for diversity
+                early_stopping=True
+            )
+
+            # Decode predictions
+            predictions = [tokenizer.decode(output, skip_special_tokens=True) for output in outputs]
+        
+            return predictions

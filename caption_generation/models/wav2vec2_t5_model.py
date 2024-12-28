@@ -41,3 +41,31 @@ class Wav2Vec2T5Model(nn.Module):
             decoder_attention_mask=decoder_attention_mask,
         )
         return outputs
+    
+    def inference(self, batch, tokenizer, max_length=50):
+        """Inference method to generate captions from input audio."""
+        # Ensure inference has no gradients
+        with torch.no_grad():
+            # Extract inputs
+            input_values = batch["input_values"].to(self.device)
+            attention_mask = batch["attention_mask"].to(self.device)
+
+            # Process inputs through Wav2Vec2
+            wav2vec_outputs = self.wav2vec2_model(input_values, attention_mask=attention_mask)
+
+            # Reduce dimensions to match T5 input
+            audio_embeddings = wav2vec_outputs.last_hidden_state
+            reduced_embeddings = self.reduction_layer(audio_embeddings)
+
+            # Generate predictions using T5
+            outputs = self.t5_model.generate(
+                inputs_embeds=reduced_embeddings,
+                max_length=max_length,
+                num_beams=5,  # Beam search for diversity
+                early_stopping=True
+            )
+
+            # Decode predictions into text
+            predictions = [tokenizer.decode(output, skip_special_tokens=True) for output in outputs]
+        
+            return predictions

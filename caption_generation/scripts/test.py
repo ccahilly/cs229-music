@@ -66,29 +66,25 @@ if __name__ == "__main__":
 
     with torch.no_grad():
         for batch in tqdm(test_loader, desc="Running Inference"):
-            inputs = batch['input_ids'].to(DEVICE)
-            attention_mask = batch['attention_mask'].to(DEVICE)
+            # Get model predictions
+            predictions = model.inference(batch, tokenizer)
+            all_predictions.extend(predictions)
 
-            # Run the model on the batch
-            outputs = model.generate(inputs, attention_mask=attention_mask)
+            # Decode true labels to text
+            labels = batch["labels"].to(device)
+            true_captions = [tokenizer.decode(label, skip_special_tokens=True) for label in labels]
+            all_true_labels.extend(true_captions)  # Add true captions to the list
 
-            # Decode the model output (generated captions)
-            decoded_preds = [t5_tokenizer.decode(output, skip_special_tokens=True) for output in outputs]
-            decoded_labels = [t5_tokenizer.decode(label, skip_special_tokens=True) for label in batch['labels']]
-
-            all_predictions.extend(decoded_preds)
-            all_true_labels.extend(decoded_labels)
 
     # Print or save predictions
+    i = 0
     for pred, true in zip(all_predictions, all_true_labels):
         print(f"Predicted: {pred}")
         print(f"True: {true}")
         print("-" * 80)
-
-    # Optionally, you can save predictions to a file
-    with open("predictions.txt", "w") as f:
-        for pred, true in zip(all_predictions, all_true_labels):
-            f.write(f"Predicted: {pred}\nTrue: {true}\n\n")
+        i += 1
+        if i == 8:
+            break
 
     # # Evaluation on test dataset
     # test_loss, predictions, true_labels = evaluate(model, test_loader)

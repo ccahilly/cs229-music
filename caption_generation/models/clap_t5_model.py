@@ -36,3 +36,27 @@ class ClapT5Model(nn.Module):
             decoder_attention_mask=decoder_attention_mask,
         )
         return outputs
+    
+    def inference(self, batch, tokenizer, max_length=50):
+        """Inference method to generate captions from input audio."""
+        # Ensure inference has no gradients
+        with torch.no_grad():
+            # Extract inputs and move to device
+            inputs = batch["inputs"].to(self.device)
+            inputs["input_features"] = inputs["input_features"].squeeze(1)
+
+            # Process inputs through CLAP
+            clap_outputs = self.clap_model.get_audio_features(**inputs)
+
+            # Generate predictions using T5
+            outputs = self.t5_model.generate(
+                inputs_embeds=clap_outputs.unsqueeze(1),  # Ensure the embeddings have the right shape
+                max_length=max_length,
+                num_beams=5,  # Beam search for better diversity
+                early_stopping=True
+            )
+
+            # Decode predictions into text
+            predictions = [tokenizer.decode(output, skip_special_tokens=True) for output in outputs]
+            
+            return predictions
