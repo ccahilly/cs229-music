@@ -77,42 +77,17 @@ if __name__ == "__main__":
 
     # Print or save predictions
     i = 0
+    all_bert_similarities = []
     for pred, true in zip(all_predictions, all_true_labels):
-        print(f"Predicted: {pred}")
-        print(f"True: {true}")
-        print("-" * 80)
+        bert_similarity = calculate_bert_similarity(true, pred)
+        if i < 8:
+            print(f"Predicted: {pred}")
+            print(f"True: {true}")
+            print(f"Bert Similarity: {bert_similarity:.4f}")
+            print("-" * 80)
         i += 1
-        if i == 8:
-            break
+        all_bert_similarities.append(bert_similarity)
 
-    # # Evaluation on test dataset
-    # test_loss, predictions, true_labels = evaluate(model, test_loader)
-    # print(f"Test Loss: {test_loss:.4f}")
-
-    # # Print 8 arbitrary example outputs and true values along with BERT similarity
-    # for i in range(8):
-    #     true_caption = t5_tokenizer.decode(true_labels[i], skip_special_tokens=True)
-    #     predicted_caption = t5_tokenizer.decode(predictions[i], skip_special_tokens=True)
-        
-    #     # Calculate BERT similarity score
-    #     bert_sim_score = calculate_bert_similarity(true_caption, predicted_caption)
-
-    #     print(f"Example {i+1}:")
-    #     print(f"True Caption: {true_caption}")
-    #     print(f"Predicted Caption: {predicted_caption}")
-    #     print(f"BERT Similarity Score: {bert_sim_score:.4f}")
-    #     print("-" * 50)
-
-    # # Calculate BERT similarity for all test examples
-    # all_bert_similarities = []
-    # for i in range(len(true_labels)):
-    #     true_caption = t5_tokenizer.decode(true_labels[i], skip_special_tokens=True)
-    #     predicted_caption = t5_tokenizer.decode(predictions[i], skip_special_tokens=True)
-        
-    #     # Calculate BERT similarity score for each example
-    #     bert_similarity = calculate_bert_similarity(true_caption, predicted_caption)
-    #     all_bert_similarities.append(bert_similarity)
-
-    # # Calculate and print the overall average BERT similarity for all test examples
-    # overall_average_bert_sim = sum(all_bert_similarities) / len(all_bert_similarities)
-    # print(f"\nOverall Average BERT Similarity for all test examples: {overall_average_bert_sim:.4f}")
+    # Calculate and print the overall average BERT similarity for all test examples
+    overall_average_bert_sim = sum(all_bert_similarities) / len(all_bert_similarities)
+    print(f"Overall Average BERT Similarity for all test examples: {overall_average_bert_sim:.4f}")
