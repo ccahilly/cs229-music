@@ -42,7 +42,7 @@ if __name__ == "__main__":
     elif EMBED_MODEL == "mert":
         BATCH_SIZE = 4
         audio_processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
-        model = MertT5Model(DEVICE, frozen=FROZEN, batch_size=BATCH_SIZE)
+        model = MertT5Model(DEVICE, frozen=FROZEN)
         AudioCaptionDataset = MertAudioCaptionDataset
     elif EMBED_MODEL == "wav2vec2":
         BATCH_SIZE = 8

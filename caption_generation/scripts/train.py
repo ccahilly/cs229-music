@@ -54,7 +54,7 @@ if __name__ == "__main__":
     elif EMBED_MODEL == "mert":
         BATCH_SIZE = 4
         audio_processor = Wav2Vec2FeatureExtractor.from_pretrained("m-a-p/MERT-v1-95M")
-        model = MertT5Model(DEVICE, frozen=FROZEN, batch_size=BATCH_SIZE)
+        model = MertT5Model(DEVICE, frozen=FROZEN)
         from dataset import MertAudioCaptionDataset as AudioCaptionDataset
     elif EMBED_MODEL == "wav2vec2":
         BATCH_SIZE = 8
