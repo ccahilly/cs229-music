@@ -2,6 +2,47 @@ import argparse
 import torch
 import shutil
 import os
+from tqdm import tqdm
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Evaluation function
+from tqdm import tqdm
+
+def evaluate(model, data_loader):
+    model.eval()
+    total_loss = 0
+    predictions = []
+    true_labels = []
+
+    with torch.no_grad():
+        for batch in tqdm(data_loader, desc="Evaluating"):
+            # Forward pass through the model
+            outputs = model(batch)
+            total_loss += outputs.loss.item()
+            
+            # Collect the predictions and true labels
+            predictions.append(outputs.logits.argmax(dim=-1).cpu().numpy())
+            true_labels.append(batch['labels'].cpu().numpy())
+
+    avg_loss = total_loss / len(data_loader)
+    
+    # Flatten the predictions and true_labels lists for easier comparison
+    predictions = [item for sublist in predictions for item in sublist]
+    true_labels = [item for sublist in true_labels for item in sublist]
+
+    model.train()  # Set the model back to training mode
+    return avg_loss, predictions, true_labels
+
+
+def calculate_bert_similarity(true, pred):
+    """
+    Calculate the BERT similarity score between the true and predicted captions.
+    """
+    bert_model = SentenceTransformer('bert-base-nli-mean-tokens')
+    sentence_embeddings = bert_model.encode([true, pred])
+    similarity_score = cosine_similarity([sentence_embeddings[0]], [sentence_embeddings[1]])[0][0]
+    return similarity_score
 
 def delete_local_copy(local_path):
     """
@@ -61,7 +102,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Fine-tuning caption generation model.")
     
     # Adding arguments for epochs, last_epoch, and frozen status
-    parser.add_argument('--embed_model', type=str, default="clap", help="clap, mert or wav2vec2.")
+    parser.add_argument('--embedding', type=str, default="clap", help="clap, mert, or wav2vec2.")
     parser.add_argument('--frozen', type=bool, default=False, help="Set whether to freeze the embedding model (True/False).")
     parser.add_argument('--epochs', type=int, default=1, help="Number of epochs to train the model.")
     parser.add_argument('--last_epoch', type=int, default=0, help="The last epoch used for checkpointing.")
@@ -84,7 +125,8 @@ def save_checkpoint(model, optimizer, epoch, loss, filename):
 def load_checkpoint(model, optimizer, filename):
     checkpoint = torch.load(filename)
     model.load_state_dict(checkpoint['model_state_dict'])
-    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    if optimizer is not None:
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     epoch = checkpoint['epoch']
     loss = checkpoint['loss']
     print(f"Checkpoint loaded from {filename}")

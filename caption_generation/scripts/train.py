@@ -11,19 +11,7 @@ from transformers import AutoProcessor, T5Tokenizer, Wav2Vec2FeatureExtractor, W
 from tqdm import tqdm
 from utils import parse_args, save_checkpoint, load_checkpoint, upload_to_gcs
 from google.cloud import storage
-
-# Evaluation function
-def evaluate(model, val_loader):
-    model.eval()  # Set the model to evaluation mode
-    total_loss = 0
-    with torch.no_grad():  # Don't compute gradients during evaluation
-        for batch in tqdm(val_loader, desc="Evaluating"):
-            outputs = model(batch)
-            total_loss += outputs.loss.item()
-    
-    avg_loss = total_loss / len(val_loader)
-    model.train()  # Set the model back to training mode
-    return avg_loss
+from utils import evaluate
 
 if __name__ == "__main__":
     # Setup & hyperparameters
@@ -40,7 +28,7 @@ if __name__ == "__main__":
         bucket = storage_client.bucket(gcs_bucket_name)
 
     args = parse_args()
-    EMBED_MODEL = args.embed_model
+    EMBED_MODEL = args.embedding
     FROZEN = args.frozen
     EPOCHS = args.epochs
     LAST_EPOCH = args.last_epoch
@@ -103,7 +91,7 @@ if __name__ == "__main__":
             total_train_loss += loss.item()
     
         avg_train_loss = total_train_loss / len(train_loader)
-        avg_val_loss = evaluate(model, val_loader, DEVICE)
+        avg_val_loss, _, _ = evaluate(model, val_loader)
         print(f"Epoch {epoch}/{LAST_EPOCH + EPOCHS} Training Loss: {avg_train_loss:.4f} Validation Loss: {avg_val_loss:.4f}")
 
         # Save the model checkpoint
