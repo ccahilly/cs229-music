@@ -1,3 +1,6 @@
+# Run from caption_generation directory with:
+# python -m scripts.test
+
 import torch
 from torch.utils.data import DataLoader
 from models import ClapT5Model
