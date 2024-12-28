@@ -34,12 +34,10 @@ class MertT5Model(nn.Module):
         
         all_layer_hidden_states = torch.stack(mert_outputs.hidden_states).squeeze()
 
+        print(f"Hidden states shape: {all_layer_hidden_states.size()}")
         current_batch_size = all_layer_hidden_states.size(1)  # Dynamically fetch batch size
         print(f"Current batch size: {current_batch_size}")
-        seq_len = inputs["input_values"].size(1)  # Dynamically fetch sequence length
-        feature_dim = all_layer_hidden_states.size(-1) // seq_len  # Compute feature size
-        print(f"Sequence length: {seq_len}, Feature dimension: {feature_dim}")
-        
+
         combined_dim = all_layer_hidden_states.view(current_batch_size, 13, -1) # [batch_size, layers, time_steps * features]
 
         # Apply Conv1d for learnable aggregation
