@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 from models import ClapT5Model
 from models import MertT5Model
 from models import Wav2Vec2T5Model
-from transformers import T5Tokenizer, Wav2Vec2Processor, AutoProcessor
+from transformers import T5Tokenizer, Wav2Vec2Processor, AutoProcessor, Wav2Vec2FeatureExtractor
 from utils import load_checkpoint, evaluate, parse_args, calculate_bert_similarity
 from dataset import ClapAudioCaptionDataset, MertAudioCaptionDataset, Wav2Vec2AudioCaptionDataset  # Adjust if needed
 from tqdm import tqdm 
@@ -41,7 +41,7 @@ if __name__ == "__main__":
         AudioCaptionDataset = ClapAudioCaptionDataset
     elif EMBED_MODEL == "mert":
         BATCH_SIZE = 4
-        audio_processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
+        audio_processor = Wav2Vec2FeatureExtractor.from_pretrained("m-a-p/MERT-v1-95M")
         model = MertT5Model(DEVICE, frozen=FROZEN)
         AudioCaptionDataset = MertAudioCaptionDataset
     elif EMBED_MODEL == "wav2vec2":
