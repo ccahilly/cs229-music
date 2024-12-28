@@ -9,6 +9,7 @@ from models import Wav2Vec2T5Model
 from transformers import T5Tokenizer, Wav2Vec2Processor, AutoProcessor
 from utils import load_checkpoint, evaluate, parse_args, calculate_bert_similarity
 from dataset import ClapAudioCaptionDataset, MertAudioCaptionDataset, Wav2Vec2AudioCaptionDataset  # Adjust if needed
+from tqdm import tqdm 
 
 if __name__ == "__main__":
     # Setup & hyperparameters
@@ -23,7 +24,7 @@ if __name__ == "__main__":
     EMBED_MODEL = args.embedding
     FROZEN = args.frozen
     LAST_EPOCH = args.last_epoch
-    print(f"Training configuration: Embed Model = {EMBED_MODEL}, Frozen = {FROZEN}, Epoch = {LAST_EPOCH}")
+    print(f"Configuration: Embed Model = {EMBED_MODEL}, Frozen = {FROZEN}, Epoch = {LAST_EPOCH}")
 
     model_save_path = f"checkpoints/{EMBED_MODEL}_t5_"
     if FROZEN:
@@ -57,34 +58,66 @@ if __name__ == "__main__":
     # Load checkpoint (if available)
     model, _, _, _ = load_checkpoint(model, None, model_save_path + f"/checkpoint{LAST_EPOCH}.pth")  # Adjust for correct checkpoint file
 
-    # Evaluation on test dataset
-    test_loss, predictions, true_labels = evaluate(model, test_loader)
-    print(f"Test Loss: {test_loss:.4f}")
+    model.eval()
 
-    # Print 8 arbitrary example outputs and true values along with BERT similarity
-    for i in range(8):
-        true_caption = t5_tokenizer.decode(true_labels[i], skip_special_tokens=True)
-        predicted_caption = t5_tokenizer.decode(predictions[i], skip_special_tokens=True)
+    # Inference loop
+    all_predictions = []
+    all_true_labels = []
+
+    with torch.no_grad():
+        for batch in tqdm(test_loader, desc="Running Inference"):
+            inputs = batch['input_ids'].to(DEVICE)
+            attention_mask = batch['attention_mask'].to(DEVICE)
+
+            # Run the model on the batch
+            outputs = model.generate(inputs, attention_mask=attention_mask)
+
+            # Decode the model output (generated captions)
+            decoded_preds = [t5_tokenizer.decode(output, skip_special_tokens=True) for output in outputs]
+            decoded_labels = [t5_tokenizer.decode(label, skip_special_tokens=True) for label in batch['labels']]
+
+            all_predictions.extend(decoded_preds)
+            all_true_labels.extend(decoded_labels)
+
+    # Print or save predictions
+    for pred, true in zip(all_predictions, all_true_labels):
+        print(f"Predicted: {pred}")
+        print(f"True: {true}")
+        print("-" * 80)
+
+    # Optionally, you can save predictions to a file
+    with open("predictions.txt", "w") as f:
+        for pred, true in zip(all_predictions, all_true_labels):
+            f.write(f"Predicted: {pred}\nTrue: {true}\n\n")
+
+    # # Evaluation on test dataset
+    # test_loss, predictions, true_labels = evaluate(model, test_loader)
+    # print(f"Test Loss: {test_loss:.4f}")
+
+    # # Print 8 arbitrary example outputs and true values along with BERT similarity
+    # for i in range(8):
+    #     true_caption = t5_tokenizer.decode(true_labels[i], skip_special_tokens=True)
+    #     predicted_caption = t5_tokenizer.decode(predictions[i], skip_special_tokens=True)
         
-        # Calculate BERT similarity score
-        bert_sim_score = calculate_bert_similarity(true_caption, predicted_caption)
+    #     # Calculate BERT similarity score
+    #     bert_sim_score = calculate_bert_similarity(true_caption, predicted_caption)
 
-        print(f"Example {i+1}:")
-        print(f"True Caption: {true_caption}")
-        print(f"Predicted Caption: {predicted_caption}")
-        print(f"BERT Similarity Score: {bert_sim_score:.4f}")
-        print("-" * 50)
+    #     print(f"Example {i+1}:")
+    #     print(f"True Caption: {true_caption}")
+    #     print(f"Predicted Caption: {predicted_caption}")
+    #     print(f"BERT Similarity Score: {bert_sim_score:.4f}")
+    #     print("-" * 50)
 
-    # Calculate BERT similarity for all test examples
-    all_bert_similarities = []
-    for i in range(len(true_labels)):
-        true_caption = t5_tokenizer.decode(true_labels[i], skip_special_tokens=True)
-        predicted_caption = t5_tokenizer.decode(predictions[i], skip_special_tokens=True)
+    # # Calculate BERT similarity for all test examples
+    # all_bert_similarities = []
+    # for i in range(len(true_labels)):
+    #     true_caption = t5_tokenizer.decode(true_labels[i], skip_special_tokens=True)
+    #     predicted_caption = t5_tokenizer.decode(predictions[i], skip_special_tokens=True)
         
-        # Calculate BERT similarity score for each example
-        bert_similarity = calculate_bert_similarity(true_caption, predicted_caption)
-        all_bert_similarities.append(bert_similarity)
+    #     # Calculate BERT similarity score for each example
+    #     bert_similarity = calculate_bert_similarity(true_caption, predicted_caption)
+    #     all_bert_similarities.append(bert_similarity)
 
-    # Calculate and print the overall average BERT similarity for all test examples
-    overall_average_bert_sim = sum(all_bert_similarities) / len(all_bert_similarities)
-    print(f"\nOverall Average BERT Similarity for all test examples: {overall_average_bert_sim:.4f}")
+    # # Calculate and print the overall average BERT similarity for all test examples
+    # overall_average_bert_sim = sum(all_bert_similarities) / len(all_bert_similarities)
+    # print(f"\nOverall Average BERT Similarity for all test examples: {overall_average_bert_sim:.4f}")
