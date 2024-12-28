@@ -16,6 +16,7 @@ if __name__ == "__main__":
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
     USE_GCP = False
     test_data_path = "../data/splits/test.csv"
+    eval_all = False
 
     print("Device:", DEVICE)
 
@@ -87,6 +88,8 @@ if __name__ == "__main__":
             print("-" * 80)
         i += 1
         all_bert_similarities.append(bert_similarity)
+        if not eval_all and i >= 8:
+            break
 
     # Calculate and print the overall average BERT similarity for all test examples
     overall_average_bert_sim = sum(all_bert_similarities) / len(all_bert_similarities)
