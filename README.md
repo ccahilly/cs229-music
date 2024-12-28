@@ -133,16 +133,17 @@ This project highlights the importance of model selection and fine-tuning for au
 
 ```
 .
+├── caption_generation/       # Code for caption generation task
+├──── models/                 # Models used in caption generation
+├──── scripts/                # To be run from caption_generation/ directory
+├──── dataset/                # Dataset processing
+├──── checkpoints/            # Store model weights here
 ├── preprocessing/            # Extract wav files given YouTube ids (ytids) from metadata file
-├── clap-to-t5/               # Caption generation using CLAP to T5 model
-├── wav2vec-to-t5/            # Caption generation using Wav2Vec 2.0 to T5 model
-├── mert-to-t5/               # Caption generation using MERT to T5 model
 ├── speecht5/                 # Caption generation attempt with SpeechT5 model (excluded from results)
 ├── plots/                    # Loss plots from training
 ├── dpo/                      # Progress towards using direct preference optimization on MusicGen
-├── embedding_analysis/       # Training and evaluation scripts
+├── dataset_analysis/         # Investigating metadata in dataset
 ├── music_samples/            # Sample wav files
-├── plot_loss.py              # Plot the loss given loss files creating while training
 ├── docs/                     # Contains full final report
 ├── README.md                 # Project description and setup instructions
 └── requirements.txt          # Required Python packages

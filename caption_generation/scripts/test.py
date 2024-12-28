@@ -75,7 +75,6 @@ if __name__ == "__main__":
             true_captions = [t5_tokenizer.decode(label, skip_special_tokens=True) for label in labels]
             all_true_labels.extend(true_captions)  # Add true captions to the list
 
-
     # Print or save predictions
     i = 0
     for pred, true in zip(all_predictions, all_true_labels):
