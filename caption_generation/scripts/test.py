@@ -67,12 +67,12 @@ if __name__ == "__main__":
     with torch.no_grad():
         for batch in tqdm(test_loader, desc="Running Inference"):
             # Get model predictions
-            predictions = model.inference(batch, tokenizer)
+            predictions = model.inference(batch, t5_tokenizer)
             all_predictions.extend(predictions)
 
             # Decode true labels to text
-            labels = batch["labels"].to(device)
-            true_captions = [tokenizer.decode(label, skip_special_tokens=True) for label in labels]
+            labels = batch["labels"].to(DEVICE)
+            true_captions = [t5_tokenizer.decode(label, skip_special_tokens=True) for label in labels]
             all_true_labels.extend(true_captions)  # Add true captions to the list
 
 
